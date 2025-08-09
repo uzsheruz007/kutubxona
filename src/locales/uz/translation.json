@@ -1,0 +1,31 @@
+{
+  "navbar": {
+    "home": "Bosh sahifa",
+    "statistics": "Statistika",
+    "news": "Yangiliklar",
+    "contact": "Aloqa",
+    "books": "Kitoblar",
+    "login": "Kirish",
+    "logout": "Chiqish",
+    "profile": "Profil",
+    "language": "Til",
+    "brand": "SamDUUF Elektron Kutubxona"
+  },
+  "hero": {
+    "welcome": "Kutubxonamizga xush kelibsiz!",
+    "description": "Eng sifatli kitoblar, oson qidiruv va qulay interfeys. O'zingizga kerakli adabiyotlarni toping va bilimlaringizni oshiring.",
+    "viewBooks": "Kitoblarni ko‘rish"
+  },
+  "footer": {
+    "rights": "SamDUUF Elektron Kutubxona. Barcha huquqlar himoyalangan.",
+    "privacyPolicy": "Maxfiylik siyosati",
+    "aboutUs": "Biz haqimizda",
+    "contactUs": "Biz bilan bog'lanish",
+    "socialMedia": "Ijtimoiy tarmoqlar",
+    "brand": "SamDU Urgut filiali Elektron Kutubxonasi",
+    "p": "Zamonaviy kutubxona, eng yaxshi kitoblar va qulay xizmatlar",
+    "address": "Urgut tumani, Samarqand viloyati, O'zbekiston",
+    "ourAddress": "Bizning manzilimiz",
+    "up": "Yuqoriga"
+  }
+}

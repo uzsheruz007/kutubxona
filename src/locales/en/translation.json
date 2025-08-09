@@ -1,0 +1,31 @@
+{
+  "navbar": {
+    "home": "Home",
+    "statistics": "Statistics",
+    "news": "News",
+    "contact": "Contact",
+    "books": "Books",
+    "login": "Login",
+    "logout": "Logout",
+    "profile": "Profile",
+    "language": "Language",
+    "brand": "SamDUUF E-Library"
+  },
+  "hero": {
+    "welcome": "Welcome to our Library!",
+    "description": "High-quality books, easy search, and a user-friendly interface. Find the literature you need and expand your knowledge.",
+    "viewBooks": "View Books"
+  },
+  "footer": {
+    "rights": "SamDUUF E-Library. All rights reserved.",
+    "privacyPolicy": "Privacy Policy",
+    "aboutUs": "About Us",
+    "contactUs": "Contact Us",
+    "socialMedia": "Social Media",
+    "brand": "SamDU Urgut Branch E-Library",
+    "p": "A modern library with the best books and convenient services",
+    "address": "Urgut district, Samarkand region, Uzbekistan",
+    "ourAddress": "Our Address",
+    "up": "Back to Top"
+  }
+}
