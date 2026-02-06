@@ -11,14 +11,15 @@ export default function PageHeader({ title, subtitle }) {
     .filter((p) => p !== "");
 
   return (
-    <motion.div
-      initial={{ opacity: 0, y: -10 }}
-      animate={{ opacity: 1, y: 0 }}
-      className="relative py-16 px-6 md:px-12 bg-gradient-to-r from-blue-500 to-cyan-500 rounded-b-3xl shadow-lg text-white"
-    >
-      {/* Breadcrumb */}
-      <div className="flex items-center gap-1 text-sm text-white/80 mb-3">
-        <Link to="/" className="flex items-center gap-1 hover:underline">
+    <div className="relative pt-32 pb-12 px-6 md:px-12 text-center">
+      {/* Background Atmosphere (Optional, same as NewsPage for consistency) */}
+      <div className="absolute inset-0 pointer-events-none -z-10">
+        <div className="absolute top-0 right-1/2 w-[500px] h-[300px] bg-amber-100/50 rounded-full blur-[100px] translate-x-1/2 -translate-y-1/2"></div>
+      </div>
+
+      {/* Breadcrumb - Centered */}
+      <div className="flex items-center justify-center gap-1 text-sm text-stone-500 mb-8">
+        <Link to="/" className="flex items-center gap-1 hover:text-amber-600 transition-colors">
           <FiHome className="w-4 h-4" />
           <span>Bosh sahifa</span>
         </Link>
@@ -29,13 +30,13 @@ export default function PageHeader({ title, subtitle }) {
             <span key={path} className="flex items-center gap-1">
               <span>/</span>
               {isLast ? (
-                <span className="font-semibold text-white">
+                <span className="font-semibold text-stone-900 capitalize">
                   {decodeURIComponent(segment)}
                 </span>
               ) : (
                 <Link
                   to={path}
-                  className="hover:underline capitalize"
+                  className="hover:text-amber-600 capitalize transition-colors"
                 >
                   {decodeURIComponent(segment)}
                 </Link>
@@ -45,17 +46,38 @@ export default function PageHeader({ title, subtitle }) {
         })}
       </div>
 
+      <motion.div
+        initial={{ opacity: 0, y: -20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.8 }}
+        className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white border border-amber-100 text-amber-700 font-medium text-sm mb-6 shadow-sm"
+      >
+        <span>Kutubxona Hayoti</span>
+      </motion.div>
+
       {/* Title */}
-      <h1 className="text-4xl md:text-5xl font-extrabold drop-shadow-sm">
-        {title}
-      </h1>
+      {title && (
+        <motion.h1
+          initial={{ opacity: 0, scale: 0.95 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.8, delay: 0.1 }}
+          className="text-4xl md:text-6xl font-extrabold text-stone-900 mb-6 tracking-tight max-w-4xl mx-auto leading-tight"
+        >
+          {title}
+        </motion.h1>
+      )}
 
       {/* Subtitle */}
       {subtitle && (
-        <p className="text-lg md:text-xl mt-3 opacity-90">
+        <motion.p
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.8, delay: 0.2 }}
+          className="text-lg md:text-xl text-stone-600 max-w-2xl mx-auto leading-relaxed"
+        >
           {subtitle}
-        </p>
+        </motion.p>
       )}
-    </motion.div>
+    </div>
   );
 }

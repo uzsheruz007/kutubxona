@@ -1,10 +1,10 @@
 const BookShowcase = () => {
   const books = [
-    "/images/image1.png",
-    "/images/image2.png",
-    "/images/image3.png",
-    "/images/bookcover.png",
-    "/images/image.png",
+    "/images/1.png",
+    "/images/2.png",
+    "/images/3.png",
+    "/images/4.png",
+    "/images/5.png",
   ];
   //recommended image covers 300x450 pixels (2:3 ratio) WebP preferred. 
 
@@ -28,7 +28,7 @@ const BookShowcase = () => {
               `}
               style={{
                 marginLeft: index !== 0 ? -40 : 0,
-                zIndex: zIndex 
+                zIndex: zIndex
               }}
             >
               <img
@@ -89,7 +89,7 @@ const BookShowcase = () => {
           <div className="absolute top-full left-0 w-full h-1 bg-black/20 rounded-b-sm"></div>
         </div>
 
-          <div className="absolute top-full left-2 right-2 mt-4 sm:mt-5 md:mt-6 lg:mt-7 h-2 bg-black/10 rounded-full blur-sm"></div>
+        <div className="absolute top-full left-2 right-2 mt-4 sm:mt-5 md:mt-6 lg:mt-7 h-2 bg-black/10 rounded-full blur-sm"></div>
       </div>
     </div>
   );

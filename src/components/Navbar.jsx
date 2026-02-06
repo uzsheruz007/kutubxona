@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from "react";
-import { Menu, X, Globe, LogIn, LogOut, ChevronDown } from "lucide-react";
+import { Menu, X, Globe, LogIn, LogOut, ChevronDown, User } from "lucide-react";
 import { Link as RouterLink, useLocation, useNavigate } from "react-router-dom";
 import { animateScroll as scroll } from "react-scroll";
 import { motion, AnimatePresence } from "framer-motion";
@@ -22,21 +22,31 @@ export default function Navbar() {
     const { user, logout } = useUser();
     const location = useLocation();
     const navigate = useNavigate();
-    
+
+    // Scrolled state for visual changes
+    const [isScrolled, setIsScrolled] = useState(false);
+
     const langRef = useRef(null);
     const userRef = useRef(null);
     const mobileMenuRef = useRef(null);
 
     const currentLang = i18n.language || "uz";
 
-    // Navigation items for consistent rendering
     const navItems = [
         { key: "home", to: "/", label: t("navbar.home") },
         { key: "stats", scrollTo: "stats", label: t("navbar.statistics") },
-        { key: "news", scrollTo: "news", label: t("navbar.news") },
-        { key: "contact", scrollTo: "contact", label: t("navbar.contact") },
+        { key: "news", to: "/news", label: t("navbar.news") },
+        // removed contact
         { key: "books", to: "/books", label: t("navbar.books") },
     ];
+
+    useEffect(() => {
+        const handleScroll = () => {
+            setIsScrolled(window.scrollY > 20);
+        };
+        window.addEventListener("scroll", handleScroll);
+        return () => window.removeEventListener("scroll", handleScroll);
+    }, []);
 
     const handleSectionClick = (sectionId) => {
         if (location.pathname !== "/") {
@@ -44,19 +54,13 @@ export default function Navbar() {
             setTimeout(() => {
                 const element = document.getElementById(sectionId);
                 if (element) {
-                    scroll.scrollTo(element.offsetTop - 80, {
-                        smooth: true,
-                        duration: 600,
-                    });
+                    scroll.scrollTo(element.offsetTop - 100, { smooth: true, duration: 600 });
                 }
             }, 50);
         } else {
             const element = document.getElementById(sectionId);
             if (element) {
-                scroll.scrollTo(element.offsetTop - 80, {
-                    smooth: true,
-                    duration: 600,
-                });
+                scroll.scrollTo(element.offsetTop - 100, { smooth: true, duration: 600 });
             }
         }
         setMobileMenuOpen(false);
@@ -65,340 +69,173 @@ export default function Navbar() {
     const handleNavClick = (item) => {
         if (item.scrollTo) {
             handleSectionClick(item.scrollTo);
+        } else if (item.to) {
+            navigate(item.to);
+            setMobileMenuOpen(false);
         } else {
             setMobileMenuOpen(false);
         }
     };
 
-    // Close dropdowns when clicking outside
+    // Close CLICK OUTSIDE
     useEffect(() => {
         const handleClickOutside = (event) => {
-            if (langRef.current && !langRef.current.contains(event.target)) {
-                setLangDropdown(false);
-            }
-            if (userRef.current && !userRef.current.contains(event.target)) {
-                setUserDropdown(false);
-            }
-            if (mobileMenuRef.current && !mobileMenuRef.current.contains(event.target) && 
-                !event.target.closest('.mobile-menu-button')) {
+            if (langRef.current && !langRef.current.contains(event.target)) setLangDropdown(false);
+            if (userRef.current && !userRef.current.contains(event.target)) setUserDropdown(false);
+            if (mobileMenuRef.current && !mobileMenuRef.current.contains(event.target) && !event.target.closest('.mobile-menu-button')) {
                 setMobileMenuOpen(false);
             }
         };
-
         document.addEventListener('mousedown', handleClickOutside);
         return () => document.removeEventListener('mousedown', handleClickOutside);
     }, []);
-
-    // Close mobile menu on escape key
-    useEffect(() => {
-        const handleEsc = (e) => {
-            if (e.key === "Escape") {
-                setMobileMenuOpen(false);
-                setLangDropdown(false);
-                setUserDropdown(false);
-            }
-        };
-        document.addEventListener("keydown", handleEsc);
-        return () => document.removeEventListener("keydown", handleEsc);
-    }, []);
-
-    // Prevent body scroll when mobile menu is open
-    useEffect(() => {
-        if (mobileMenuOpen) {
-            document.body.style.overflow = 'hidden';
-        } else {
-            document.body.style.overflow = 'unset';
-        }
-        return () => {
-            document.body.style.overflow = 'unset';
-        };
-    }, [mobileMenuOpen]);
 
     const changeLanguage = (lang) => {
         i18n.changeLanguage(lang);
         setLangDropdown(false);
     };
 
-    const handleLogout = () => {
-        logout();
-        setUserDropdown(false);
-        setMobileMenuOpen(false);
-    };
-
     return (
-        <nav className="bg-white/90 backdrop-blur-md shadow-sm sticky top-0 z-50 border-b border-gray-200/50">
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div className="flex justify-between items-center h-16 sm:h-20">
-                    {/* Logo */}
-                    <RouterLink to="/" className="flex items-center space-x-2 sm:space-x-3 flex-shrink-0">
-                        <img src={Logo} alt="Logo" className="h-10 w-10 sm:h-12 sm:w-12 lg:h-14 lg:w-14 object-contain" />
-                        <span className="font-bold text-blue-700 text-base sm:text-lg lg:text-xl truncate">
-                            {t("navbar.brand")}
-                        </span>
-                    </RouterLink>
+        <>
+            <motion.nav
+                initial={{ y: -100 }}
+                animate={{ y: 0 }}
+                transition={{ type: "spring", stiffness: 100, damping: 20 }}
+                className={`fixed left-0 right-0 z-50 mx-auto px-4 max-w-7xl transition-all duration-300 ${isScrolled ? "top-10" : "top-12"}`}
+            >
+                <div className={`
+                    rounded-full border border-stone-200 backdrop-blur-xl
+                    ${isScrolled ? "bg-white/90 py-2 shadow-sm" : "bg-white/70 py-3"}
+                    transition-all duration-300 px-6 sm:px-8
+                `}>
+                    <div className="flex justify-between items-center">
 
-                    {/* Desktop Menu */}
-                    <div className="hidden lg:flex items-center space-x-1 xl:space-x-2">
-                        {navItems.map((item) => (
-                            <PremiumNavLink
-                                key={item.key}
-                                to={item.to}
-                                scrollTo={item.scrollTo}
-                            >
-                                {item.label}
-                            </PremiumNavLink>
-                        ))}
-                    </div>
+                        {/* 1. LOGO */}
+                        <RouterLink to="/" className="flex items-center gap-2 group">
+                            <div className="relative">
+                                <div className="absolute inset-0 bg-amber-600 blur-lg opacity-20 group-hover:opacity-40 transition-opacity rounded-full"></div>
+                                <img src={Logo} alt="Logo" className="h-10 w-10 sm:h-12 sm:w-12 object-contain relative z-10" />
+                            </div>
+                            <span className="font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-amber-700 to-orange-600 text-lg sm:text-xl tracking-tight hidden sm:block">
+                                {t("navbar.brand")}
+                            </span>
+                        </RouterLink>
 
-                    {/* Right Side - Desktop */}
-                    <div className="hidden md:flex items-center space-x-2 lg:space-x-3">
-                        {/* Language Dropdown */}
-                        <div className="relative" ref={langRef}>
-                            <button
-                                onClick={() => setLangDropdown(!langDropdown)}
-                                className="flex items-center gap-1 sm:gap-2 px-2 sm:px-3 py-2 rounded-lg bg-gray-100 hover:bg-blue-50 text-gray-700 hover:text-blue-700 transition-all duration-200 text-sm"
-                            >
-                                <Globe size={16} className="sm:w-[18px] sm:h-[18px]" />
-                                <span className="font-medium uppercase text-xs sm:text-sm">{currentLang}</span>
-                                <ChevronDown size={14} className={`transition-transform duration-200 ${langDropdown ? 'rotate-180' : ''}`} />
-                            </button>
-                            
-                            <AnimatePresence>
-                                {langDropdown && (
-                                    <motion.div
-                                        initial={{ opacity: 0, y: -10, scale: 0.95 }}
-                                        animate={{ opacity: 1, y: 0, scale: 1 }}
-                                        exit={{ opacity: 0, y: -10, scale: 0.95 }}
-                                        transition={{ duration: 0.2 }}
-                                        className="absolute right-0 mt-2 w-40 bg-white rounded-xl shadow-lg border border-gray-200 overflow-hidden z-50"
-                                    >
-                                        {languages.map((lang) => (
-                                            <button
-                                                key={lang.code}
-                                                onClick={() => changeLanguage(lang.code)}
-                                                className={`flex items-center w-full px-4 py-3 text-sm hover:bg-blue-50 transition-colors duration-150 ${
-                                                    currentLang === lang.code
-                                                        ? "bg-blue-100 text-blue-700 font-semibold"
-                                                        : "text-gray-700"
-                                                }`}
-                                            >
-                                                <span className="mr-3">{lang.flag}</span>
-                                                {lang.label}
-                                            </button>
-                                        ))}
-                                    </motion.div>
-                                )}
-                            </AnimatePresence>
+                        {/* 2. DESKTOP MENU */}
+                        <div className="hidden lg:flex items-center gap-8 bg-stone-100/50 p-1 px-2 rounded-full border border-white/50 ring-1 ring-stone-200/50">
+                            {navItems.map((item) => (
+                                <button
+                                    key={item.key}
+                                    onClick={() => handleNavClick(item)}
+                                    className="px-5 py-2 rounded-full text-sm font-medium text-stone-600 hover:text-amber-700 hover:bg-amber-50 transition-all shadow-sm hover:shadow-orange-100/50"
+                                >
+                                    {item.label}
+                                </button>
+                            ))}
                         </div>
 
-                        {/* User Section */}
-                        {user ? (
-                            <div className="relative" ref={userRef}>
+                        {/* 3. ACTIONS (Lang & User) */}
+                        <div className="hidden md:flex items-center gap-3">
+                            {/* Lang */}
+                            <div className="relative" ref={langRef}>
                                 <button
-                                    onClick={() => setUserDropdown(!userDropdown)}
-                                    className="flex items-center gap-2 px-2 sm:px-3 py-2 rounded-lg bg-gray-100 hover:bg-blue-50 text-gray-700 hover:text-blue-700 transition-all duration-200"
+                                    onClick={() => setLangDropdown(!langDropdown)}
+                                    className="w-10 h-10 flex items-center justify-center rounded-full bg-stone-50 hover:bg-amber-50 text-stone-700 transition hover:scale-105 border border-stone-200"
                                 >
-                                    <img
-                                        src={user.avatar || "/images/avatar-placeholder.png"}
-                                        alt="Avatar"
-                                        className="w-7 h-7 sm:w-8 sm:h-8 rounded-full object-cover border-2 border-gray-200"
-                                    />
-                                    <span className="hidden lg:inline font-medium text-sm truncate max-w-24 xl:max-w-32">
-                                        {user.name}
-                                    </span>
-                                    <ChevronDown size={14} className={`transition-transform duration-200 ${userDropdown ? 'rotate-180' : ''}`} />
+                                    <Globe size={18} className="text-amber-600" />
                                 </button>
-
                                 <AnimatePresence>
-                                    {userDropdown && (
+                                    {langDropdown && (
                                         <motion.div
-                                            initial={{ opacity: 0, y: -10, scale: 0.95 }}
-                                            animate={{ opacity: 1, y: 0, scale: 1 }}
-                                            exit={{ opacity: 0, y: -10, scale: 0.95 }}
-                                            transition={{ duration: 0.2 }}
-                                            className="absolute right-0 mt-2 w-48 bg-white rounded-xl shadow-lg border border-gray-200 overflow-hidden z-50"
+                                            initial={{ opacity: 0, scale: 0.9, y: 10 }}
+                                            animate={{ opacity: 1, scale: 1, y: 0 }}
+                                            exit={{ opacity: 0, scale: 0.9, y: 10 }}
+                                            className="absolute right-0 mt-3 w-40 bg-white rounded-2xl shadow-xl border border-stone-100 overflow-hidden p-1 ring-1 ring-stone-900/5"
                                         >
-                                            <RouterLink
-                                                to="/profile"
-                                                className="flex items-center px-4 py-3 text-sm text-gray-700 hover:bg-blue-50 transition-colors duration-150"
-                                                onClick={() => setUserDropdown(false)}
-                                            >
-                                                <img
-                                                    src={user.avatar || "/images/avatar-placeholder.png"}
-                                                    alt="Avatar"
-                                                    className="w-6 h-6 rounded-full object-cover mr-3"
-                                                />
-                                                {t("navbar.profile", "Profile")}
-                                            </RouterLink>
-                                            <hr className="border-gray-200" />
-                                            <button
-                                                onClick={handleLogout}
-                                                className="flex items-center w-full px-4 py-3 text-sm text-gray-700 hover:bg-red-50 hover:text-red-600 transition-colors duration-150"
-                                            >
-                                                <LogOut size={16} className="mr-3" />
-                                                {t("navbar.logout")}
-                                            </button>
+                                            {languages.map(lang => (
+                                                <button key={lang.code} onClick={() => changeLanguage(lang.code)} className={`w-full text-left px-3 py-2 rounded-xl text-sm ${currentLang === lang.code ? "bg-amber-100 text-amber-700" : "hover:bg-stone-50 text-stone-700"}`}>
+                                                    <span className="mr-2">{lang.flag}</span> {lang.label}
+                                                </button>
+                                            ))}
                                         </motion.div>
                                     )}
                                 </AnimatePresence>
                             </div>
-                        ) : (
-                            <RouterLink
-                                to="/login"
-                                className="flex items-center gap-2 px-3 py-2 rounded-lg bg-blue-600 text-white hover:bg-blue-700 transition-all duration-200 text-sm font-medium"
-                            >
-                                <LogIn size={16} />
-                                <span className="hidden lg:inline">{t("navbar.login")}</span>
-                            </RouterLink>
-                        )}
+
+                            {/* User */}
+                            {user ? (
+                                <div className="relative" ref={userRef}>
+                                    <button onClick={() => setUserDropdown(!userDropdown)} className="flex items-center gap-2 pl-1 pr-3 py-1 rounded-full bg-gradient-to-r from-stone-50 to-amber-50 border border-stone-200 hover:shadow-lg transition">
+                                        <div className="w-8 h-8 rounded-full bg-white border-2 border-amber-100 flex items-center justify-center shadow-sm">
+                                            <User size={18} className="text-amber-500" />
+                                        </div>
+                                        <span className="text-sm font-semibold text-stone-800 max-w-[80px] truncate">{user.first_name || user.username}</span>
+                                    </button>
+                                    {/* User Dropdown (Simplified) */}
+                                    <AnimatePresence>
+                                        {userDropdown && (
+                                            <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: 10 }} className="absolute right-0 mt-3 w-48 bg-white rounded-2xl shadow-xl border border-stone-100 p-2 ring-1 ring-stone-900/5">
+                                                <RouterLink to="/profile" className="flex items-center gap-2 px-3 py-2 rounded-xl hover:bg-amber-50 text-stone-700 text-sm">
+                                                    <div className="w-6 h-6 rounded-full bg-amber-50 flex items-center justify-center">
+                                                        <User size={14} className="text-amber-500" />
+                                                    </div>
+                                                    Profile
+                                                </RouterLink>
+                                                <button onClick={() => { logout(); setUserDropdown(false); }} className="w-full flex items-center gap-2 px-3 py-2 rounded-xl hover:bg-red-50 text-red-600 text-sm mt-1">
+                                                    <LogOut size={16} /> Chiqish
+                                                </button>
+                                            </motion.div>
+                                        )}
+                                    </AnimatePresence>
+                                </div>
+                            ) : (
+                                <RouterLink to="/login" className="px-6 py-2.5 rounded-full bg-gradient-to-r from-amber-600 to-orange-600 text-white font-semibold text-sm shadow-lg shadow-amber-500/30 hover:shadow-amber-600/40 hover:scale-105 transition-all active:scale-95">
+                                    {t("navbar.login")}
+                                </RouterLink>
+                            )}
+                        </div>
+
+                        {/* Mobile Toggle */}
+                        <button className="md:hidden p-2 text-gray-600 hover:text-amber-600 mobile-menu-button" onClick={() => setMobileMenuOpen(true)}>
+                            <Menu size={28} />
+                        </button>
                     </div>
-
-                    {/* Mobile Menu Button */}
-                    <button
-                        className="md:hidden mobile-menu-button text-gray-600 hover:text-blue-600 transition-colors duration-200 p-2 -mr-2"
-                        onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-                        aria-label="Toggle mobile menu"
-                    >
-                        {mobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
-                    </button>
                 </div>
-            </div>
+            </motion.nav>
 
-            {/* Mobile Menu */}
+            {/* Mobile Menu Overlay */}
             <AnimatePresence>
                 {mobileMenuOpen && (
-                    <>
-                        {/* Background Overlay */}
-                        <motion.div
-                            initial={{ opacity: 0 }}
-                            animate={{ opacity: 1 }}
-                            exit={{ opacity: 0 }}
-                            className="fixed inset-0 bg-black/50 backdrop-blur-sm z-40 md:hidden"
-                            onClick={() => setMobileMenuOpen(false)}
-                        />
+                    <motion.div
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        className="fixed inset-0 z-[60] bg-white/95 backdrop-blur-xl flex flex-col items-center justify-center space-y-8"
+                    >
+                        <button onClick={() => setMobileMenuOpen(false)} className="absolute top-8 right-8 p-2 bg-gray-100 rounded-full text-gray-500 hover:text-red-500">
+                            <X size={32} />
+                        </button>
 
-                        {/* Menu Drawer */}
-                        <motion.div
-                            ref={mobileMenuRef}
-                            initial={{ x: "100%" }}
-                            animate={{ x: 0 }}
-                            exit={{ x: "100%" }}
-                            transition={{ type: "spring", damping: 25, stiffness: 200 }}
-                            className="fixed top-0 right-0 w-80 max-w-[85vw] h-screen bg-white shadow-2xl z-50 md:hidden border-l border-gray-200"
-                            style={{ height: '100vh', height: '100dvh' }}
-                        >
-                            <div className="flex flex-col h-full min-h-screen">
-                                {/* Header */}
-                                <div className="flex items-center justify-between p-4 sm:p-6 border-b border-gray-200 bg-white flex-shrink-0">
-                                    <div className="flex items-center space-x-3">
-                                        <img src={Logo} alt="Logo" className="h-8 w-8 sm:h-10 sm:w-10 object-contain" />
-                                        <span className="font-bold text-blue-700 text-base sm:text-lg">
-                                            {t("navbar.brand")}
-                                        </span>
-                                    </div>
-                                    <button
-                                        onClick={() => setMobileMenuOpen(false)}
-                                        className="p-2 text-gray-500 hover:text-gray-700 hover:bg-gray-100 rounded-lg transition-colors"
-                                    >
-                                        <X size={22} />
-                                    </button>
-                                </div>
+                        <div className="flex flex-col items-center gap-6">
+                            {navItems.map((item) => (
+                                <button key={item.key} onClick={() => handleNavClick(item)} className="text-2xl font-bold text-gray-800 hover:text-amber-600">
+                                    {item.label}
+                                </button>
+                            ))}
+                        </div>
 
-                                {/* Navigation Items - Scrollable Middle Section */}
-                                <div className="flex-1 overflow-y-auto bg-white">
-                                    <div className="p-4 sm:p-6 space-y-2">
-                                        <h3 className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-4">
-                                            {t("navbar.navigation", "Navigation")}
-                                        </h3>
-                                        {navItems.map((item) => (
-                                            <div key={item.key}>
-                                                {item.scrollTo ? (
-                                                    <button
-                                                        onClick={() => handleNavClick(item)}
-                                                        className="flex items-center w-full px-4 py-4 text-left text-gray-800 font-medium hover:text-blue-600 hover:bg-blue-50 rounded-xl transition-all duration-200 text-base"
-                                                    >
-                                                        {item.label}
-                                                    </button>
-                                                ) : (
-                                                    <RouterLink
-                                                        to={item.to}
-                                                        className="flex items-center px-4 py-4 text-gray-800 font-medium hover:text-blue-600 hover:bg-blue-50 rounded-xl transition-all duration-200 text-base"
-                                                        onClick={() => handleNavClick(item)}
-                                                    >
-                                                        {item.label}
-                                                    </RouterLink>
-                                                )}
-                                            </div>
-                                        ))}
-                                    </div>
-
-                                    {/* Language Selection - Mobile */}
-                                    <div className="px-4 sm:px-6 py-4 border-t border-gray-100">
-                                        <h3 className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-4">
-                                            {t("navbar.language", "Language")}
-                                        </h3>
-                                        <div className="space-y-2">
-                                            {languages.map((lang) => (
-                                                <button
-                                                    key={lang.code}
-                                                    onClick={() => changeLanguage(lang.code)}
-                                                    className={`flex items-center w-full px-4 py-3 rounded-xl transition-all duration-200 text-base ${
-                                                        currentLang === lang.code
-                                                            ? "bg-blue-100 text-blue-700 font-semibold"
-                                                            : "text-gray-700 hover:bg-gray-50"
-                                                    }`}
-                                                >
-                                                    <span className="mr-3 text-xl">{lang.flag}</span>
-                                                    {lang.label}
-                                                </button>
-                                            ))}
-                                        </div>
-                                    </div>
-                                </div>
-
-                                {/* User Section - Fixed Bottom */}
-                                <div className="border-t border-gray-200 p-4 sm:p-6 bg-white flex-shrink-0">
-                                    {user ? (
-                                        <div className="space-y-3">
-                                            <RouterLink
-                                                to="/profile"
-                                                className="flex items-center px-4 py-4 bg-gray-50 rounded-xl hover:bg-gray-100 transition-colors duration-200"
-                                                onClick={() => setMobileMenuOpen(false)}
-                                            >
-                                                <img
-                                                    src={user.avatar || "/images/avatar-placeholder.png"}
-                                                    alt="Avatar"
-                                                    className="w-12 h-12 rounded-full object-cover mr-4 border-2 border-gray-200"
-                                                />
-                                                <div className="flex-1">
-                                                    <div className="font-semibold text-gray-900 text-base">{user.name}</div>
-                                                    <div className="text-sm text-gray-500">{t("navbar.viewProfile", "View Profile")}</div>
-                                                </div>
-                                            </RouterLink>
-                                            <button
-                                                onClick={handleLogout}
-                                                className="flex items-center w-full px-4 py-4 text-red-600 hover:bg-red-50 rounded-xl transition-all duration-200 font-medium"
-                                            >
-                                                <LogOut size={22} className="mr-3" />
-                                                <span className="text-base">{t("navbar.logout")}</span>
-                                            </button>
-                                        </div>
-                                    ) : (
-                                        <RouterLink
-                                            to="/login"
-                                            className="flex items-center justify-center w-full px-4 py-4 bg-blue-600 text-white rounded-xl hover:bg-blue-700 transition-all duration-200 font-semibold text-base"
-                                            onClick={() => setMobileMenuOpen(false)}
-                                        >
-                                            <LogIn size={22} className="mr-3" />
-                                            {t("navbar.login")}
-                                        </RouterLink>
-                                    )}
-                                </div>
-                            </div>
-                        </motion.div>
-                    </>
+                        <div className="flex gap-4 mt-8">
+                            {user ? (
+                                <button onClick={logout} className="text-red-500 font-semibold text-lg">Log Out</button>
+                            ) : (
+                                <RouterLink to="/login" onClick={() => setMobileMenuOpen(false)} className="px-8 py-3 rounded-full bg-amber-600 text-white font-bold text-lg shadow-xl">
+                                    Login
+                                </RouterLink>
+                            )}
+                        </div>
+                    </motion.div>
                 )}
             </AnimatePresence>
-        </nav>
+        </>
     );
 }

@@ -11,10 +11,27 @@
     "language": "Til",
     "brand": "SamDUUF Elektron Kutubxona"
   },
+  "loginPage": {
+    "title": "Tizimga Kirish",
+    "subtitle": "Kutubxona tizimiga kirish uchun ma'lumotlaringizni kiriting",
+    "username": "Foydalanuvchi nomi",
+    "usernamePlaceholder": "Loginingizni kiriting",
+    "password": "Parol",
+    "loginButton": "Kirish",
+    "loggingIn": "Kirilmoqda...",
+    "error": "Login yoki parol noto'g'ri!"
+  },
   "hero": {
-    "welcome": "Kutubxonamizga xush kelibsiz!",
+    "slogan": "Bilimlar xazinasi",
+    "welcome_part1": "Kashf",
+    "welcome_part2": "Eting",
     "description": "Eng sifatli kitoblar, oson qidiruv va qulay interfeys. O'zingizga kerakli adabiyotlarni toping va bilimlaringizni oshiring.",
-    "viewBooks": "Kitoblarni ko‘rish"
+    "viewBooks": "Kitoblarni ko‘rish",
+    "enterLibrary": "Kutubxonaga kirish",
+    "search": "Qidirish",
+    "books": "Kitoblar",
+    "users": "Foydalanuvchilar",
+    "online": "Onlayn"
   },
   "footer": {
     "rights": "SamDUUF Elektron Kutubxona. Barcha huquqlar himoyalangan.",
@@ -27,5 +44,144 @@
     "address": "Urgut tumani, Samarqand viloyati, O'zbekiston",
     "ourAddress": "Bizning manzilimiz",
     "up": "Yuqoriga"
-  }
+  },
+  "news": {
+    "readMore": "Batafsil",
+    "postedBy": "Muallif:",
+    "libraryLife": "Kutubxona Hayoti",
+    "newsAnd": "Yangiliklar va",
+    "announcements": "E'lonlar",
+    "pageSubtitle": "Kutubxonamizdagi so'nggi o'zgarishlar, yangi kelgan kitoblar va bo'lajak tadbirlar haqida xabardor bo'ling.",
+    "noNewsFound": "Ushbu toifadagi yangiliklar mavjud emas.",
+    "latestNews": "Yangiliklar",
+    "homeSubtitle": "Kutubxonamizdagi so'nggi e'lonlar va yangiliklar bilan tanishing",
+    "viewAll": "Barcha yangiliklar",
+    "noNewsHome": "Hozircha yangiliklar yo'q.",
+    "categories": {
+      "all": "Barchasi",
+      "announcement": "E'lon",
+      "event": "Tadbir",
+      "new": "Yangi",
+      "service": "Xizmat",
+      "technical": "Texnik",
+      "news": "Yangilik"
+    },
+    "notFound": "Yangilik topilmadi",
+    "fetchError": "Yangilik topilmadi yoki serverda xatolik.",
+    "backToAllNews": "Barcha yangiliklarga qaytish"
+  },
+  "loading": "Yuklanmoqda",
+  "back": "Orqaga",
+  "author": "Muallif",
+  "unknown": "Noma'lum",
+  "viewDetails": "Batafsil ko‘rish",
+  "features": {
+    "badge": "Afzalliklarimiz",
+    "whyUsPart1": "Nega aynan bizning",
+    "whyUsPart2": "Kutubxona?",
+    "description": "Biz foydalanuvchilarimizga eng qulay va zamonaviy o'qish tajribasini taqdim etishga intilamiz.",
+    "fastSearch": {
+      "title": "Tezkor Qidiruv",
+      "desc": "Millionlab kitoblar orasidan keraklisini soniyalar ichida toping."
+    },
+    "easyDownload": {
+      "title": "Oson Yuklab Olish",
+      "desc": "Sevimli kitoblaringizni istalgan formatda (PDF, EPUB) yuklab oling."
+    },
+    "largeBase": {
+      "title": "Katta Baza",
+      "desc": "Barcha janrlardagi badiiy va ilmiy adabiyotlar to'plami."
+    },
+    "anywhere": {
+      "title": "Istalgan Joyda",
+      "desc": "Kompyuter, planshet yoki telefonda qulay foydalanish imkoniyati."
+    },
+    "highSpeed": {
+      "title": "Yuqori Tezlik",
+      "desc": "Eng zamonaviy texnologiyalar asosida ishlaydigan tezkor platforma."
+    },
+    "secureSystem": {
+      "title": "Xavfsiz Tizim",
+      "desc": "Shaxsiy ma'lumotlaringiz va o'qish tarixingiz himoyalangan."
+    }
+  },
+  "topCategories": {
+    "title": "Top Kategoriyalar",
+    "subtitle": "Mashhur kitoblarni kategoriyalar orqali toping",
+    "bookDesc": "Bu kitob haqida qisqacha ma'lumot mavjud emas.",
+    "details": "Batafsil"
+  },
+  "categories": {
+    "all": "Barchasi",
+    "dasturlash": "Dasturlash",
+    "adabiyot": "Adabiyot",
+    "ilmiy": "Ilmiy",
+    "tarix": "Tarix",
+    "texnika": "Texnika",
+    "psixologiya": "Psixologiya",
+    "badiiy": "Badiiy Adabiyot",
+    "texnologiya": "Texnologiya & IT",
+    "tarixiy": "Tarixiy",
+    "biznes": "Biznes"
+  },
+  "popularBooks": {
+    "title": "Mashhur kitoblar",
+    "subtitle": "Kutubxonadagi eng ko‘p o‘qilgan mashhur kitoblar"
+  },
+  "stats": {
+    "title": "Kutubxona Statistikasi",
+    "subtitle": "Elektron kutubxonamiz haqida qisqacha ma'lumot",
+    "totalBooks": "Jami kitoblar",
+    "categories": "Kategoriya",
+    "users": "Foydalanuvchilar",
+    "newBooks": "Yangi kitoblar"
+  },
+  "flipBook": {
+    "readFree": "Mutolaa uchun bepul kitoblar",
+    "freeBooksDesc": "Eng sara asarlar va qo'llanmalar siz uchun mutlaqo bepul",
+    "aboutWork": "Asar Haqida",
+    "aboutWorkDesc": "Bilimlar dunyosini kashf eting. Ushbu raqamli kutubxona barcha kitobxonlarni ilhomlantirish va o'qitish uchun mo'ljallangan saralangan tarkibni o'z ichiga oladi.",
+    "publisher": "Sharq Ziyosi Nashriyoti"
+  },
+  "books": {
+    "jsFundamentals": {
+      "desc": "Zamonaviy JavaScript tushunchalarini chuqur o'rganing, jumladan ES6+ xususiyatlari va eng yaxshi amaliyotlar."
+    },
+    "pythonData": {
+      "desc": "Pandas, NumPy va matplotlib kabi Python kutubxonalari yordamida ma'lumotlarni tahlil qilishni o'rganing."
+    },
+    "cleanCode": {
+      "desc": "O'qilishi oson va saqlanishi qulay kod yozishga urg'u beruvchi agile dasturiy ta'minot hunarmandchiligi qo'llanmasi."
+    },
+    "ai": {
+      "desc": "Sun'iy intellekt asoslari va texnikalarini tushunish uchun eng mukammal darslik."
+    },
+    "webDev": {
+      "desc": "To'liq stekli veb-ilovalar uchun ilg'or frontend va backend texnikalarini o'rganing."
+    },
+    "designPatterns": {
+      "desc": "Vaqt sinovidan o'tgan dasturiy ta'minotni loyihalash naqshlari va tamoyillari haqida klassik kitob."
+    }
+  },
+  "resourceType": "Resurs turi",
+  "pageCount": "Betlar soni",
+  "pages": "bet",
+  "publishedDate": "Chop etilgan",
+  "subjects": "Mavzular",
+  "noSubjects": "Mavzular mavjud emas",
+  "addToFavorites": "Sevimlilarga",
+  "share": "Ulashish",
+  "aboutBook": "Kitob haqida",
+  "noDescription": "Bu kitob haqida batafsil ma'lumot mavjud emas.",
+  "download": "Yuklab olish",
+  "loginAndDownload": "Kirish va Yuklab olish",
+  "eLibrary": "Elektron Kutubxona",
+  "textbooks": "O'quv adabiyotlar",
+  "monographs": "Monografiyalar",
+  "dissertations": "Dissertatsiyalar",
+  "allBooks": "Barcha Kitoblar",
+  "allBooksSubtitle": "Kutubxonamizdagi barcha kitoblarni ko'ring va o'qing!",
+  "categoriesLabel": "Kategoriyalar",
+  "currentCategory": "Kategoriya",
+  "noBooksFound": "Hech qanday kitob topilmadi."
 }

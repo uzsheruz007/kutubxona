@@ -9,7 +9,7 @@ export default function AnimatedSectionDivider() {
     const interval = setInterval(() => {
       setProgress((prev) => (prev + 0.5) % 100); // Smoother increment
     }, 50); // Slower, smoother animation
-    
+
     return () => clearInterval(interval);
   }, []);
 
@@ -52,10 +52,10 @@ export default function AnimatedSectionDivider() {
 
   return (
     <div className="relative w-full max-w-3xl h-12 mx-auto flex items-center justify-center px-4">
-      
+
       {/* Left Line */}
       <motion.div
-        className="h-0.5 bg-gradient-to-r from-transparent via-blue-500 to-blue-600 relative overflow-hidden"
+        className="h-0.5 bg-gradient-to-r from-transparent via-amber-500 to-amber-600 relative overflow-hidden"
         style={{ width: left }}
         animate={{ width: left }}
         transition={{ duration: 0.1, ease: "easeInOut" }}
@@ -64,11 +64,11 @@ export default function AnimatedSectionDivider() {
         <motion.div
           className="absolute inset-0 bg-gradient-to-r from-transparent via-white/40 to-transparent"
           animate={{ x: ["-100%", "100%"] }}
-          transition={{ 
-            duration: 2, 
-            repeat: Infinity, 
+          transition={{
+            duration: 2,
+            repeat: Infinity,
             ease: "easeInOut",
-            repeatDelay: 1 
+            repeatDelay: 1
           }}
         />
       </motion.div>
@@ -82,24 +82,24 @@ export default function AnimatedSectionDivider() {
         {/* Icon background with glow */}
         <div className="relative">
           {/* Glow effect */}
-          <div className="absolute inset-0 bg-blue-500/30 rounded-full blur-md scale-120"></div>
-          
+          <div className="absolute inset-0 bg-amber-500/30 rounded-full blur-md scale-120"></div>
+
           {/* Icon container */}
-          <div className="relative bg-white border-2 border-blue-500 rounded-full p-2 shadow-lg">
-            <Book className="w-4 h-4 text-blue-600" />
+          <div className="relative bg-white border-2 border-amber-500 rounded-full p-2 shadow-lg">
+            <Book className="w-4 h-4 text-amber-600" />
           </div>
-          
+
           {/* Pulsing ring */}
           <motion.div
-            className="absolute inset-0 border-2 border-blue-400 rounded-full"
-            animate={{ 
-              scale: [1, 1.5, 1], 
-              opacity: [0.8, 0, 0.8] 
+            className="absolute inset-0 border-2 border-amber-400 rounded-full"
+            animate={{
+              scale: [1, 1.5, 1],
+              opacity: [0.8, 0, 0.8]
             }}
-            transition={{ 
-              duration: 2, 
-              repeat: Infinity, 
-              ease: "easeInOut" 
+            transition={{
+              duration: 2,
+              repeat: Infinity,
+              ease: "easeInOut"
             }}
           />
         </div>
@@ -107,7 +107,7 @@ export default function AnimatedSectionDivider() {
 
       {/* Right Line */}
       <motion.div
-        className="h-0.5 bg-gradient-to-l from-transparent via-blue-500 to-blue-600 relative overflow-hidden"
+        className="h-0.5 bg-gradient-to-l from-transparent via-amber-500 to-amber-600 relative overflow-hidden"
         style={{ width: right }}
         animate={{ width: right }}
         transition={{ duration: 0.1, ease: "easeInOut" }}
@@ -116,11 +116,11 @@ export default function AnimatedSectionDivider() {
         <motion.div
           className="absolute inset-0 bg-gradient-to-r from-transparent via-white/40 to-transparent"
           animate={{ x: ["100%", "-100%"] }}
-          transition={{ 
-            duration: 2, 
-            repeat: Infinity, 
+          transition={{
+            duration: 2,
+            repeat: Infinity,
             ease: "easeInOut",
-            repeatDelay: 1 
+            repeatDelay: 1
           }}
         />
       </motion.div>
@@ -130,7 +130,7 @@ export default function AnimatedSectionDivider() {
         {[...Array(6)].map((_, i) => (
           <motion.div
             key={i}
-            className="absolute w-1 h-1 bg-blue-400/40 rounded-full"
+            className="absolute w-1 h-1 bg-amber-400/40 rounded-full"
             style={{
               left: `${10 + i * 15}%`,
               top: "50%",

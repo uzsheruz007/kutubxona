@@ -1,6 +1,7 @@
 import { useState } from "react";
-import { User } from "lucide-react";
-import { Link } from "react-router-dom";
+import { User, BookOpen } from "lucide-react";
+import { useNavigate, Link } from "react-router-dom";
+import { motion } from "framer-motion";
 
 export default function BookCard({
   title,
@@ -10,104 +11,123 @@ export default function BookCard({
   category = "Kategoriya",
   description = "Izoh mavjud emas",
 }) {
+  const navigate = useNavigate();
   const fallbackCover = "/images/no-image.png";
   const validCoverUrl = coverUrl || fallbackCover;
-
   const [isImageLoaded, setIsImageLoaded] = useState(false);
 
+  const handleCardClick = (e) => {
+    // Prevent navigation if clicking the existing inner Link (though unlikely to conflict if paths are same)
+    if (e.target.closest('a')) return;
+    navigate(`/book/${id}`);
+  };
+
   return (
-    <div className="group bg-white rounded-2xl shadow-sm hover:shadow-md transition-all duration-300 overflow-hidden cursor-pointer relative">
-      {/* Book Image with Shimmer */}
-      <div className="relative aspect-[3/4] rounded-xl overflow-hidden">
-        {/* Shimmer Effect */}
-        {!isImageLoaded && (
-          <div
-            className="absolute inset-0 bg-gray-200 overflow-hidden"
-            style={{
-              background: "linear-gradient(90deg, #e5e7eb 25%, #f3f4f6 50%, #e5e7eb 75%)",
-              backgroundSize: "200% 100%",
-              animation: "shimmer 1.5s infinite",
-            }}
-          />
-        )}
+    <div
+      onClick={handleCardClick}
+      className="group relative w-full aspect-[3/4.2] perspective-[1500px] cursor-pointer my-8"
+    >
+      {/* --- Book Container (The moving part) --- */}
+      <motion.div
+        className="relative w-full h-full transition-all duration-700 ease-[cubic-bezier(0.25,0.8,0.25,1)] transform-style-3d group-hover:-translate-x-4"
+        initial={false}
+        whileHover={{ rotateY: -35 }} // Opens the book partially
+      >
 
-        <img
-          src={validCoverUrl}
-          alt={title}
-          className={`w-full h-full object-cover object-center transform group-hover:scale-105 transition-transform duration-500 ${
-            isImageLoaded ? "opacity-100" : "opacity-0"
-          }`}
-          onLoad={() => setIsImageLoaded(true)}
-          onError={(e) => {
-            e.target.src = fallbackCover;
-            setIsImageLoaded(true);
-          }}
-        />
+        {/* --- FRONT COVER (The Image) --- */}
+        <div
+          className="absolute inset-0 bg-white rounded-r-xl rounded-l-sm shadow-2xl origin-left z-20 backface-hidden"
+          style={{ transformStyle: "preserve-3d" }}
+        >
+          {/* Cover Spine Shadow */}
+          <div className="absolute left-0 top-0 bottom-0 w-1 bg-gradient-to-r from-black/20 to-transparent z-30" />
 
-        {/* Category Badge */}
-        <div className="absolute top-3 right-3">
-          <span className="px-3 py-1 bg-white/90 text-gray-800 text-xs font-medium rounded-full shadow">
-            {category}
-          </span>
+          {/* Glossy Overlay */}
+          <div className="absolute inset-0 bg-gradient-to-tr from-white/20 to-transparent z-40 pointer-events-none mix-blend-overlay" />
+
+          {/* Image */}
+          <div className="w-full h-full rounded-r-xl overflow-hidden bg-stone-100 relative">
+            {!isImageLoaded && <div className="absolute inset-0 bg-stone-200 animate-pulse" />}
+            <img
+              src={validCoverUrl}
+              alt={title}
+              className="w-full h-full object-cover"
+              onLoad={() => setIsImageLoaded(true)}
+              onError={(e) => { e.target.src = fallbackCover; setIsImageLoaded(true); }}
+            />
+
+            {/* Category Badge on Cover */}
+            <div className="absolute top-4 right-4 z-50">
+              <span className="px-3 py-1 bg-white/90 backdrop-blur text-stone-900 text-[10px] font-bold uppercase tracking-wider rounded-sm shadow-md border-l-2 border-amber-600">
+                {category}
+              </span>
+            </div>
+
+            {/* Title on Cover (Bottom) */}
+            <div className="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black/80 to-transparent pt-12">
+              <h3 className="text-white font-bold text-lg leading-tight line-clamp-2 drop-shadow-md">{title}</h3>
+              <p className="text-white/80 text-xs mt-1 font-medium">{author}</p>
+            </div>
+          </div>
         </div>
-      </div>
 
-      {/* Book Info */}
-      <div className="p-4">
-        {/* Title */}
-        <h3 className="font-bold text-base text-gray-900 mb-2 line-clamp-2 group-hover:text-blue-600 transition-colors h-[60px]">
-          {title}
-        </h3>
+        {/* --- BOOK SPINE (Left Side) --- */}
+        <div
+          className="absolute top-1 bottom-1 left-0 w-8 bg-stone-900 origin-left transform -rotate-y-90 rounded-l-sm"
+          style={{ transform: "rotateY(-90deg) translateX(-100%)" }}
+        >
+          <div className="w-full h-full bg-gradient-to-r from-white/10 to-transparent" />
+        </div>
 
-        {/* Author */}
-        <p className="text-sm text-gray-500 mb-2 flex items-center gap-1">
-          <User size={14} className="text-blue-400" />
-          {author || "Noma'lum"}
-        </p>
+        {/* --- INSIDE PAGES (Revealed on Open) --- */}
+        <div
+          className="absolute inset-y-2 left-1 right-2 bg-[#fdfbf7] rounded-r-md shadow-inner border-l border-stone-200 z-10 flex flex-col p-5 origin-left"
+          style={{ transform: "translateZ(-2px)" }}
+        >
+          {/* Paper Texture */}
+          <div className="absolute inset-0 opacity-30 bg-[url('https://www.transparenttextures.com/patterns/cream-paper.png')] pointer-events-none" />
 
-        {/* Description */}
-        <p className="text-xs text-gray-600 line-clamp-2 mb-3">
-          {description}
-        </p>
+          {/* Header */}
+          <div className="text-center pb-3 border-b border-stone-200 mb-3 border-dashed">
+            <span className="text-xs text-stone-400 font-serif uppercase tracking-widest">Annotatsiya</span>
+          </div>
 
-        {/* Details Link */}
-        <div className="flex items-center text-blue-600 text-sm font-medium group-hover:text-blue-700 transition-colors">
-          <Link
-            to={`/book/${id}`}
-            className="flex items-center gap-1"
-          >
-            <span>Batafsil</span>
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className="h-4 w-4 transform group-hover:translate-x-1 transition-transform"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-              strokeWidth={2}
+          {/* Description Text */}
+          <p className="text-xs text-stone-700 leading-relaxed font-serif text-justify line-clamp-[8] opacity-90">
+            {description || "Ushbu kitob haqida batafsil ma'lumot olish uchun 'O'qish' tugmasini bosing. Unda ko'plab qiziqarli faktlar va ma'lumotlar mavjud..."}
+          </p>
+
+          {/* Spacer */}
+          <div className="flex-grow" />
+
+          {/* Footer / Buttons */}
+          <div className="mt-auto">
+            <Link
+              to={`/book/${id}`}
+              className="group/btn w-full flex items-center justify-center gap-2 py-2.5 rounded-lg bg-amber-600 text-white text-xs font-bold uppercase tracking-wide hover:bg-amber-700 transition-all shadow-md hover:shadow-lg active:scale-95"
             >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M9 5l7 7-7 7"
-              />
-            </svg>
-          </Link>
-        </div>
-      </div>
+              <BookOpen size={14} />
+              <span>O'qish</span>
+            </Link>
+          </div>
 
-      {/* Inline Shimmer Animation */}
-      <style>
-        {`
-          @keyframes shimmer {
-            0% {
-              background-position: -200% 0;
-            }
-            100% {
-              background-position: 200% 0;
-            }
-          }
-        `}
-      </style>
+          {/* Page Curvature Shadow */}
+          <div className="absolute inset-y-0 left-0 w-6 bg-gradient-to-r from-black/5 to-transparent pointer-events-none" />
+        </div>
+
+        {/* --- PAGE LAYERS (Thickness) --- */}
+        {Array.from({ length: 5 }).map((_, i) => (
+          <div
+            key={i}
+            className="absolute inset-y-3 right-0 w-px bg-stone-200"
+            style={{ right: `${i * 2}px`, transform: "translateZ(-1px)" }}
+          />
+        ))}
+
+      </motion.div>
+
+      {/* Shadow underneath */}
+      <div className="absolute bottom-0 left-2 right-2 h-4 bg-black/20 blur-xl rounded-[100%] group-hover:scale-x-110 transition-transform duration-700 delay-100" />
     </div>
   );
 }

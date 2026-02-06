@@ -11,10 +11,19 @@
     "language": "Language",
     "brand": "SamDUUF E-Library"
   },
-  "hero": {
-    "welcome": "Welcome to our Library!",
-    "description": "High-quality books, easy search, and a user-friendly interface. Find the literature you need and expand your knowledge.",
-    "viewBooks": "View Books"
+  "loginPage": {
+    "title": "System Login",
+    "subtitle": "Enter your credentials to access the library",
+    "username": "Username",
+    "usernamePlaceholder": "Enter your username",
+    "password": "Password",
+    "loginButton": "Login",
+    "loggingIn": "Logging in...",
+    "error": "Invalid username or password!"
+  },
+  "intro": {
+    "brand": "SamDUUF",
+    "subtitle": "Digital Library"
   },
   "footer": {
     "rights": "SamDUUF E-Library. All rights reserved.",
@@ -27,5 +36,155 @@
     "address": "Urgut district, Samarkand region, Uzbekistan",
     "ourAddress": "Our Address",
     "up": "Back to Top"
-  }
+  },
+  "news": {
+    "readMore": "Read More",
+    "postedBy": "Posted by:",
+    "libraryLife": "Library Life",
+    "newsAnd": "News and",
+    "announcements": "Announcements",
+    "pageSubtitle": "Stay informed about the latest changes, new arrivals, and upcoming events in our library.",
+    "noNewsFound": "No news found in this category.",
+    "latestNews": "Latest News",
+    "homeSubtitle": "Check out the latest announcements and news from our library",
+    "viewAll": "View All News",
+    "noNewsHome": "No news available at the moment.",
+    "categories": {
+      "all": "All",
+      "announcement": "Announcement",
+      "event": "Event",
+      "new": "New",
+      "service": "Service",
+      "technical": "Technical",
+      "news": "News"
+    },
+    "notFound": "News not found",
+    "fetchError": "Error fetching news or server error.",
+    "backToAllNews": "Back to All News"
+  },
+  "loading": "Loading",
+  "back": "Back",
+  "author": "Author",
+  "unknown": "Unknown",
+  "viewDetails": "View Details",
+  "hero": {
+    "slogan": "Treasure of Knowledge",
+    "welcome_part1": "Discover",
+    "welcome_part2": "It",
+    "description": "Thousands of books, audio materials, and scientific articles — now on one modern platform. Start learning today.",
+    "enterLibrary": "Enter Library",
+    "search": "Search",
+    "books": "Books",
+    "users": "Users",
+    "online": "Online"
+  },
+  "features": {
+    "badge": "Our Advantages",
+    "whyUsPart1": "Why our",
+    "whyUsPart2": "Library?",
+    "description": "We strive to provide the most convenient and modern reading experience for our users.",
+    "fastSearch": {
+      "title": "Fast Search",
+      "desc": "Find what you need among millions of books in seconds."
+    },
+    "easyDownload": {
+      "title": "Easy Download",
+      "desc": "Download your favorite books in any format (PDF, EPUB)."
+    },
+    "largeBase": {
+      "title": "Large Database",
+      "desc": "A collection of fiction and scientific literature of all genres."
+    },
+    "anywhere": {
+      "title": "Anywhere",
+      "desc": "Convenient access on computer, tablet, or phone."
+    },
+    "highSpeed": {
+      "title": "High Speed",
+      "desc": "Fast platform based on the most modern technologies."
+    },
+    "secureSystem": {
+      "title": "Secure System",
+      "desc": "Your personal data and reading history are protected."
+    }
+  },
+  "topCategories": {
+    "title": "Top Categories",
+    "subtitle": "Find popular books by category",
+    "bookDesc": "No brief information available for this book.",
+    "details": "Details"
+  },
+  "categories": {
+    "all": "All",
+    "dasturlash": "Programming",
+    "adabiyot": "Literature",
+    "ilmiy": "Scientific",
+    "tarix": "History",
+    "texnika": "Technical",
+    "psixologiya": "Psychology",
+    "badiiy": "Fiction",
+    "texnologiya": "Technology & IT",
+    "tarixiy": "Historical",
+    "biznes": "Business"
+  },
+  "popularBooks": {
+    "title": "Popular Books",
+    "subtitle": "Most read popular books in the library"
+  },
+  "stats": {
+    "title": "Library Statistics",
+    "subtitle": "Brief information about our digital library",
+    "totalBooks": "Total Books",
+    "categories": "Categories",
+    "users": "Users",
+    "newBooks": "New Books"
+  },
+  "flipBook": {
+    "readFree": "Free Books to Read",
+    "freeBooksDesc": "The best works and manuals are absolutely free for you",
+    "aboutWork": "About the Work",
+    "aboutWorkDesc": "Discover a world of knowledge at your fingertips. This digital library contains carefully curated content designed to inspire and educate readers of all backgrounds.",
+    "publisher": "Sharq Ziyosi Publishing"
+  },
+  "books": {
+    "jsFundamentals": {
+      "desc": "A deep dive into modern JavaScript concepts, including ES6+ features and best practices."
+    },
+    "pythonData": {
+      "desc": "Learn how to analyze data using Python libraries like pandas, NumPy, and matplotlib."
+    },
+    "cleanCode": {
+      "desc": "A handbook of agile software craftsmanship that emphasizes writing readable and maintainable code."
+    },
+    "ai": {
+      "desc": "The most comprehensive textbook for understanding the foundations and techniques of AI."
+    },
+    "webDev": {
+      "desc": "Explore advanced frontend and backend techniques for full-stack web apps."
+    },
+    "designPatterns": {
+      "desc": "A classic book on software design patterns and principles that endure time."
+    }
+  },
+  "resourceType": "Resource Type",
+  "pageCount": "Page Count",
+  "pages": "pages",
+  "publishedDate": "Published Date",
+  "subjects": "Subjects",
+  "noSubjects": "No subjects available",
+  "addToFavorites": "Add to Favorites",
+  "share": "Share",
+  "aboutBook": "About the Book",
+  "noDescription": "No detailed description available for this book.",
+  "download": "Download",
+  "loginAndDownload": "Login & Download",
+  "eLibrary": "E-Library",
+  "textbooks": "Textbooks",
+  "monographs": "Monographs",
+  "dissertations": "Dissertations",
+  "allBooks": "All Books",
+  "allBooksSubtitle": "View and read all books in our library!",
+  "categoriesLabel": "Categories",
+  "currentCategory": "Category",
+  "noBooksFound": "No books found."
 }

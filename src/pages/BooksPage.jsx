@@ -7,6 +7,7 @@ import BookCardSkeleton from "../components/BookCardSekeleton";
 import Pagination from "../components/Pagination";
 import noDataSvg from '../assets/undraw_no-data_ig65.svg';
 import PageHeader from "../components/PageHeader";
+import i18n from "../i18n";
 
 const categories = [
   "Barchasi",
@@ -17,7 +18,10 @@ const categories = [
   "Texnologiya",
 ];
 
+import { useTranslation } from "react-i18next";
+
 export default function BooksPage() {
+  const { t, i18n } = useTranslation();
   const [searchParams, setSearchParams] = useSearchParams();
   const currentCategory = searchParams.get("category") || "Barchasi";
   const page = parseInt(searchParams.get("page")) || 1;
@@ -33,14 +37,17 @@ export default function BooksPage() {
     const fetchBooks = async () => {
       setLoading(true);
       try {
-        const subject = currentCategory !== "Barchasi" ? currentCategory : "fiction";
-        const offset = (page - 1) * limit;
+        const res = await axios.get("http://127.0.0.1:8000/api/books/", {
+          headers: {
+            "Accept-Language": i18n.language
+          }
+        });
+        let works = res.data || [];
 
-        const res = await axios.get(
-          `https://corsproxy.io/?https://openlibrary.org/subjects/${subject.toLowerCase()}.json?limit=${limit}&offset=${offset}`
-        );
-
-        let works = res.data.works || [];
+        // Category Filter
+        if (currentCategory !== "Barchasi") {
+          works = works.filter((book) => book.category === currentCategory);
+        }
 
         // Search filter
         if (search.trim()) {
@@ -54,14 +61,15 @@ export default function BooksPage() {
           works = works.sort((a, b) => a.title.localeCompare(b.title));
         } else if (sort === "author") {
           works = works.sort((a, b) =>
-            (a.authors?.[0]?.name || "").localeCompare(b.authors?.[0]?.name || "")
+            (a.author || "").localeCompare(b.author || "")
           );
         } else if (sort === "year") {
-          works = works.sort((a, b) => (b.first_publish_year || 0) - (a.first_publish_year || 0));
+          // published_date string "YYYY-MM-DD"
+          works = works.sort((a, b) => new Date(b.published_date || 0) - new Date(a.published_date || 0));
         }
 
         setBooksData(works);
-        setTotalCount(res.data.work_count || 0);
+        setTotalCount(works.length);
       } catch (err) {
         setBooksData([]);
         setTotalCount(0);
@@ -71,18 +79,18 @@ export default function BooksPage() {
     };
 
     fetchBooks();
-  }, [currentCategory, page, search, sort]);
+  }, [currentCategory, search, sort, i18n.language]);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-white pb-16">
+    <div className="min-h-screen bg-gradient-to-br from-stone-50 to-amber-50 pb-16">
       {/* Header */}
-      <PageHeader title={"Barcha Kitoblar"} subtitle={"Kutubxonamizdagi barcha kitoblarni ko'ring va o'qing!"} />
+      <PageHeader title={t("allBooks")} subtitle={t("allBooksSubtitle")} />
 
       <section className="max-w-7xl mx-auto px-6">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           {/* Sidebar – Kategoriya tugmalari */}
-          <aside className="md:col-span-1 bg-white shadow rounded-lg p-5 h-fit sticky top-24">
-            <h3 className="text-lg font-semibold mb-4">Kategoriyalar</h3>
+          <aside className="md:col-span-1 bg-white shadow rounded-lg p-5 h-fit sticky top-24 border border-stone-100">
+            <h3 className="text-lg font-semibold mb-4 text-stone-800">{t("categoriesLabel")}</h3>
             <motion.div
               initial="hidden"
               animate="visible"
@@ -96,18 +104,17 @@ export default function BooksPage() {
                 <motion.button
                   key={cat}
                   onClick={() => setSearchParams({ category: cat, page: 1 })}
-                  className={`text-sm cursor-pointer px-4 py-2 rounded-md text-left transition-all duration-300 relative overflow-hidden ${
-                    currentCategory === cat
-                      ? "bg-gradient-to-r from-blue-600 to-blue-400 text-white font-semibold shadow-lg scale-[1.03]"
-                      : "bg-gray-50 hover:bg-blue-50 text-gray-800"
-                  }`
-                }
-                whileHover={{
-                  scale: 1.05,
-                  boxShadow: "0 4px 20px rgba(59,130,246,0.2)",
-                }}
+                  className={`text-sm cursor-pointer px-4 py-2 rounded-md text-left transition-all duration-300 relative overflow-hidden ${currentCategory === cat
+                    ? "bg-gradient-to-r from-amber-600 to-orange-500 text-white font-semibold shadow-lg scale-[1.03]"
+                    : "bg-stone-50 hover:bg-amber-50 text-stone-700"
+                    }`
+                  }
+                  whileHover={{
+                    scale: 1.05,
+                    boxShadow: "0 4px 20px rgba(245, 158, 11, 0.2)",
+                  }}
                 >
-                  {cat}
+                  {cat === "Barchasi" ? t("categories.all") : cat}
                 </motion.button>
               ))}
             </motion.div>
@@ -116,8 +123,8 @@ export default function BooksPage() {
           {/* Kitoblar – Grid ko‘rinishda */}
           <div className="md:col-span-3">
 
-            <h2 className="text-2xl font-bold mb-6">
-              Kategoriya: <span className="text-blue-600">{currentCategory}</span>
+            <h2 className="text-2xl font-bold mb-6 text-stone-900">
+              {t("currentCategory")}: <span className="text-amber-600">{currentCategory === "Barchasi" ? t("categories.all") : currentCategory}</span>
             </h2>
 
             {/* Book Grid */}
@@ -125,10 +132,10 @@ export default function BooksPage() {
               <AnimatePresence>
                 {loading
                   ? Array.from({ length: 9 }).map((_, idx) => (
-                      <BookCardSkeleton key={idx} />
-                    ))
+                    <BookCardSkeleton key={idx} />
+                  ))
                   : booksData.length > 0
-                  ? booksData.map((book, idx) => (
+                    ? booksData.map((book, idx) => (
                       <motion.div
                         key={idx}
                         initial={{ opacity: 0, y: 30 }}
@@ -137,23 +144,23 @@ export default function BooksPage() {
                         transition={{ duration: 0.4 }}
                       >
                         <BookCard
-                          id={book.key?.split("/").pop()}
+                          id={book.id}
                           title={book.title}
-                          author={book.authors?.[0]?.name}
+                          author={book.author}
                           coverUrl={
-                            book.cover_id
-                              ? `https://covers.openlibrary.org/b/id/${book.cover_id}-M.jpg`
+                            book.cover_image
+                              ? (book.cover_image.startsWith('http') ? book.cover_image : `http://127.0.0.1:8000${book.cover_image}`)
                               : ""
                           }
                         />
                       </motion.div>
                     ))
-                  : (
-                    <div className="col-span-full flex flex-col items-center py-20">
-                      <img src={noDataSvg} alt="No books" className="w-40 h-40 mb-6" />
-                      <p className="text-gray-500 text-lg">Hech qanday kitob topilmadi.</p>
-                    </div>
-                  )}
+                    : (
+                      <div className="col-span-full flex flex-col items-center py-20">
+                        <img src={noDataSvg} alt="No books" className="w-40 h-40 mb-6 opacity-80" />
+                        <p className="text-stone-500 text-lg">{t("noBooksFound")}</p>
+                      </div>
+                    )}
               </AnimatePresence>
             </div>
 
