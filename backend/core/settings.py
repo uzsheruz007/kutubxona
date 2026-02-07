@@ -26,7 +26,9 @@ SECRET_KEY = 'django-insecure-!ahw76oy!1hnq))h#yb)5y4)=y#0#_fcr79o@-mphejg1@4yqs
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['kutubxona.samduuf.uz', 'www.kutubxona.samduuf.uz', 'localhost', '127.0.0.1']
+
+CSRF_TRUSTED_ORIGINS = ['https://kutubxona.samduuf.uz']
 
 
 # Application definition
