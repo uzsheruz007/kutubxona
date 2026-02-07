@@ -3,7 +3,6 @@ import { Link } from "react-router-dom";
 import { ArrowRight, Sparkles, BookOpen, Search } from "lucide-react";
 import { motion } from "framer-motion";
 import { useTranslation } from "react-i18next";
-import { useTranslation } from "react-i18next";
 import BookShowcase from "./BookShowcase"; // Original Component
 import { API_BASE_URL } from "../config";
 
