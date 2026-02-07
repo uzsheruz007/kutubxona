@@ -2,7 +2,9 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
 import { FiPlus, FiEdit2, FiTrash2, FiSearch, FiFilter } from "react-icons/fi";
+import { useNavigate } from "react-router-dom";
 import { Loader } from "lucide-react";
+import { API_BASE_URL } from "../../config";
 
 export default function AdminBooks() {
     const [books, setBooks] = useState([]);
@@ -27,7 +29,7 @@ export default function AdminBooks() {
     const fetchBooks = async () => {
         setLoading(true);
         try {
-            let url = "http://127.0.0.1:8000/api/books/";
+            let url = `${API_BASE_URL}/api/books/`;
             if (category !== "all") {
                 url += `?category=${category}`;
             }
@@ -43,7 +45,7 @@ export default function AdminBooks() {
     const handleDelete = async (id) => {
         if (!window.confirm("Rostdan ham bu kitobni o'chirmoqchimisiz?")) return;
         try {
-            await axios.delete(`http://127.0.0.1:8000/api/books/${id}/`);
+            await axios.delete(`${API_BASE_URL}/api/books/${id}/`);
             setBooks(books.filter(b => b.id !== id));
         } catch (error) {
             console.error("Delete failed:", error);

@@ -7,6 +7,7 @@ import QRCode from "react-qr-code";
 import PageHeader from "../components/PageHeader";
 import { useUser } from "../context/UserContext";
 import i18n from "../i18n";
+import { API_BASE_URL } from "../config";
 
 import { useTranslation } from "react-i18next";
 
@@ -31,7 +32,7 @@ export default function BookDetails() {
       return;
     }
     try {
-      const response = await axios.post(`http://127.0.0.1:8000/api/accounts/favorites/${book.id}/`, {}, {
+      const response = await axios.post(`${API_BASE_URL}/api/accounts/favorites/${book.id}/`, {}, {
         headers: { Authorization: `Token ${localStorage.getItem('token')}` } // Assuming token is in localStorage
       });
 
@@ -62,7 +63,7 @@ export default function BookDetails() {
       try {
         setLoading(true);
         const res = await axios.get(
-          `http://127.0.0.1:8000/api/books/${id}/`, {
+          `${API_BASE_URL}/api/books/${id}/`, {
           headers: {
             "Accept-Language": i18n.language
           }
@@ -104,7 +105,7 @@ export default function BookDetails() {
   }
 
   const coverUrl = book.cover_image
-    ? (book.cover_image.startsWith('http') ? book.cover_image : `http://127.0.0.1:8000${book.cover_image}`)
+    ? (book.cover_image.startsWith('http') ? book.cover_image : `${API_BASE_URL}${book.cover_image}`)
     : "/images/image.png";
 
   return (
@@ -158,7 +159,7 @@ export default function BookDetails() {
                     onClick={() => {
                       if (user) {
                         if (book.file) {
-                          const fileUrl = book.file.startsWith('http') ? book.file : `http://127.0.0.1:8000${book.file}`;
+                          const fileUrl = book.file.startsWith('http') ? book.file : `${API_BASE_URL}${book.file}`;
                           window.open(fileUrl, '_blank');
                         }
                         else alert("Fayl yuklanmagan");
@@ -239,7 +240,7 @@ export default function BookDetails() {
                 <div className="bg-stone-50 p-4 rounded-xl mb-6 flex justify-center">
                   {book.qr_code ? (
                     <img
-                      src={book.qr_code.startsWith('http') ? book.qr_code : `http://127.0.0.1:8000${book.qr_code}`}
+                      src={book.qr_code.startsWith('http') ? book.qr_code : `${API_BASE_URL}${book.qr_code}`}
                       alt="QR Code"
                       className="w-[140px] h-[140px] object-contain mix-blend-multiply"
                     />

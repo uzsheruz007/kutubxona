@@ -8,6 +8,7 @@ import Pagination from "../components/Pagination";
 import noDataSvg from '../assets/undraw_no-data_ig65.svg';
 import PageHeader from "../components/PageHeader";
 import i18n from "../i18n";
+import { API_BASE_URL } from "../config";
 
 const categories = [
   "Barchasi",
@@ -37,7 +38,7 @@ export default function BooksPage() {
     const fetchBooks = async () => {
       setLoading(true);
       try {
-        const res = await axios.get("http://127.0.0.1:8000/api/books/", {
+        const res = await axios.get(`${API_BASE_URL}/api/books/`, {
           headers: {
             "Accept-Language": i18n.language
           }
@@ -149,7 +150,7 @@ export default function BooksPage() {
                           author={book.author}
                           coverUrl={
                             book.cover_image
-                              ? (book.cover_image.startsWith('http') ? book.cover_image : `http://127.0.0.1:8000${book.cover_image}`)
+                              ? (book.cover_image.startsWith('http') ? book.cover_image : `${API_BASE_URL}${book.cover_image}`)
                               : ""
                           }
                         />

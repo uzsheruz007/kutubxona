@@ -5,6 +5,7 @@ import { Sparkles, Search } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import axios from "axios";
 import i18n from "../i18n";
+import { API_BASE_URL } from "../config";
 
 // Match Backend Defaults
 const categoryKeys = ["Barchasi", "Yangilik", "E'lon", "Tadbir", "Yangi", "Texnik", "Xizmat"];
@@ -21,7 +22,7 @@ export default function AllNewsPage() {
     useEffect(() => {
         const fetchNews = async () => {
             try {
-                const response = await axios.get("http://127.0.0.1:8000/api/news/", {
+                const response = await axios.get(`${API_BASE_URL}/api/news/`, {
                     headers: {
                         'Accept-Language': i18n.language || 'uz'
                     }
@@ -154,7 +155,7 @@ export default function AllNewsPage() {
                                 <NewsCard
                                     {...item}
                                     admin="Kutubxona_Admin"
-                                    image={item.image ? (item.image.startsWith('http') ? item.image : `http://127.0.0.1:8000${item.image}`) : null}
+                                    image={item.image ? (item.image.startsWith('http') ? item.image : `${API_BASE_URL}${item.image}`) : null}
                                 />
                             </motion.div>
                         ))}

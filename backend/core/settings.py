@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/6.0/ref/settings/
 """
 
 from pathlib import Path
+import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -227,4 +228,4 @@ HEMIS_STAFF_URL = 'https://hemis.samduuf.uz'
 # API URL (Default to student, but service handles both)
 HEMIS_API_URL = 'https://student.samduuf.uz/oauth/api' 
 
-HEMIS_REDIRECT_URI = 'http://localhost:5173/login/callback'
+HEMIS_REDIRECT_URI = os.environ.get('HEMIS_REDIRECT_URI', 'http://localhost:5173/login/callback')

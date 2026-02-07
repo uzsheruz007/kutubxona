@@ -6,6 +6,7 @@ import { Link } from "react-router-dom";
 import { Parallax } from "react-parallax";
 import AnimatedSectionDivider from "./AnimatedSectionDivider";
 import { useTranslation } from "react-i18next";
+import { API_BASE_URL } from "../config";
 
 const categories = ["Badiiy", "Texnologiya", "Ilmiy", "Tarixiy", "Psixologiya", "Biznes"];
 
@@ -49,7 +50,7 @@ export default function TopCategoriesSection() {
   // Load books when category changes
   useEffect(() => {
     setLoading(true);
-    fetch(`http://127.0.0.1:8000/api/books/?category=${activeCategory}`)
+    fetch(`${API_BASE_URL}/api/books/?category=${activeCategory}`)
       .then(res => res.json())
       .then(data => {
         const formattedBooks = data.map(book => ({

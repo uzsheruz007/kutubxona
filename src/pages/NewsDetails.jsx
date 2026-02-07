@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import PageHeader from "../components/PageHeader";
 import { motion } from "framer-motion";
 import { useTranslation } from "react-i18next";
+import { API_BASE_URL } from "../config";
 
 export default function NewsDetailPage() {
   const { t, i18n } = useTranslation();
@@ -18,8 +19,8 @@ export default function NewsDetailPage() {
   useEffect(() => {
     const fetchNewsDetail = async () => {
       try {
-        // Updated to use 127.0.0.1 for consistency
-        const response = await fetch(`http://127.0.0.1:8000/api/news/${id}/`, {
+        // Updated to use 127.0.0.1 for consistency (Now using API_BASE_URL)
+        const response = await fetch(`${API_BASE_URL}/api/news/${id}/`, {
           headers: {
             'Accept-Language': i18n.language || 'uz'
           }
@@ -94,7 +95,7 @@ export default function NewsDetailPage() {
                   initial={{ opacity: 0, scale: 1.05 }}
                   animate={{ opacity: 1, scale: 1 }}
                   transition={{ duration: 0.8 }}
-                  src={newsItem.image ? (newsItem.image.startsWith('http') ? newsItem.image : `http://127.0.0.1:8000${newsItem.image}`) : "https://placehold.co/800x400/d6d3d1/57534e?text=No+Image"}
+                  src={newsItem.image ? (newsItem.image.startsWith('http') ? newsItem.image : `${API_BASE_URL}${newsItem.image}`) : "https://placehold.co/800x400/d6d3d1/57534e?text=No+Image"}
                   alt={newsItem.title}
                   className="w-full h-full object-cover transform group-hover:scale-105 transition duration-700 ease-out"
                 />

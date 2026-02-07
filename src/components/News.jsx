@@ -9,6 +9,7 @@ import axios from "axios";
 import NewsCard from "./NewsCard";
 import i18n from "../i18n";
 import { useTranslation } from "react-i18next";
+import { API_BASE_URL } from "../config";
 
 export default function NewsSection() {
   const { t } = useTranslation();
@@ -18,7 +19,7 @@ export default function NewsSection() {
   useEffect(() => {
     const fetchNews = async () => {
       try {
-        const response = await axios.get("http://127.0.0.1:8000/api/news/", {
+        const response = await axios.get(`${API_BASE_URL}/api/news/`, {
           headers: { 'Accept-Language': i18n.language }
         });
         setNews(response.data);
@@ -106,7 +107,7 @@ export default function NewsSection() {
                 <NewsCard
                   {...item}
                   // Ensure image is full URL if relative
-                  image={item.image ? (item.image.startsWith('http') ? item.image : `http://127.0.0.1:8000${item.image}`) : null}
+                  image={item.image ? (item.image.startsWith('http') ? item.image : `${API_BASE_URL}${item.image}`) : null}
                 />
               </SwiperSlide>
             ))}

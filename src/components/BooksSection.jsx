@@ -3,6 +3,7 @@ import { Book } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import AnimatedSectionDivider from "./AnimatedSectionDivider";
 import { useTranslation } from "react-i18next";
+import { API_BASE_URL } from "../config";
 
 export default function MostPopularBooks() {
   const { t } = useTranslation();
@@ -10,7 +11,7 @@ export default function MostPopularBooks() {
   const [books, setBooks] = useState([]);
 
   useEffect(() => {
-    fetch('http://127.0.0.1:8000/api/books/popular/')
+    fetch(`${API_BASE_URL}/api/books/popular/`)
       .then(res => res.json())
       .then(data => {
         if (data.length > 0) {

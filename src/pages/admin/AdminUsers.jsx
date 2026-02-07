@@ -3,6 +3,7 @@ import axios from "axios";
 import { FiSearch, FiTrash2, FiUser, FiMoreVertical } from "react-icons/fi";
 import { Loader } from "lucide-react";
 import { format } from "date-fns";
+import { API_BASE_URL } from "../../config";
 
 export default function AdminUsers() {
     const [users, setUsers] = useState([]);
@@ -12,7 +13,7 @@ export default function AdminUsers() {
     const fetchUsers = async () => {
         setLoading(true);
         try {
-            const res = await axios.get(`http://127.0.0.1:8000/api/accounts/users/?search=${search}`);
+            const res = await axios.get(`${API_BASE_URL}/api/accounts/users/?search=${search}`);
             setUsers(res.data.results || res.data); // Handle pagination or list
         } catch (error) {
             console.error("Error fetching users:", error);
@@ -31,7 +32,7 @@ export default function AdminUsers() {
     const handleDelete = async (id) => {
         if (!window.confirm("Bu foydalanuvchini o'chirmoqchimisiz?")) return;
         try {
-            // await axios.delete(`http://127.0.0.1:8000/api/accounts/users/${id}/`);
+            // await axios.delete(`${API_BASE_URL}/api/accounts/users/${id}/`);
             alert("Hozircha o'chirish imkoniyati yopiq.");
             fetchUsers();
         } catch (error) {

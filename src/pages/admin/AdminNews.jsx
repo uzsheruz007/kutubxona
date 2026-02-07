@@ -4,6 +4,7 @@ import { FiPlus, FiSearch, FiEdit2, FiTrash2, FiCalendar } from "react-icons/fi"
 import { Loader } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { format } from "date-fns";
+import { API_BASE_URL } from "../../config";
 
 export default function AdminNews() {
     const [news, setNews] = useState([]);
@@ -14,7 +15,7 @@ export default function AdminNews() {
     const fetchNews = async () => {
         setLoading(true);
         try {
-            const res = await axios.get(`http://127.0.0.1:8000/api/news/?search=${search}`);
+            const res = await axios.get(`${API_BASE_URL}/api/news/?search=${search}`);
             setNews(res.data.results || res.data);
         } catch (error) {
             console.error("Error fetching news:", error);
@@ -33,7 +34,7 @@ export default function AdminNews() {
     const handleDelete = async (id) => {
         if (!window.confirm("Bu yangilikni o'chirmoqchimisiz?")) return;
         try {
-            await axios.delete(`http://127.0.0.1:8000/api/news/${id}/`);
+            await axios.delete(`${API_BASE_URL}/api/news/${id}/`);
             setNews(prev => prev.filter(item => item.id !== id));
         } catch (error) {
             console.error("Delete error:", error);

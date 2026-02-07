@@ -4,6 +4,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { FiSave, FiArrowLeft, FiUploadCloud, FiGlobe } from "react-icons/fi";
 import { Loader } from "lucide-react";
 import JoditEditor from 'jodit-react';
+import { API_BASE_URL } from "../../config";
 
 export default function AdminNewsForm() {
     const { id } = useParams();
@@ -32,7 +33,7 @@ export default function AdminNewsForm() {
 
     useEffect(() => {
         if (isEdit) {
-            axios.get(`http://127.0.0.1:8000/api/news/${id}/`)
+            axios.get(`${API_BASE_URL}/api/news/${id}/`)
                 .then(res => {
                     const data = res.data;
                     setFormData({
@@ -81,11 +82,11 @@ export default function AdminNewsForm() {
         try {
             if (isEdit) {
                 if (!formData.image) data.delete("image");
-                await axios.patch(`http://127.0.0.1:8000/api/news/${id}/`, data, {
+                await axios.patch(`${API_BASE_URL}/api/news/${id}/`, data, {
                     headers: { 'Content-Type': 'multipart/form-data' }
                 });
             } else {
-                await axios.post("http://127.0.0.1:8000/api/news/", data, {
+                await axios.post(`${API_BASE_URL}/api/news/`, data, {
                     headers: { 'Content-Type': 'multipart/form-data' }
                 });
             }

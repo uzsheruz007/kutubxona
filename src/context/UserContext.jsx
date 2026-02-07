@@ -1,5 +1,6 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import axios from "axios";
+import { API_BASE_URL } from "../config";
 
 const UserContext = createContext();
 
@@ -30,7 +31,7 @@ export function UserProvider({ children }) {
 
     const login = async (username, password) => {
         try {
-            const response = await axios.post("http://127.0.0.1:8000/api/accounts/login/", {
+            const response = await axios.post(`${API_BASE_URL}/api/accounts/login/`, {
                 username,
                 password
             });
@@ -48,7 +49,7 @@ export function UserProvider({ children }) {
 
     const loginWithHemis = async (data) => {
         try {
-            const response = await axios.post("http://127.0.0.1:8000/api/accounts/hemis/callback/", data);
+            const response = await axios.post(`${API_BASE_URL}/api/accounts/hemis/callback/`, data);
             setUser(response.data.user);
             setToken(response.data.token);
             return { success: true };
@@ -63,7 +64,7 @@ export function UserProvider({ children }) {
 
     const getHemisAuthUrl = async (userType = 'student') => {
         try {
-            const response = await axios.get(`http://127.0.0.1:8000/api/accounts/hemis/login/?user_type=${userType}`);
+            const response = await axios.get(`${API_BASE_URL}/api/accounts/hemis/login/?user_type=${userType}`);
             return response.data.auth_url;
         } catch (error) {
             console.error("Error fetching Hemis URL:", error);
@@ -81,7 +82,7 @@ export function UserProvider({ children }) {
         try {
             // Simplified fetch - we don't have a dedicated /me/ endpoint in views shown, 
             // but we can use UserProfileView GET /api/accounts/profile/
-            const response = await axios.get("http://127.0.0.1:8000/api/accounts/profile/");
+            const response = await axios.get(`${API_BASE_URL}/api/accounts/profile/`);
             setUser(response.data);
             return response.data;
         } catch (error) {

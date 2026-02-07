@@ -3,6 +3,7 @@ import axios from "axios";
 import { useNavigate, useParams } from "react-router-dom";
 import { FiSave, FiArrowLeft, FiUploadCloud, FiGlobe } from "react-icons/fi";
 import { Loader } from "lucide-react";
+import { API_BASE_URL } from "../../config";
 
 export default function AdminBookForm() {
     const { id } = useParams();
@@ -38,7 +39,7 @@ export default function AdminBookForm() {
 
     useEffect(() => {
         if (isEdit) {
-            axios.get(`http://127.0.0.1:8000/api/books/${id}/`)
+            axios.get(`${API_BASE_URL}/api/books/${id}/`)
                 .then(res => {
                     const data = res.data;
                     setFormData({
@@ -99,11 +100,11 @@ export default function AdminBookForm() {
                 if (!formData.file) data.delete("file");
                 if (!formData.qr_code) data.delete("qr_code");
 
-                await axios.patch(`http://127.0.0.1:8000/api/books/${id}/`, data, {
+                await axios.patch(`${API_BASE_URL}/api/books/${id}/`, data, {
                     headers: { 'Content-Type': 'multipart/form-data' }
                 });
             } else {
-                await axios.post("http://127.0.0.1:8000/api/books/", data, {
+                await axios.post(`${API_BASE_URL}/api/books/`, data, {
                     headers: { 'Content-Type': 'multipart/form-data' }
                 });
             }

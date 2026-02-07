@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import AnimatedSectionDivider from "./AnimatedSectionDivider";
 import { useTranslation } from "react-i18next";
 import { useState, useEffect } from "react";
+import { API_BASE_URL } from "../config";
 
 export default function LibraryStats() {
   const { t } = useTranslation();
@@ -15,7 +16,7 @@ export default function LibraryStats() {
   });
 
   useEffect(() => {
-    fetch('http://127.0.0.1:8000/api/books/stats/')
+    fetch(`${API_BASE_URL}/api/books/stats/`)
       .then(res => {
         if (!res.ok) {
           throw new Error(`HTTP error! status: ${res.status}`);

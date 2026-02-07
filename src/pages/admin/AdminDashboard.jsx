@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { FiBook, FiUsers, FiUserPlus, FiPieChart } from "react-icons/fi";
 import { Loader } from "lucide-react";
+import { API_BASE_URL } from "../../config";
 
 export default function AdminDashboard() {
     const [stats, setStats] = useState(null);
@@ -10,7 +11,7 @@ export default function AdminDashboard() {
     useEffect(() => {
         const fetchStats = async () => {
             try {
-                const response = await axios.get("http://127.0.0.1:8000/api/books/admin/stats/");
+                const response = await axios.get(`${API_BASE_URL}/api/books/admin/stats/`);
                 setStats(response.data);
             } catch (error) {
                 console.error("Failed to load admin stats", error);

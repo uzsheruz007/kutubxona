@@ -3,6 +3,7 @@ import { useUser } from "../context/UserContext";
 import { FiLogOut, FiHeart, FiUser, FiSettings, FiBookOpen, FiAward, FiGrid, FiList } from "react-icons/fi";
 import { Link, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
+import { API_BASE_URL } from "../config";
 
 export default function Profile() {
     const { user, logout, refreshUser } = useUser();
@@ -108,7 +109,7 @@ export default function Profile() {
                                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
                                         {user.favourites.map((book) => {
                                             const coverSrc = book.coverUrl
-                                                ? (book.coverUrl.startsWith('http') ? book.coverUrl : `http://127.0.0.1:8000${book.coverUrl}`)
+                                                ? (book.coverUrl.startsWith('http') ? book.coverUrl : `${API_BASE_URL}${book.coverUrl}`)
                                                 : "/images/image.png";
                                             return (
                                                 <Link to={`/book/${book.id}`} key={book.id} className="group bg-white rounded-xl overflow-hidden border border-stone-100 hover:border-amber-200 hover:shadow-md transition-all flex flex-col">
