@@ -78,9 +78,12 @@ class HemisService:
         
         try:
             response = requests.get(info_url, headers=headers)
+            if response.status_code != 200:
+                print(f"HemisService: get_user_info failed. URL: {info_url}, Status: {response.status_code}, Body: {response.text}")
             response.raise_for_status()
             return response.json()
-        except requests.exceptions.RequestException:
+        except requests.exceptions.RequestException as e:
+            print(f"HemisService: get_user_info Exception: {e}")
             return None
 
     @staticmethod
