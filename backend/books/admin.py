@@ -6,8 +6,8 @@ from django.db import models
 
 @admin.register(Book)
 class BookAdmin(TranslationAdmin):
-    list_display = ('title', 'author', 'category', 'resource_type', 'published_date')
-    list_filter = ('category', 'resource_type', 'author', 'published_date')
+    list_display = ('title', 'author', 'category', 'published_date')
+    list_filter = ('category', 'author', 'published_date')
     search_fields = ('title', 'author', 'description', 'subjects')
     
     group_fieldsets = True
