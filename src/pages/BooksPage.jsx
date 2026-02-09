@@ -14,9 +14,10 @@ const categories = [
   "Barchasi",
   "Badiiy",
   "Ilmiy",
-  "Biografiya",
-  "Falsafa",
   "Texnologiya",
+  "Diniy",
+  "Bolalar",
+  "Jahon"
 ];
 
 import { useTranslation } from "react-i18next";
@@ -115,7 +116,7 @@ export default function BooksPage() {
                     boxShadow: "0 4px 20px rgba(245, 158, 11, 0.2)",
                   }}
                 >
-                  {cat === "Barchasi" ? t("categories.all") : cat}
+                  {cat === "Barchasi" ? t("categories.all") : t(`categories.${cat.toLowerCase()}`, cat)}
                 </motion.button>
               ))}
             </motion.div>
@@ -125,7 +126,7 @@ export default function BooksPage() {
           <div className="md:col-span-3">
 
             <h2 className="text-2xl font-bold mb-6 text-stone-900">
-              {t("currentCategory")}: <span className="text-amber-600">{currentCategory === "Barchasi" ? t("categories.all") : currentCategory}</span>
+              {t("currentCategory")}: <span className="text-amber-600">{currentCategory === "Barchasi" ? t("categories.all") : t(`categories.${currentCategory.toLowerCase()}`, currentCategory)}</span>
             </h2>
 
             {/* Book Grid */}
