@@ -67,8 +67,8 @@ class HemisLoginView(APIView):
             base_url = settings.HEMIS_STUDENT_URL
 
         # Generate Hemis Authorize URL
-        # URL should be https://student.samduuf.uz/oauth/authorize
-        auth_url = f"{base_url}/oauth/authorize?client_id={settings.HEMIS_CLIENT_ID}&response_type=code&redirect_uri={settings.HEMIS_REDIRECT_URI}"
+        # We pass user_type as 'state' to identify the domain on callback
+        auth_url = f"{base_url}/oauth/authorize?client_id={settings.HEMIS_CLIENT_ID}&response_type=code&redirect_uri={settings.HEMIS_REDIRECT_URI}&state={user_type}"
         
         return Response({
             "auth_url": auth_url
@@ -82,15 +82,17 @@ class HemisCallbackView(APIView):
 
     def post(self, request):
         code = request.data.get('code')
+        state = request.data.get('state', 'student') # Default to student if missing
+        
         if not code:
             logger.error("HemisCallbackView: Code is missing")
             return Response({'error': 'Code is required'}, status=status.HTTP_400_BAD_REQUEST)
 
-        logger.info(f"HemisCallbackView: Received code {code[:5]}...")
+        logger.info(f"HemisCallbackView: Received code {code[:5]}... State: {state}")
 
         # 1. Exchange code for access token
         try:
-            token_data = HemisService.exchange_code_for_token(code)
+            token_data = HemisService.exchange_code_for_token(code, user_type_hint=state)
         except Exception as e:
             logger.error(f"HemisCallbackView: exchange_code_for_token failed: {e}")
             return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)

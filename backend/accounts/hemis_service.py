@@ -5,9 +5,17 @@ from rest_framework.authtoken.models import Token
 
 class HemisService:
     @staticmethod
-    def exchange_code_for_token(code):
-        # Prioritize student.samduuf.uz as requested
+    def exchange_code_for_token(code, user_type_hint='student'):
+        # Default order
         domains = ["student.samduuf.uz", "hemis.samduuf.uz"]
+        
+        # Override order based on hint
+        if user_type_hint in ['staff', 'employee']:
+            domains = ["hemis.samduuf.uz", "student.samduuf.uz"]
+            print(f"DEBUG: Staff Login detected. Prioritizing hemis.samduuf.uz")
+        else:
+            print(f"DEBUG: Student Login detected. Prioritizing student.samduuf.uz")
+        
         paths = ["/oauth/access-token", "/oauth/token"]
         
         try:
