@@ -26,7 +26,7 @@ SECRET_KEY = 'django-insecure-!ahw76oy!1hnq))h#yb)5y4)=y#0#_fcr79o@-mphejg1@4yqs
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['e-library.samduuf.uz', 'www.e-library.samduuf.uz', 'kutubxona.samduuf.uz', 'www.kutubxona.samduuf.uz', 'localhost', '127.0.0.1']
+ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS', 'e-library.samduuf.uz,www.e-library.samduuf.uz,kutubxona.samduuf.uz,www.kutubxona.samduuf.uz,localhost,127.0.0.1').split(',')
 
 CSRF_TRUSTED_ORIGINS = ['https://e-library.samduuf.uz', 'https://kutubxona.samduuf.uz']
 
