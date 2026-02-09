@@ -29,13 +29,20 @@ class ChangePasswordSerializer(serializers.Serializer):
         return value
 
 class UserSerializer(serializers.ModelSerializer):
+    user_type = serializers.SerializerMethodField()
     avatar = serializers.SerializerMethodField()
     favourites = serializers.SerializerMethodField()
     
     class Meta:
         model = User
-        fields = ['id', 'username', 'email', 'first_name', 'last_name', 'avatar', 'favourites', 'date_joined', 'is_staff', 'is_superuser']
+        fields = ['id', 'username', 'email', 'first_name', 'last_name', 'user_type', 'avatar', 'favourites', 'date_joined', 'is_staff', 'is_superuser']
         
+    def get_user_type(self, obj):
+        try:
+            return obj.profile.user_type
+        except:
+            return 'student' # Default to student if profile missing
+
     def get_avatar(self, obj):
         try:
             return obj.profile.avatar_url
