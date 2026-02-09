@@ -55,7 +55,7 @@ export default function Profile() {
                         <h2 className="text-xl font-bold text-stone-800 font-serif">
                             {user.first_name || user.username} {user.last_name || ""}
                         </h2>
-                        <p className="text-stone-500 text-sm font-medium mb-4">{user.user_type === 'employee' ? 'Xodim' : 'Talaba'}</p>
+
 
                         <div className="w-full border-t border-stone-100 pt-4 space-y-2">
                             <button
