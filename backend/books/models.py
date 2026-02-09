@@ -25,7 +25,8 @@ class Book(models.Model):
         ('Maqola', 'Maqola'),
         ('Dissertatsiya', 'Dissertatsiya'),
     ]
-    resource_type = models.CharField("Resurs Turi", max_length=50, choices=RESOURCE_TYPE_CHOICES, default='Kitob')
+    # Removed strict choices to allow manual input, but kept choices variable for reference if needed
+    resource_type = models.CharField("Resurs Turi", max_length=50, default='Kitob')
     
     # Metadata
     page_count = models.IntegerField("Betlar Soni", default=0)

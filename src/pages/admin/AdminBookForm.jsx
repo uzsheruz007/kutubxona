@@ -176,9 +176,10 @@ export default function AdminBookForm() {
                         </div>
                         <div className="space-y-2">
                             <label className="text-sm font-semibold text-stone-700">Resurs Turi</label>
-                            <select name="resource_type" value={formData.resource_type} onChange={handleChange} className="w-full px-4 py-2.5 rounded-xl border border-stone-200 focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 outline-none bg-white">
-                                {resourceTypes.map(t => <option key={t} value={t}>{t}</option>)}
-                            </select>
+                            <input list="resource-types" name="resource_type" value={formData.resource_type} onChange={handleChange} className="w-full px-4 py-2.5 rounded-xl border border-stone-200 focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 outline-none" placeholder="Masalan: Kitob, Maqola..." />
+                            <datalist id="resource-types">
+                                {resourceTypes.map(t => <option key={t} value={t} />)}
+                            </datalist>
                         </div>
                     </div>
                 </div>
