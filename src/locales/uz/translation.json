@@ -23,9 +23,9 @@
   },
   "hero": {
     "slogan": "Bilimlar xazinasi",
-    "welcome_part1": "Kashf",
-    "welcome_part2": "Eting",
-    "description": "Eng sifatli kitoblar, oson qidiruv va qulay interfeys. O'zingizga kerakli adabiyotlarni toping va bilimlaringizni oshiring.",
+    "welcome_part1": "Kitob — bu",
+    "welcome_part2": "vaqt mashinasi.",
+    "description": "So‘zlar, satrlar va g‘oyalar uyg‘unlashgan ushbu makonda siz nafaqat bilim topasiz, balki o‘zingizni ham qayta kashf etasiz. Bu yerda o‘tmish donoligi, bugungi texnologiya va kelajak orzulari bir nuqtada jamlangan.",
     "viewBooks": "Kitoblarni ko‘rish",
     "enterLibrary": "Kutubxonaga kirish",
     "search": "Qidirish",

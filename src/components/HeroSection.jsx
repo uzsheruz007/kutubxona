@@ -52,9 +52,9 @@ export default function HeroSection({ onScrollClick }) {
           </div>
 
           <h1 className="text-5xl sm:text-6xl lg:text-7xl font-extrabold text-stone-900 leading-[1.1] tracking-tight mb-6">
-            <span className="block">{t("hero.welcome_part1", "Kashf")}</span>
+            <span className="block">{t("hero.welcome_part1", "Kitob — bu")}</span>
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-600 via-orange-600 to-yellow-600">
-              {t("hero.welcome_part2", "Eting")}
+              {t("hero.welcome_part2", "vaqt mashinasi.")}
             </span>
           </h1>
 

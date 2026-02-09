@@ -137,10 +137,10 @@ export default function ThreeDHero({ onScrollClick }) {
 
                 <h1 className="text-5xl md:text-7xl font-black text-white mb-6 drop-shadow-2xl">
                     <span className="block text-transparent bg-clip-text bg-gradient-to-r from-blue-300 via-white to-blue-300">
-                        {t("hero.welcome_part1", "Kashf")}
+                        {t("hero.welcome_part1", "Kitob — bu")}
                     </span>
                     <span className="block mt-2 text-transparent bg-clip-text bg-gradient-to-r from-amber-200 via-yellow-400 to-amber-600">
-                        {t("hero.welcome_part2", "Eting")}
+                        {t("hero.welcome_part2", "vaqt mashinasi.")}
                     </span>
                 </h1>
 
