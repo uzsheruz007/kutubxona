@@ -26,7 +26,7 @@ export default function Profile() {
     if (!user) return null;
 
     return (
-        <div className="min-h-screen bg-stone-50 pt-24 pb-20 px-4 sm:px-6 relative overflow-hidden">
+        <div className="min-h-screen bg-stone-50 pt-36 pb-20 px-4 sm:px-6 relative overflow-hidden">
             {/* Atmospheric Background */}
             <div className="absolute inset-0 pointer-events-none bg-gradient-to-tr from-stone-50 via-orange-50/30 to-amber-50/30"></div>
             <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-amber-200/20 rounded-full blur-[120px] -translate-y-1/2 translate-x-1/2"></div>
