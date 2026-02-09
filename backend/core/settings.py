@@ -225,8 +225,8 @@ CKEDITOR_5_CONFIGS = {
 }
 
 # Hemis Auth Settings
-HEMIS_CLIENT_ID = '7'
-HEMIS_CLIENT_SECRET = 'Qeg49F7hDTp11Zx7Lg20UV9rYRxedl376_kub68t'
+HEMIS_CLIENT_ID = os.environ.get('HEMIS_CLIENT_ID', '7')
+HEMIS_CLIENT_SECRET = os.environ.get('HEMIS_CLIENT_SECRET', 'Qeg49F7hDTp11Zx7Lg20UV9rYRxedl376_kub68t')
 # Base APIs
 HEMIS_STUDENT_URL = 'https://student.samduuf.uz'
 HEMIS_STAFF_URL = 'https://hemis.samduuf.uz'
