@@ -1,4 +1,4 @@
-export const API_BASE_URL = "https://kutubxona.samduuf.uz";
+export const API_BASE_URL = "https://e-library.samduuf.uz";
 
 export const getImageUrl = (path) => {
     if (!path) return null;

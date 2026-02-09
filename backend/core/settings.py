@@ -26,9 +26,11 @@ SECRET_KEY = 'django-insecure-!ahw76oy!1hnq))h#yb)5y4)=y#0#_fcr79o@-mphejg1@4yqs
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['kutubxona.samduuf.uz', 'www.kutubxona.samduuf.uz', 'localhost', '127.0.0.1']
+ALLOWED_HOSTS = ['e-library.samduuf.uz', 'www.e-library.samduuf.uz', 'kutubxona.samduuf.uz', 'www.kutubxona.samduuf.uz', 'localhost', '127.0.0.1']
 
-CSRF_TRUSTED_ORIGINS = ['https://kutubxona.samduuf.uz']
+CSRF_TRUSTED_ORIGINS = ['https://e-library.samduuf.uz', 'https://kutubxona.samduuf.uz']
+
+
 
 
 # Application definition
@@ -162,6 +164,7 @@ MEDIA_ROOT = BASE_DIR / 'media'
 # CORS Configuration
 CORS_ALLOW_ALL_ORIGINS = True
 CORS_ALLOWED_ORIGINS = [
+    "https://e-library.samduuf.uz",
     "http://localhost:5173",
     "http://127.0.0.1:5173",
 ]
@@ -230,4 +233,4 @@ HEMIS_STAFF_URL = 'https://hemis.samduuf.uz'
 # API URL (Default to student, but service handles both)
 HEMIS_API_URL = 'https://student.samduuf.uz/oauth/api' 
 
-HEMIS_REDIRECT_URI = os.environ.get('HEMIS_REDIRECT_URI', 'http://localhost:5173/login/callback')
+HEMIS_REDIRECT_URI = os.environ.get('HEMIS_REDIRECT_URI', 'https://e-library.samduuf.uz/login/callback')
