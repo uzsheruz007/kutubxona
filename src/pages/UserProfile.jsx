@@ -44,8 +44,8 @@ export default function Profile() {
 
                         <div className="relative z-10">
                             <div className="w-28 h-28 rounded-full bg-white border-4 border-white shadow-lg flex items-center justify-center mb-4 relative z-10 mx-auto overflow-hidden">
-                                {user.avatar_url ? (
-                                    <img src={user.avatar_url} alt="Avatar" className="w-full h-full object-cover" />
+                                {user.avatar ? (
+                                    <img src={user.avatar} alt="Avatar" className="w-full h-full object-cover" />
                                 ) : (
                                     <FiUser size={40} className="text-stone-300" />
                                 )}

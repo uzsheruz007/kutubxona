@@ -166,8 +166,12 @@ export default function Navbar() {
                             {user ? (
                                 <div className="relative" ref={userRef}>
                                     <button onClick={() => setUserDropdown(!userDropdown)} className="flex items-center gap-2 pl-1 pr-3 py-1 rounded-full bg-gradient-to-r from-stone-50 to-amber-50 border border-stone-200 hover:shadow-lg transition">
-                                        <div className="w-8 h-8 rounded-full bg-white border-2 border-amber-100 flex items-center justify-center shadow-sm">
-                                            <User size={18} className="text-amber-500" />
+                                        <div className="w-8 h-8 rounded-full bg-white border-2 border-amber-100 flex items-center justify-center shadow-sm overflow-hidden">
+                                            {user.avatar ? (
+                                                <img src={user.avatar} alt="User" className="w-full h-full object-cover" />
+                                            ) : (
+                                                <User size={18} className="text-amber-500" />
+                                            )}
                                         </div>
                                         <span className="text-sm font-semibold text-stone-800 max-w-[80px] truncate">{user.first_name || user.username}</span>
                                     </button>
