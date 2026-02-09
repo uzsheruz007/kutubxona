@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useSearchParams, useNavigate } from "react-router-dom";
 import { useUser } from "../context/UserContext";
 import axios from "axios";
@@ -10,14 +10,19 @@ export default function LoginCallback() {
     const { loginWithHemis } = useUser();
     const [status, setStatus] = useState("Authenticating...");
 
+    const effectRan = useRef(false);
+
     useEffect(() => {
+        if (effectRan.current) return;
+
         const code = searchParams.get('code');
         const state = searchParams.get('state');
+
         if (code) {
+            effectRan.current = true;
             handleCallback({ code, state });
         } else {
             setStatus("Authorization Code not found.");
-            // setTimeout(() => navigate('/login'), 3000);
         }
     }, [searchParams]);
 
