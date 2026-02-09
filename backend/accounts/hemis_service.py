@@ -6,31 +6,21 @@ from rest_framework.authtoken.models import Token
 class HemisService:
     @staticmethod
     def exchange_code_for_token(code):
-        """
-        Exchanges the authorization code for an access token from Hemis.
-        Tries multiple domains and paths to find the correct one.
-        Uses Browser Headers to avoid being blocked.
-        Retries with Basic Auth if Body Auth fails.
-        """
-        domains = ["student.samduuf.uz", "hemis.samduuf.uz"]
-        # 'access-token' is confirmed to be the correct endpoint
-        paths = ["/oauth/access-token", "/oauth/token"]
+        # Prioritize hemis.samduuf.uz for employees
+        domains = ["hemis.samduuf.uz", "student.samduuf.uz"]
         
-        # Add the one from settings as a priority if not already covered
         settings_host = settings.HEMIS_API_URL.split("://")[-1].split("/")[0]
         if settings_host not in domains:
             domains.insert(0, settings_host)
 
         print(f"DEBUG: Starting Secure Token Exchange.")
         
-        # Payload without credentials (for Basic Auth)
         payload_basic = {
             'grant_type': 'authorization_code',
             'redirect_uri': settings.HEMIS_REDIRECT_URI,
             'code': code
         }
         
-        # Payload with credentials (for Body Auth)
         payload_body = payload_basic.copy()
         payload_body.update({
             'client_id': settings.HEMIS_CLIENT_ID,
@@ -38,39 +28,39 @@ class HemisService:
         })
         
         headers = {
-            'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
-            'Accept': 'application/json, text/html, */*'
+            'User-Agent': 'Mozilla/5.0 (Compatible; KutubxonaBot/1.0)',
+            'Accept': 'application/json'
         }
         
         auth = requests.auth.HTTPBasicAuth(settings.HEMIS_CLIENT_ID, settings.HEMIS_CLIENT_SECRET)
 
         for domain in domains:
+            # Try both access-token endpoints
+            paths = ["/oauth/access-token", "/oauth/token"]
+            
             for path in paths:
-                url = f"https://{domain}{path}"
-                print(f"DEBUG: Trying {url}...")
+                full_url = f"https://{domain}{path}"
+                print(f"DEBUG: Trying {full_url}...")
                 
-                # Method 1: POST with Body Credentials
+                # Method 1: Body Auth
                 try:
-                    response = requests.post(url, data=payload_body, headers=headers, timeout=5)
-                    print(f"DEBUG: [POST Body] {url} -> {response.status_code}")
+                    response = requests.post(full_url, data=payload_body, headers=headers, timeout=5)
                     if response.status_code == 200:
                         data = response.json()
-                        data['found_domain'] = domain # Inject domain to know where to fetch user info
+                        data['found_domain'] = domain
+                        print(f"DEBUG: Success with {full_url}")
                         return data
                 except Exception as e:
-                    print(f"DEBUG: Connect error {url}: {e}")
+                    print(f"DEBUG: Error connecting to {full_url}: {e}")
 
-                # Method 2: POST with Basic Auth Header (Fix for 401 invalid_client)
+                # Method 2: Basic Auth
                 try:
-                    # Note: We send payload_basic (no credentials in body) + auth header
-                    response = requests.post(url, data=payload_basic, auth=auth, headers=headers, timeout=5)
-                    print(f"DEBUG: [POST BasicAuth] {url} -> {response.status_code}")
+                    response = requests.post(full_url, data=payload_basic, auth=auth, headers=headers, timeout=5)
                     if response.status_code == 200:
                          data = response.json()
-                         data['found_domain'] = domain # Inject domain
+                         data['found_domain'] = domain
+                         print(f"DEBUG: Success with {full_url} (Basic Auth)")
                          return data
-                    elif response.status_code == 401:
-                         print(f"DEBUG: Basic Auth Failed: {response.text}")
                 except Exception:
                     pass
         
@@ -79,11 +69,6 @@ class HemisService:
 
     @staticmethod
     def get_user_info(access_token, base_domain=None):
-        """
-        Fetches user info using the access token. 
-        Uses base_domain to construct the URL if provided.
-        """
-        # Default to settings if no domain provided (fallback)
         if base_domain:
             info_url = f"https://{base_domain}/oauth/api/user"
         else:
@@ -96,79 +81,77 @@ class HemisService:
             response = requests.get(info_url, headers=headers)
             response.raise_for_status()
             data = response.json()
-            print(f"DEBUG: Full User Info: {data}") # LOGGING TO SEE KEYS
+            print(f"DEBUG: Full User Info: {data}") 
             return data
         except requests.exceptions.RequestException as e:
             print(f"Hemis User Info Error: {e}")
             return None
 
     @staticmethod
-    def get_or_create_user(hemis_data, user_type='student'):
-        """
-        Creates or updates a Django User based on Hemis data.
-        user_type: 'student' or 'employee' (staff)
-        """
-        # Determine unique identifier
-        # Students usually have 'student_id_number'
-        # Staff usually have 'employee_id_number'
+    def get_or_create_user(hemis_data, user_type='student', found_domain=None):
+        # 1. Username logic (robust fallback)
+        username = (
+            hemis_data.get('login') or 
+            hemis_data.get('username') or 
+            hemis_data.get('student_id_number') or 
+            hemis_data.get('employee_id_number')
+        )
         
-        hemis_id = None
-        
-        if user_type == 'student':
-            hemis_id = hemis_data.get('student_id_number') or hemis_data.get('login')
-            if not hemis_id and 'id' in hemis_data:
-                hemis_id = f"student_{hemis_data['id']}"
-        else:
-             # Staff
-            hemis_id = hemis_data.get('employee_id_number') or hemis_data.get('login')
-            if not hemis_id and 'id' in hemis_data:
-                hemis_id = f"employee_{hemis_data['id']}"
-        
-        # Fallback
-        if not hemis_id:
+        if not username:
              hemis_id = str(hemis_data.get('id', ''))
-             if user_type:
-                 hemis_id = f"{user_type}_{hemis_id}"
+             if hemis_id:
+                 username = f"{user_type}_{hemis_id}"
         
-        if not hemis_id or hemis_id == f"{user_type}_":
+        if not username:
+            print("DEBUG: Username not found in Hemis data")
             return None
             
-        username = hemis_id
-        first_name = hemis_data.get('firstname', '') or hemis_data.get('firstName', '')
-        last_name = hemis_data.get('lastname', '') or hemis_data.get('surname', '') or hemis_data.get('lastName', '')
-        
+        # 2. Name logic
+        first_name = hemis_data.get('firstname') or hemis_data.get('first_name') or hemis_data.get('name', '')
+        last_name = hemis_data.get('surname') or hemis_data.get('last_name') or hemis_data.get('lastname', '')
         email = hemis_data.get('email', '')
+
+        print(f"DEBUG: Creating/Updating user: {username}, {first_name} {last_name}")
 
         user, created = User.objects.get_or_create(username=username)
         
-        # Update fields
-        user.first_name = first_name
-        user.last_name = last_name
-        if email:
-            user.email = email
+        if first_name: user.first_name = first_name
+        if last_name: user.last_name = last_name
+        if email: user.email = email
         user.save()
         
-        # Create or Update UserProfile with Avatar
+        # 3. Profile & Avatar logic
         from accounts.models import UserProfile
         profile, _ = UserProfile.objects.get_or_create(user=user)
         
-        # Try multiple keys for picture
-        picture_url = (
+        picture_path = (
             hemis_data.get('picture') or 
+            hemis_data.get('picture_link') or
             hemis_data.get('image') or 
             hemis_data.get('avatar') or 
             hemis_data.get('photo') or
             hemis_data.get('avatar_url')
         )
         
-        if picture_url:
-            profile.avatar_url = picture_url
+        if picture_path:
+            if picture_path.startswith("http"):
+                 profile.avatar_url = picture_path
+            else:
+                 # Construct full URL
+                 base_domain = found_domain or ("hemis.samduuf.uz" if user_type == 'employee' else "student.samduuf.uz")
+                 if not picture_path.startswith("/"):
+                     picture_path = f"/{picture_path}"
+                 profile.avatar_url = f"https://{base_domain}{picture_path}"
         
-        profile.hemis_id = hemis_id
-        profile.user_type = user_type # Check if model has this field, if not it's fine, we primarily needed unique username
+        # Save Hemis ID
+        if user_type == 'student':
+            profile.hemis_id = hemis_data.get('student_id_number', username)
+        else:
+            profile.hemis_id = hemis_data.get('employee_id_number', username)
+
+        profile.user_type = user_type
         profile.save()
         
-        # Create DRF Token
         token, _ = Token.objects.get_or_create(user=user)
         
         return user, token

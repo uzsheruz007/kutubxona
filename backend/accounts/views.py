@@ -107,7 +107,7 @@ class HemisCallbackView(APIView):
             user_type = 'student'
             
         # Create or Update User
-        result = HemisService.get_or_create_user(user_info, user_type=user_type)
+        result = HemisService.get_or_create_user(user_info, user_type=user_type, found_domain=found_domain)
         if not result:
             return Response({'error': 'User processing failed.'}, status=status.HTTP_400_BAD_REQUEST)
              
