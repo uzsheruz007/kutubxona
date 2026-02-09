@@ -59,10 +59,23 @@ class HemisLoginView(APIView):
     permission_classes = [AllowAny]
 
     def get(self, request):
+        user_type = request.query_params.get('user_type', 'student')
+        
+        if user_type == 'staff' or user_type == 'employee':
+            base_url = settings.HEMIS_STAFF_URL
+        else:
+            base_url = settings.HEMIS_STUDENT_URL
+
         # Generate Hemis Authorize URL
+        # URL should be https://student.samduuf.uz/oauth/authorize
+        auth_url = f"{base_url}/oauth/authorize?client_id={settings.HEMIS_CLIENT_ID}&response_type=code&redirect_uri={settings.HEMIS_REDIRECT_URI}"
+        
         return Response({
-            "url": f"{settings.HEMIS_API_URL}/oauth/authorize?client_id={settings.HEMIS_CLIENT_ID}&response_type=code&redirect_uri={settings.HEMIS_REDIRECT_URI}"
+            "auth_url": auth_url
         })
+
+import logging
+logger = logging.getLogger(__name__)
 
 class HemisCallbackView(APIView):
     permission_classes = [AllowAny]
@@ -70,20 +83,38 @@ class HemisCallbackView(APIView):
     def post(self, request):
         code = request.data.get('code')
         if not code:
+            logger.error("HemisCallbackView: Code is missing")
             return Response({'error': 'Code is required'}, status=status.HTTP_400_BAD_REQUEST)
 
+        logger.info(f"HemisCallbackView: Received code {code[:5]}...")
+
         # 1. Exchange code for access token
-        token_data = HemisService.exchange_code_for_token(code)
+        try:
+            token_data = HemisService.exchange_code_for_token(code)
+        except Exception as e:
+            logger.error(f"HemisCallbackView: exchange_code_for_token failed: {e}")
+            return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
         if not token_data or 'access_token' not in token_data:
+            logger.error(f"HemisCallbackView: Failed to get token. Data: {token_data}")
             return Response({'error': 'Failed to get access token from Hemis'}, status=status.HTTP_400_BAD_REQUEST)
 
         access_token = token_data['access_token']
         found_domain = token_data.get('found_domain')
+        logger.info(f"HemisCallbackView: Token obtained. Domain: {found_domain}")
 
         # 2. Get User Info
-        user_info = HemisService.get_user_info(access_token, base_domain=found_domain)
+        try:
+            user_info = HemisService.get_user_info(access_token, base_domain=found_domain)
+        except Exception as e:
+             logger.error(f"HemisCallbackView: get_user_info failed: {e}")
+             return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
         if not user_info:
+            logger.error("HemisCallbackView: User info is empty")
             return Response({'error': 'Failed to get user info from Hemis'}, status=status.HTTP_400_BAD_REQUEST)
+            
+        logger.info(f"HemisCallbackView: User info received: {user_info.get('id', 'Unknown')}")
 
         user_type = user_info.get('type', 'student') 
         # Note: Hemis API might return 'type' or we infer it. 
@@ -92,11 +123,18 @@ class HemisCallbackView(APIView):
             user_type = 'employee'
         elif 'student_id_number' in user_info:
             user_type = 'student'
+        
+        logger.info(f"HemisCallbackView: Determined user_type: {user_type}")
 
         # 3. Create or Update User
-        result = HemisService.get_or_create_user(user_info, user_type=user_type, found_domain=found_domain)
+        try:
+            result = HemisService.get_or_create_user(user_info, user_type=user_type, found_domain=found_domain)
+        except Exception as e:
+            logger.error(f"HemisCallbackView: get_or_create_user failed: {e}")
+            return Response({'error': f"Create user failed: {e}"}, status=status.HTTP_400_BAD_REQUEST)
         
         if not result:
+             logger.error("HemisCallbackView: result from get_or_create_user is None")
              return Response({'error': 'Failed to create user'}, status=status.HTTP_400_BAD_REQUEST)
              
         user, token = result
