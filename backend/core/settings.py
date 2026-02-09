@@ -227,6 +227,10 @@ CKEDITOR_5_CONFIGS = {
 # Hemis Auth Settings
 HEMIS_CLIENT_ID = os.environ.get('HEMIS_CLIENT_ID', '7')
 HEMIS_CLIENT_SECRET = os.environ.get('HEMIS_CLIENT_SECRET', 'Qeg49F7hDTp11Zx7Lg20UV9rYRxedl376_kub68t')
+
+# Separate settings for Staff if they differ
+HEMIS_STAFF_CLIENT_ID = os.environ.get('HEMIS_STAFF_CLIENT_ID', HEMIS_CLIENT_ID)
+HEMIS_STAFF_CLIENT_SECRET = os.environ.get('HEMIS_STAFF_CLIENT_SECRET', HEMIS_CLIENT_SECRET)
 # Base APIs
 HEMIS_STUDENT_URL = 'https://student.samduuf.uz'
 HEMIS_STAFF_URL = 'https://hemis.samduuf.uz'
@@ -234,3 +238,24 @@ HEMIS_STAFF_URL = 'https://hemis.samduuf.uz'
 HEMIS_API_URL = 'https://student.samduuf.uz/oauth/api' 
 
 HEMIS_REDIRECT_URI = os.environ.get('HEMIS_REDIRECT_URI', 'https://e-library.samduuf.uz/login/callback')
+
+# ==========================================
+# PRODUCTION SECURITY HARDENING
+# ==========================================
+if not DEBUG:
+    # Force HTTPS
+    SECURE_SSL_REDIRECT = True
+    # HSTS (HTTP Strict Transport Security)
+    SECURE_HSTS_SECONDS = 31536000  # 1 year
+    SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+    SECURE_HSTS_PRELOAD = True
+    # Cookie Security
+    SESSION_COOKIE_SECURE = True
+    CSRF_COOKIE_SECURE = True
+    # Browser Security Headers
+    SECURE_BROWSER_XSS_FILTER = True
+    SECURE_CONTENT_TYPE_NOSNIFF = True
+    X_FRAME_OPTIONS = 'DENY'  # Prevent clickjacking
+    
+    # Secure Proxy SSL Header (for Nginx)
+    SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')

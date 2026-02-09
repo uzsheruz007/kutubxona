@@ -55,20 +55,33 @@ class UserProfileView(APIView):
             return Response(serializer.data)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+from django.core.signing import Signer, BadSignature
+
+from rest_framework.throttling import UserRateThrottle, AnonRateThrottle
+
 class HemisLoginView(APIView):
     permission_classes = [AllowAny]
+    throttle_classes = [UserRateThrottle, AnonRateThrottle]
+    throttle_scope = 'hemis_auth'
 
     def get(self, request):
         user_type = request.query_params.get('user_type', 'student')
         
         if user_type == 'staff' or user_type == 'employee':
             base_url = settings.HEMIS_STAFF_URL
+            client_id = settings.HEMIS_STAFF_CLIENT_ID
+            user_type_val = 'staff'
         else:
             base_url = settings.HEMIS_STUDENT_URL
+            client_id = settings.HEMIS_CLIENT_ID
+            user_type_val = 'student'
 
         # Generate Hemis Authorize URL
-        # We pass user_type as 'state' to identify the domain on callback
-        auth_url = f"{base_url}/oauth/authorize?client_id={settings.HEMIS_CLIENT_ID}&response_type=code&redirect_uri={settings.HEMIS_REDIRECT_URI}&state={user_type}"
+        # Sign the state to prevent tampering and CSRF
+        signer = Signer()
+        state = signer.sign(user_type_val)
+        
+        auth_url = f"{base_url}/oauth/authorize?client_id={client_id}&response_type=code&redirect_uri={settings.HEMIS_REDIRECT_URI}&state={state}"
         
         return Response({
             "auth_url": auth_url
@@ -79,20 +92,32 @@ logger = logging.getLogger(__name__)
 
 class HemisCallbackView(APIView):
     permission_classes = [AllowAny]
+    throttle_classes = [UserRateThrottle, AnonRateThrottle]
+    throttle_scope = 'hemis_auth'
 
     def post(self, request):
         code = request.data.get('code')
-        state = request.data.get('state', 'student') # Default to student if missing
+        state = request.data.get('state')
         
         if not code:
             logger.error("HemisCallbackView: Code is missing")
             return Response({'error': 'Code is required'}, status=status.HTTP_400_BAD_REQUEST)
 
-        logger.info(f"HemisCallbackView: Received code {code[:5]}... State: {state}")
+        # UNSIGN state to get user_type
+        user_type_hint = 'student' # Default
+        if state:
+            try:
+                signer = Signer()
+                user_type_hint = signer.unsign(state)
+            except BadSignature:
+                logger.error("HemisCallbackView: Invalid state signature")
+                return Response({'error': 'Invalid state parameter'}, status=status.HTTP_400_BAD_REQUEST)
+        
+        logger.info(f"HemisCallbackView: Received code {code[:5]}... State (Valid): {user_type_hint}")
 
         # 1. Exchange code for access token
         try:
-            token_data = HemisService.exchange_code_for_token(code, user_type_hint=state)
+            token_data = HemisService.exchange_code_for_token(code, user_type_hint=user_type_hint)
         except Exception as e:
             logger.error(f"HemisCallbackView: exchange_code_for_token failed: {e}")
             return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
