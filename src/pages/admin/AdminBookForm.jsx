@@ -24,7 +24,6 @@ export default function AdminBookForm() {
         // Files
         cover_image: null,
         file: null,
-        qr_code: null,
 
         // Translated Fields (uz)
         title_uz: "", author_uz: "", description_uz: "", subjects_uz: "",
@@ -47,7 +46,6 @@ export default function AdminBookForm() {
                         category: data.category,
                         cover_image: null,
                         file: null,
-                        qr_code: null,
 
                         title_uz: data.title_uz || "", author_uz: data.author_uz || "", description_uz: data.description_uz || "", subjects_uz: data.subjects_uz || "",
                         title_ru: data.title_ru || "", author_ru: data.author_ru || "", description_ru: data.description_ru || "", subjects_ru: data.subjects_ru || "",
@@ -80,7 +78,7 @@ export default function AdminBookForm() {
 
         // Append all text fields
         Object.keys(formData).forEach(key => {
-            if (['cover_image', 'file', 'qr_code'].includes(key)) return; // Skip files loop
+            if (['cover_image', 'file'].includes(key)) return; // Skip files loop
             data.append(key, formData[key]);
         });
 
@@ -90,13 +88,11 @@ export default function AdminBookForm() {
         // Handle files
         if (formData.cover_image) data.append("cover_image", formData.cover_image);
         if (formData.file) data.append("file", formData.file);
-        if (formData.qr_code) data.append("qr_code", formData.qr_code);
 
         try {
             if (isEdit) {
                 if (!formData.cover_image) data.delete("cover_image");
                 if (!formData.file) data.delete("file");
-                if (!formData.qr_code) data.delete("qr_code");
 
                 await axios.patch(`${API_BASE_URL}/api/books/${id}/`, data, {
                     headers: { 'Content-Type': 'multipart/form-data' }
@@ -217,14 +213,6 @@ export default function AdminBookForm() {
                                 <input name="file" onChange={handleChange} type="file" className="absolute inset-0 opacity-0 cursor-pointer z-10" />
                                 <FiUploadCloud size={24} className="text-stone-400 mb-2" />
                                 <span className="text-xs text-stone-500 break-all px-2">{formData.file?.name || "Fayl yuklash"}</span>
-                            </div>
-                        </div>
-                        <div className="space-y-2">
-                            <label className="text-sm font-semibold text-stone-700">QR Kod</label>
-                            <div className="border border-dashed border-stone-300 rounded-xl p-4 text-center hover:bg-stone-50 transition-colors cursor-pointer relative h-32 flex flex-col items-center justify-center">
-                                <input name="qr_code" onChange={handleChange} type="file" accept="image/*" className="absolute inset-0 opacity-0 cursor-pointer z-10" />
-                                <FiUploadCloud size={24} className="text-stone-400 mb-2" />
-                                <span className="text-xs text-stone-500 break-all px-2">{formData.qr_code?.name || "QR Rasm"}</span>
                             </div>
                         </div>
                     </div>

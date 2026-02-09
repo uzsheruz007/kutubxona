@@ -36,3 +36,40 @@ class Book(models.Model):
 
     def __str__(self):
         return self.title
+
+    def save(self, *args, **kwargs):
+        # 1. Save first to ensure we have an ID
+        is_new = self._state.adding
+        super().save(*args, **kwargs)
+
+        # 2. Generate QR Code if it's new or doesn't exist (or always if you want to ensure it matches)
+        if is_new or not self.qr_code:
+            import qrcode
+            from io import BytesIO
+            from django.core.files import File
+
+            # Public URL for the book
+            # Ensure this matches your frontend route
+            url = f"https://e-library.samduuf.uz/books/{self.id}"
+            
+            qr = qrcode.QRCode(
+                version=1,
+                error_correction=qrcode.constants.ERROR_CORRECT_L,
+                box_size=10,
+                border=4,
+            )
+            qr.add_data(url)
+            qr.make(fit=True)
+
+            img = qr.make_image(fill_color="black", back_color="white")
+            
+            # Save to buffer
+            buffer = BytesIO()
+            img.save(buffer, format="PNG")
+            
+            # Save to model field
+            filename = f"qr_book_{self.id}.png"
+            self.qr_code.save(filename, File(buffer), save=False)
+            
+            # Save again to persist the image field change
+            super().save(update_fields=['qr_code'])
