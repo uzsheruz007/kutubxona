@@ -43,23 +43,27 @@ class HemisService:
                 
                 # Method 1: Body Auth
                 try:
-                    response = requests.post(full_url, data=payload_body, headers=headers, timeout=5)
+                    response = requests.post(full_url, data=payload_body, headers=headers, timeout=10)
                     if response.status_code == 200:
                         data = response.json()
                         data['found_domain'] = domain
                         return data
-                except Exception:
-                    pass
+                    else:
+                        print(f"HemisService: Attempt 1 (Body) failed for {domain}{path}. Status: {response.status_code}, Body: {response.text}")
+                except Exception as e:
+                    print(f"HemisService: Attempt 1 (Body) Exception for {domain}{path}: {e}")
 
                 # Method 2: Basic Auth
                 try:
-                    response = requests.post(full_url, data=payload_basic, auth=auth, headers=headers, timeout=5)
+                    response = requests.post(full_url, data=payload_basic, auth=auth, headers=headers, timeout=10)
                     if response.status_code == 200:
                          data = response.json()
                          data['found_domain'] = domain
                          return data
-                except Exception:
-                    pass
+                    else:
+                        print(f"HemisService: Attempt 2 (Basic) failed for {domain}{path}. Status: {response.status_code}, Body: {response.text}")
+                except Exception as e:
+                    print(f"HemisService: Attempt 2 (Basic) Exception for {domain}{path}: {e}")
         
         return None
 
