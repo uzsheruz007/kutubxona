@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useUser } from "../context/UserContext";
-import { FiLogOut, FiHeart, FiUser, FiSettings, FiBookOpen, FiAward, FiGrid, FiList } from "react-icons/fi";
+import { FiLogOut, FiHeart, FiUser, FiSettings, FiBookOpen, FiAward, FiGrid } from "react-icons/fi";
 import { Link, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { API_BASE_URL } from "../config";
@@ -65,13 +65,7 @@ export default function Profile() {
                                 <FiHeart className={activeTab === "books" ? "text-amber-600" : "text-stone-400"} />
                                 Sevimli Kitoblar
                             </button>
-                            <button
-                                onClick={() => setActiveTab("news")}
-                                className={`w-full py-2.5 px-4 rounded-xl text-sm font-semibold transition-all flex items-center gap-3 ${activeTab === "news" ? "bg-amber-100/50 text-amber-700" : "text-stone-600 hover:bg-stone-50"}`}
-                            >
-                                <FiList className={activeTab === "news" ? "text-amber-600" : "text-stone-400"} />
-                                Yangiliklar
-                            </button>
+
                             <button
                                 onClick={() => setActiveTab("stats")}
                                 className={`w-full py-2.5 px-4 rounded-xl text-sm font-semibold transition-all flex items-center gap-3 ${activeTab === "stats" ? "bg-amber-100/50 text-amber-700" : "text-stone-600 hover:bg-stone-50"}`}
@@ -140,17 +134,7 @@ export default function Profile() {
                             </div>
                         )}
 
-                        {activeTab === "news" && (
-                            <div>
-                                <h3 className="text-xl font-bold font-serif mb-6 text-stone-800 flex items-center gap-2">
-                                    <FiList className="text-blue-500" /> Yangiliklar
-                                </h3>
-                                <div className="text-center py-20 bg-stone-50/50 rounded-2xl border border-dashed border-stone-200">
-                                    <p className="text-stone-500">Saqlangan yangiliklar mavjud emas.</p>
-                                    <Link to="/news" className="text-amber-600 font-medium hover:underline mt-2 inline-block">Barcha yangiliklarni ko'rish</Link>
-                                </div>
-                            </div>
-                        )}
+
 
                         {activeTab === "stats" && (
                             <div>
