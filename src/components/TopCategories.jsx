@@ -8,7 +8,7 @@ import AnimatedSectionDivider from "./AnimatedSectionDivider";
 import { useTranslation } from "react-i18next";
 import { API_BASE_URL } from "../config";
 
-const categories = ["Adabiyotlar", "Darslik", "Ilmiy"];
+const categories = ["Adabiyotlar", "Darslik", "Ilmiy", "Oquv"];
 
 function BookCard({ title, cover, id }) {
   const { t } = useTranslation();

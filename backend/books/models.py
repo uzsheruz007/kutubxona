@@ -12,6 +12,7 @@ class Book(models.Model):
         ('Adabiyotlar', 'Adabiyotlar'),
         ('Darslik', 'Darslik'),
         ('Ilmiy', 'Ilmiy Adabiyot'),
+        ('Oquv', 'O\'quv adabiyotlar'),
         ('Barchasi', 'Barchasi'),
     ]
     category = models.CharField("Kategoriya", max_length=50, choices=CATEGORY_CHOICES, default='Adabiyotlar')

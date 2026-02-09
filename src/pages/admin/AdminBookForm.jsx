@@ -117,7 +117,7 @@ export default function AdminBookForm() {
         }
     };
 
-    const categories = ["Adabiyotlar", "Darslik", "Ilmiy"];
+    const categories = ["Adabiyotlar", "Darslik", "Ilmiy", "Oquv"];
     const resourceTypes = ["Kitob", "Avtoreferat", "Monografiya", "O'quv qo'llanma", "Maqola", "Dissertatsiya"];
 
     if (loading) return <div className="flex justify-center p-20"><Loader className="animate-spin text-amber-600" /></div>;

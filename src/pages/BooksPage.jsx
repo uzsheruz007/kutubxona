@@ -14,7 +14,8 @@ const categories = [
   "Barchasi",
   "Adabiyotlar",
   "Darslik",
-  "Ilmiy"
+  "Ilmiy",
+  "Oquv"
 ];
 
 import { useTranslation } from "react-i18next";
