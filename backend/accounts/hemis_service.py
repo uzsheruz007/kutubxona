@@ -98,46 +98,48 @@ class HemisService:
 
     @staticmethod
     def get_or_create_user(hemis_data, user_type='student', found_domain=None):
-        hemis_id = None
+        # Mantiq (User snippetdan olindi):
+        # 1. Login (username) aniqlash
+        username = (
+            hemis_data.get('login') or 
+            hemis_data.get('username') or 
+            hemis_data.get('student_id_number') or 
+            hemis_data.get('employee_id_number')
+        )
         
-        # Logic from user snippet
-        if user_type == 'student':
-            hemis_id = hemis_data.get('student_id_number') or hemis_data.get('login')
-            if not hemis_id and 'id' in hemis_data:
-                hemis_id = f"student_{hemis_data['id']}"
-        else:
-            # Staff logic
-            hemis_id = hemis_data.get('employee_id_number') or hemis_data.get('login')
-            if not hemis_id and 'id' in hemis_data:
-                hemis_id = f"employee_{hemis_data['id']}"
-        
-        # Fallback if specific ID missing
-        if not hemis_id:
+        if not username:
+             # Agar hech narsa topilmasa, ID bilan yasaymiz
              hemis_id = str(hemis_data.get('id', ''))
-             if user_type:
-                 hemis_id = f"{user_type}_{hemis_id}"
+             if hemis_id:
+                 username = f"{user_type}_{hemis_id}"
         
-        if not hemis_id or hemis_id == f"{user_type}_":
+        if not username:
+            print("DEBUG: Username topilmadi!")
             return None
             
-        username = hemis_id
+        # 2. Ism-familiya
+        first_name = hemis_data.get('firstname') or hemis_data.get('first_name') or hemis_data.get('name', '')
+        last_name = hemis_data.get('surname') or hemis_data.get('last_name') or hemis_data.get('lastname', '')
         
-        first_name = hemis_data.get('firstname') or hemis_data.get('firstName') or hemis_data.get('name', '')
-        last_name = hemis_data.get('lastname') or hemis_data.get('surname') or hemis_data.get('lastName', '')
         email = hemis_data.get('email', '')
+
+        print(f"DEBUG: Creating/Updating user: {username}, {first_name} {last_name}")
 
         user, created = User.objects.get_or_create(username=username)
         
-        if first_name: user.first_name = first_name
-        if last_name: user.last_name = last_name
-        if email: user.email = email
+        user.first_name = first_name
+        user.last_name = last_name
+        if email:
+            user.email = email
         user.save()
         
+        # 3. Profil ma'lumotlari
         from accounts.models import UserProfile
         profile, _ = UserProfile.objects.get_or_create(user=user)
         
         picture_path = (
             hemis_data.get('picture') or 
+            hemis_data.get('picture_link') or
             hemis_data.get('image') or 
             hemis_data.get('avatar') or 
             hemis_data.get('photo') or
@@ -148,13 +150,18 @@ class HemisService:
             if picture_path.startswith("http"):
                  profile.avatar_url = picture_path
             else:
-                 # Re-adding domain logic for robustness, though user didn't have it, it's safer
-                 base_domain = found_domain or ("student.samduuf.uz" if user_type == 'student' else "hemis.samduuf.uz")
+                 # Domen logikasini saqlab qolamiz (rasm ko'rinishi uchun muhim)
+                 base_domain = found_domain or ("hemis.samduuf.uz" if user_type != 'student' else "student.samduuf.uz")
                  if not picture_path.startswith("/"):
                      picture_path = f"/{picture_path}"
                  profile.avatar_url = f"https://{base_domain}{picture_path}"
         
-        profile.hemis_id = hemis_id
+        # Hemis ID ni saqlab qo'yamiz
+        if user_type == 'student':
+            profile.hemis_id = hemis_data.get('student_id_number', username)
+        else:
+            profile.hemis_id = hemis_data.get('employee_id_number', username)
+
         profile.user_type = user_type
         profile.save()
         
