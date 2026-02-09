@@ -89,16 +89,20 @@ export default function BooksPage() {
       <section className="max-w-7xl mx-auto px-6">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           {/* Sidebar – Kategoriya tugmalari */}
-          <aside className="md:col-span-1 bg-white shadow rounded-lg p-5 h-fit sticky top-24 border border-stone-100">
-            <h3 className="text-lg font-semibold mb-4 text-stone-800">{t("categoriesLabel")}</h3>
+          <aside className="md:col-span-1 bg-white shadow rounded-lg p-5 h-fit md:sticky md:top-24 border border-stone-100 mb-8 md:mb-0">
+            <h3 className="text-lg font-semibold mb-4 text-stone-800 flex items-center justify-between md:block cursor-pointer md:cursor-default" onClick={() => document.getElementById('cat-list').classList.toggle('hidden')}>
+              {t("categoriesLabel")}
+              <span className="md:hidden text-amber-600">▼</span>
+            </h3>
             <motion.div
+              id="cat-list"
               initial="hidden"
               animate="visible"
               variants={{
                 hidden: { opacity: 0, x: -30 },
                 visible: { opacity: 1, x: 0, transition: { staggerChildren: 0.07 } },
               }}
-              className="flex flex-col gap-2"
+              className="flex flex-col gap-2 hidden md:flex"
             >
               {categories.map((cat) => (
                 <motion.button

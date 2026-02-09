@@ -228,12 +228,39 @@ export default function Navbar() {
                             ))}
                         </div>
 
-                        <div className="flex gap-4 mt-8">
+                        {/* Mobile Actions */}
+                        <div className="flex flex-col gap-6 items-center w-full px-8">
+                            {/* Language Switcher */}
+                            <div className="flex gap-4 p-1 bg-stone-100/50 rounded-xl">
+                                {languages.map(lang => (
+                                    <button
+                                        key={lang.code}
+                                        onClick={() => { changeLanguage(lang.code); setMobileMenuOpen(false); }}
+                                        className={`px-3 py-1.5 rounded-lg text-sm transition-all ${currentLang === lang.code ? "bg-white shadow-sm text-amber-600 font-bold" : "text-stone-500"}`}
+                                    >
+                                        <span className="mr-1">{lang.flag}</span> {lang.code.toUpperCase()}
+                                    </button>
+                                ))}
+                            </div>
+
+                            {/* User Actions */}
                             {user ? (
-                                <button onClick={logout} className="text-red-500 font-semibold text-lg">Log Out</button>
+                                <div className="flex flex-col gap-4 w-full items-center">
+                                    <RouterLink to="/profile" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-3 px-6 py-3 bg-stone-50 rounded-2xl w-full justify-center hover:bg-amber-50 transition border border-stone-100">
+                                        {user.avatar ? (
+                                            <img src={user.avatar} alt="User" className="w-8 h-8 rounded-full object-cover border border-amber-200" />
+                                        ) : (
+                                            <User size={20} className="text-amber-500" />
+                                        )}
+                                        <span className="font-semibold text-stone-700">{t("navbar.profile")}</span>
+                                    </RouterLink>
+                                    <button onClick={() => { logout(); setMobileMenuOpen(false); }} className="text-red-500 font-semibold flex items-center gap-2 hover:bg-red-50 px-4 py-2 rounded-xl transition">
+                                        <LogOut size={18} /> {t("navbar.logout")}
+                                    </button>
+                                </div>
                             ) : (
-                                <RouterLink to="/login" onClick={() => setMobileMenuOpen(false)} className="px-8 py-3 rounded-full bg-amber-600 text-white font-bold text-lg shadow-xl">
-                                    Login
+                                <RouterLink to="/login" onClick={() => setMobileMenuOpen(false)} className="w-full text-center px-8 py-3.5 rounded-xl bg-gradient-to-r from-amber-600 to-orange-600 text-white font-bold text-lg shadow-xl shadow-amber-200">
+                                    {t("navbar.login")}
                                 </RouterLink>
                             )}
                         </div>

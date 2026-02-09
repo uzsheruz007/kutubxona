@@ -115,7 +115,7 @@ export default function ThreeDHero({ onScrollClick }) {
     const { t } = useTranslation();
 
     return (
-        <div className="relative w-full h-screen bg-[#0f172a] overflow-hidden flex flex-col items-center justify-center">
+        <div className="relative w-full h-[100dvh] bg-[#0f172a] overflow-hidden flex flex-col items-center justify-center">
 
             {/* 3D Layer */}
             <div className="absolute inset-0 z-0">
@@ -128,14 +128,14 @@ export default function ThreeDHero({ onScrollClick }) {
             </div>
 
             {/* Content Layer (Glassmorphism) */}
-            <div className="relative z-10 p-8 md:p-12 rounded-2xl bg-slate-900/30 backdrop-blur-md border border-white/10 text-center max-w-4xl mx-4 shadow-2xl">
-                <div className="mb-6 flex justify-center">
+            <div className="relative z-10 p-6 md:p-12 rounded-2xl bg-slate-900/30 backdrop-blur-md border border-white/10 text-center max-w-4xl mx-4 shadow-2xl mt-16 md:mt-0">
+                <div className="mb-4 md:mb-6 flex justify-center">
                     <div className="px-4 py-1 rounded-full bg-amber-500/20 border border-amber-500/50 text-amber-300 text-xs font-bold tracking-widest uppercase">
                         Smart Library v2.0
                     </div>
                 </div>
 
-                <h1 className="text-5xl md:text-7xl font-black text-white mb-6 drop-shadow-2xl">
+                <h1 className="text-4xl sm:text-5xl md:text-7xl font-black text-white mb-6 drop-shadow-2xl">
                     <span className="block text-transparent bg-clip-text bg-gradient-to-r from-blue-300 via-white to-blue-300">
                         {t("hero.welcome_part1", "Kitob —")}
                     </span>

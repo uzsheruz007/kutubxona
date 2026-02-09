@@ -44,21 +44,21 @@ export default function HeroSection({ onScrollClick }) {
           className="text-center lg:text-left"
         >
           {/* Badge */}
-          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white border border-amber-100 shadow-sm mt-16 mb-4">
+          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white border border-amber-100 shadow-sm mt-8 lg:mt-16 mb-4">
             <span className="flex h-2 w-2 rounded-full bg-amber-500 animate-pulse"></span>
             <span className="text-sm font-medium text-stone-600 tracking-wide uppercase">
               {t("brand.slogan", "Bilimlar xazinasi")}
             </span>
           </div>
 
-          <h1 className="text-5xl sm:text-6xl lg:text-7xl font-extrabold text-stone-900 leading-[1.1] tracking-tight mb-6">
+          <h1 className="text-4xl sm:text-6xl lg:text-7xl font-extrabold text-stone-900 leading-[1.1] tracking-tight mb-6">
             <span className="block">{t("hero.welcome_part1", "Kitob —")}</span>
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-600 via-orange-600 to-yellow-600">
               {t("hero.welcome_part2", "vaqt mashinasi.")}
             </span>
           </h1>
 
-          <p className="text-lg sm:text-xl text-stone-600 mb-10 max-w-lg mx-auto lg:mx-0 leading-relaxed">
+          <p className="text-base sm:text-xl text-stone-600 mb-8 sm:mb-10 max-w-lg mx-auto lg:mx-0 leading-relaxed">
             {t("hero.description")}
           </p>
 
