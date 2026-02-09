@@ -20,7 +20,6 @@ export default function AdminBookForm() {
         page_count: 0,
         publication_year: new Date().getFullYear(),
         category: "Adabiyotlar",
-        resource_type: "Kitob",
 
         // Files
         cover_image: null,
@@ -46,7 +45,6 @@ export default function AdminBookForm() {
                         page_count: data.page_count,
                         publication_year: data.published_date ? new Date(data.published_date).getFullYear() : new Date().getFullYear(),
                         category: data.category,
-                        resource_type: data.resource_type || "Kitob",
                         cover_image: null,
                         file: null,
                         qr_code: null,
@@ -118,7 +116,6 @@ export default function AdminBookForm() {
     };
 
     const categories = ["Adabiyotlar", "Darslik", "Ilmiy", "Oquv"];
-    const resourceTypes = ["Kitob", "Avtoreferat", "Monografiya", "O'quv qo'llanma", "Maqola", "Dissertatsiya"];
 
     if (loading) return <div className="flex justify-center p-20"><Loader className="animate-spin text-amber-600" /></div>;
 
@@ -173,13 +170,6 @@ export default function AdminBookForm() {
                             <select name="category" value={formData.category} onChange={handleChange} className="w-full px-4 py-2.5 rounded-xl border border-stone-200 focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 outline-none bg-white">
                                 {categories.map(c => <option key={c} value={c}>{c}</option>)}
                             </select>
-                        </div>
-                        <div className="space-y-2">
-                            <label className="text-sm font-semibold text-stone-700">Resurs Turi</label>
-                            <input list="resource-types" name="resource_type" value={formData.resource_type} onChange={handleChange} className="w-full px-4 py-2.5 rounded-xl border border-stone-200 focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 outline-none" placeholder="Masalan: Kitob, Maqola..." />
-                            <datalist id="resource-types">
-                                {resourceTypes.map(t => <option key={t} value={t} />)}
-                            </datalist>
                         </div>
                     </div>
                 </div>

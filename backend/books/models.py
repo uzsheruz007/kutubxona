@@ -17,17 +17,6 @@ class Book(models.Model):
     ]
     category = models.CharField("Kategoriya", max_length=50, choices=CATEGORY_CHOICES, default='Adabiyotlar')
     
-    RESOURCE_TYPE_CHOICES = [
-        ('Kitob', 'Kitob'),
-        ('Avtoreferat', 'Avtoreferat'),
-        ('Monografiya', 'Monografiya'),
-        ('O\'quv qo\'llanma', 'O\'quv qo\'llanma'),
-        ('Maqola', 'Maqola'),
-        ('Dissertatsiya', 'Dissertatsiya'),
-    ]
-    # Removed strict choices to allow manual input, but kept choices variable for reference if needed
-    resource_type = models.CharField("Resurs Turi", max_length=50, default='Kitob')
-    
     # Metadata
     page_count = models.IntegerField("Betlar Soni", default=0)
     published_date = models.DateField("Chop Etilgan Sana", null=True, blank=True)
