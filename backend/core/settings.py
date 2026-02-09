@@ -230,4 +230,4 @@ HEMIS_STAFF_URL = 'https://hemis.samduuf.uz'
 # API URL (Default to student, but service handles both)
 HEMIS_API_URL = 'https://student.samduuf.uz/oauth/api' 
 
-HEMIS_REDIRECT_URI = os.environ.get('HEMIS_REDIRECT_URI', 'https://kutubxona.samduuf.uz/login/callback')
+HEMIS_REDIRECT_URI = os.environ.get('HEMIS_REDIRECT_URI', 'http://localhost:5173/login/callback')
