@@ -8,7 +8,7 @@ import AnimatedSectionDivider from "./AnimatedSectionDivider";
 import { useTranslation } from "react-i18next";
 import { API_BASE_URL } from "../config";
 
-const categories = ["Badiiy", "Ilmiy", "Texnologiya", "Diniy", "Bolalar", "Jahon"];
+const categories = ["Adabiyotlar", "Darslik", "Ilmiy"];
 
 function BookCard({ title, cover, id }) {
   const { t } = useTranslation();
@@ -43,7 +43,7 @@ function BookCard({ title, cover, id }) {
 
 export default function TopCategoriesSection() {
   const { t } = useTranslation();
-  const [activeCategory, setActiveCategory] = useState("Badiiy");
+  const [activeCategory, setActiveCategory] = useState("Adabiyotlar");
   const [books, setBooks] = useState([]);
   const [loading, setLoading] = useState(false);
 

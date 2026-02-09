@@ -9,15 +9,12 @@ class Book(models.Model):
     
     # Categorization
     CATEGORY_CHOICES = [
-        ('Badiiy', 'Badiiy Adabiyot'),
+        ('Adabiyotlar', 'Adabiyotlar'),
+        ('Darslik', 'Darslik'),
         ('Ilmiy', 'Ilmiy Adabiyot'),
-        ('Texnologiya', 'Texnologiya'),
-        ('Diniy', 'Diniy-Ma\'rifiy'),
-        ('Bolalar', 'Bolalar Adabiyoti'),
-        ('Jahon', 'Jahon Adabiyoti'),
         ('Barchasi', 'Barchasi'),
     ]
-    category = models.CharField("Kategoriya", max_length=50, choices=CATEGORY_CHOICES, default='Badiiy')
+    category = models.CharField("Kategoriya", max_length=50, choices=CATEGORY_CHOICES, default='Adabiyotlar')
     
     RESOURCE_TYPE_CHOICES = [
         ('Kitob', 'Kitob'),

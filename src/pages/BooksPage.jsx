@@ -12,12 +12,9 @@ import { API_BASE_URL } from "../config";
 
 const categories = [
   "Barchasi",
-  "Badiiy",
-  "Ilmiy",
-  "Texnologiya",
-  "Diniy",
-  "Bolalar",
-  "Jahon"
+  "Adabiyotlar",
+  "Darslik",
+  "Ilmiy"
 ];
 
 import { useTranslation } from "react-i18next";

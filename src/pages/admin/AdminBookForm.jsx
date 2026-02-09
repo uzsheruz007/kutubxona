@@ -19,7 +19,7 @@ export default function AdminBookForm() {
         // Common
         page_count: 0,
         publication_year: new Date().getFullYear(),
-        category: "Badiiy",
+        category: "Adabiyotlar",
         resource_type: "Kitob",
 
         // Files
@@ -117,7 +117,7 @@ export default function AdminBookForm() {
         }
     };
 
-    const categories = ["Badiiy", "Ilmiy", "Texnologiya", "Diniy", "Bolalar", "Jahon", "Barchasi"];
+    const categories = ["Adabiyotlar", "Darslik", "Ilmiy"];
     const resourceTypes = ["Kitob", "Avtoreferat", "Monografiya", "O'quv qo'llanma", "Maqola", "Dissertatsiya"];
 
     if (loading) return <div className="flex justify-center p-20"><Loader className="animate-spin text-amber-600" /></div>;
