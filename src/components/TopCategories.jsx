@@ -57,7 +57,7 @@ export default function TopCategoriesSection() {
           id: book.id,
           title: book.title,
           cover: book.cover_image || "/images/image.png"
-        })).slice(0, 6);
+        }));
         setBooks(formattedBooks);
       })
       .catch(err => console.error("TopCategories load error:", err))
