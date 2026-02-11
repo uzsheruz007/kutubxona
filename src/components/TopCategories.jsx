@@ -7,8 +7,7 @@ import { Parallax } from "react-parallax";
 import AnimatedSectionDivider from "./AnimatedSectionDivider";
 import { useTranslation } from "react-i18next";
 import { API_BASE_URL } from "../config";
-
-const categories = ["Adabiyotlar", "Darslik", "Ilmiy", "Oquv"];
+import { BOOK_CATEGORIES } from "../constants/categories";
 
 function BookCard({ title, cover, id }) {
   const { t } = useTranslation();
@@ -149,19 +148,19 @@ export default function TopCategoriesSection() {
             {/* Mobile Category Selector */}
             <div className="bg-white rounded-lg shadow-sm border border-stone-100 overflow-hidden mb-4">
               <div className="flex overflow-x-auto scrollbar-hide">
-                {categories.map((cat) => (
+                {BOOK_CATEGORIES.map((cat) => (
                   <button
-                    key={cat}
+                    key={cat.value}
                     onClick={() => {
-                      setActiveCategory(cat);
+                      setActiveCategory(cat.value);
                       instanceRef.current?.moveToIdx(0);
                     }}
-                    className={`flex-shrink-0 text-xs sm:text-sm font-medium px-4 py-3 transition whitespace-nowrap ${activeCategory === cat
+                    className={`flex-shrink-0 text-xs sm:text-sm font-medium px-4 py-3 transition whitespace-nowrap ${activeCategory === cat.value
                       ? "bg-amber-600 text-white"
                       : "bg-white text-stone-700 hover:bg-amber-50"
                       }`}
                   >
-                    {t(`categories.${cat.toLowerCase()}`, cat)}
+                    {t(`categories.${cat.value.toLowerCase()}`, cat.label)}
                   </button>
                 ))}
               </div>
@@ -194,19 +193,19 @@ export default function TopCategoriesSection() {
             </button>
 
             <div className="flex flex-wrap justify-center bg-white rounded-xl shadow-lg border border-stone-100/50 overflow-hidden p-1">
-              {categories.map((cat) => (
+              {BOOK_CATEGORIES.map((cat) => (
                 <button
-                  key={cat}
+                  key={cat.value}
                   onClick={() => {
-                    setActiveCategory(cat);
+                    setActiveCategory(cat.value);
                     instanceRef.current?.moveToIdx(0);
                   }}
-                  className={`text-sm font-semibold px-6 lg:px-8 py-3 lg:py-4 transition rounded-lg ${activeCategory === cat
+                  className={`text-sm font-semibold px-6 lg:px-8 py-3 lg:py-4 transition rounded-lg ${activeCategory === cat.value
                     ? "bg-gradient-to-r from-amber-600 to-orange-500 text-white shadow-md"
                     : "bg-transparent text-stone-600 hover:bg-stone-50 hover:text-amber-700"
                     }`}
                 >
-                  {t(`categories.${cat.toLowerCase()}`, cat)}
+                  {t(`categories.${cat.value.toLowerCase()}`, cat.label)}
                 </button>
               ))}
             </div>

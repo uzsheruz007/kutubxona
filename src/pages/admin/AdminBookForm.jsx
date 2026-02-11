@@ -4,6 +4,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { FiSave, FiArrowLeft, FiUploadCloud, FiGlobe } from "react-icons/fi";
 import { Loader } from "lucide-react";
 import { API_BASE_URL } from "../../config";
+import { BOOK_CATEGORIES } from "../../constants/categories";
 
 export default function AdminBookForm() {
     const { id } = useParams();
@@ -111,7 +112,7 @@ export default function AdminBookForm() {
         }
     };
 
-    const categories = ["Adabiyotlar", "Darslik", "Ilmiy", "Oquv"];
+
 
     if (loading) return <div className="flex justify-center p-20"><Loader className="animate-spin text-amber-600" /></div>;
 
@@ -164,7 +165,7 @@ export default function AdminBookForm() {
                         <div className="space-y-2">
                             <label className="text-sm font-semibold text-stone-700">Kategoriya</label>
                             <select name="category" value={formData.category} onChange={handleChange} className="w-full px-4 py-2.5 rounded-xl border border-stone-200 focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 outline-none bg-white">
-                                {categories.map(c => <option key={c} value={c}>{c}</option>)}
+                                {BOOK_CATEGORIES.map(c => <option key={c.value} value={c.value}>{c.label}</option>)}
                             </select>
                         </div>
                     </div>

@@ -1,4 +1,4 @@
-export const API_BASE_URL = "https://e-library.samduuf.uz";
+export const API_BASE_URL = "http://127.0.0.1:8000";
 
 export const getImageUrl = (path) => {
     if (!path) return null;
