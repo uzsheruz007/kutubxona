@@ -12,7 +12,7 @@ import { BOOK_CATEGORIES } from "../constants/categories";
 function BookCard({ title, cover, id }) {
   const { t } = useTranslation();
   return (
-    <div className="keen-slider__slide px-2 sm:px-1">
+    <div className="keen-slider__slide px-2 sm:px-1 shrink-0">
       <div className="relative rounded-xl overflow-hidden shadow-md hover:shadow-xl transition group w-full max-w-64 mx-auto">
         <div className="aspect-[2/3] overflow-hidden">
           <img
