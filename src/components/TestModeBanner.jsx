@@ -10,13 +10,12 @@ export default function TestModeBanner() {
             </div>
             <style jsx>{`
                 @keyframes marquee-rl {
-                    0% { transform: translateX(100%); }
+                    0% { transform: translateX(100vw); }
                     100% { transform: translateX(-100%); }
                 }
                 .animate-marquee-rl {
                     display: inline-block;
-                    animation: marquee-rl 20s linear infinite;
-                    padding-left: 100%; /* Start off-screen */
+                    animation: marquee-rl 25s linear infinite;
                     will-change: transform;
                 }
             `}</style>
