@@ -11,6 +11,7 @@
     "language": "Til",
     "brand": "SamDUUF Elektron Kutubxona"
   },
+  "testModeWarning": "Diqqat! Ushbu elektron kutubxona platformasi hozirda test rejimida ishlamoqda. Taklif va mulohazalaringizni mamnuniyat bilan qabul qilamiz. 🛠️",
   "loginPage": {
     "title": "Tizimga Kirish",
     "subtitle": "Kutubxona tizimiga kirish uchun ma'lumotlaringizni kiriting",

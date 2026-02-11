@@ -11,6 +11,7 @@
     "language": "Language",
     "brand": "SamDUUF E-Library"
   },
+  "testModeWarning": "Attention! This digital library platform is currently operating in test mode. We welcome your suggestions and feedback. 🛠️",
   "loginPage": {
     "title": "System Login",
     "subtitle": "Enter your credentials to access the library",
