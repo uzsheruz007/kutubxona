@@ -56,7 +56,7 @@ export default function TopCategoriesSection() {
           id: book.id,
           title: book.title,
           cover: book.cover_image || "/images/image.png"
-        }));
+        })).slice(0, 6);
         setBooks(formattedBooks);
       })
       .catch(err => console.error("TopCategories load error:", err))
@@ -66,7 +66,7 @@ export default function TopCategoriesSection() {
   const [sliderRef, instanceRef] = useKeenSlider({
     loop: true,
     slides: {
-      perView: 4,
+      perView: 6,
       spacing: 16,
     },
     renderMode: "performance",
@@ -93,10 +93,10 @@ export default function TopCategoriesSection() {
         slides: { perView: 1.8, spacing: 12 },
       },
       "(max-width: 1024px)": {
-        slides: { perView: 2.5, spacing: 16 },
+        slides: { perView: 4, spacing: 16 },
       },
       "(max-width: 1280px)": {
-        slides: { perView: 3, spacing: 16 },
+        slides: { perView: 5, spacing: 16 },
       },
     },
   });
