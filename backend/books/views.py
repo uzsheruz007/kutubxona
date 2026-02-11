@@ -17,7 +17,12 @@ class BookViewSet(viewsets.ModelViewSet):
         queryset = Book.objects.all()
         category = self.request.query_params.get('category')
         if category:
-            queryset = queryset.filter(category__iexact=category)
+            from django.db.models import Q
+            queryset = queryset.filter(
+                Q(category_uz=category) | 
+                Q(category_ru=category) | 
+                Q(category_en=category)
+            )
         return queryset
 
 class LibraryStatsView(APIView):
