@@ -5,6 +5,7 @@ import { FiPlus, FiEdit2, FiTrash2, FiSearch, FiFilter } from "react-icons/fi";
 import { useNavigate } from "react-router-dom";
 import { Loader } from "lucide-react";
 import { API_BASE_URL } from "../../config";
+import { BOOK_CATEGORIES } from "../../constants/categories";
 
 export default function AdminBooks() {
     const [books, setBooks] = useState([]);
@@ -13,13 +14,10 @@ export default function AdminBooks() {
     const [category, setCategory] = useState("all");
 
     // Static categories for filter (same as translations)
-    const categories = [
-        { id: "all", label: "Barchasi" },
-        { id: "badiiy", label: "Badiiy" },
-        { id: "texnologiya", label: "Texnologiya" },
-        { id: "ilmiy", label: "Ilmiy" },
-        { id: "tarixiy", label: "Tarixiy" },
-        { id: "biznes", label: "Biznes" },
+    // Categories for filter
+    const categoryOptions = [
+        { value: "all", label: "Barchasi" },
+        ...BOOK_CATEGORIES
     ];
 
     useEffect(() => {
@@ -86,8 +84,8 @@ export default function AdminBooks() {
                             value={category}
                             onChange={(e) => setCategory(e.target.value)}
                         >
-                            {categories.map(cat => (
-                                <option key={cat.id} value={cat.id}>{cat.label}</option>
+                            {categoryOptions.map(cat => (
+                                <option key={cat.value} value={cat.value}>{cat.label}</option>
                             ))}
                         </select>
                     </div>
@@ -122,7 +120,9 @@ export default function AdminBooks() {
                                         <td className="p-3 font-medium">{book.title}</td>
                                         <td className="p-3 text-sm">{book.author}</td>
                                         <td className="p-3 text-sm capitalize">
-                                            <span className="bg-stone-100 px-2 py-1 rounded text-stone-600 text-xs">{book.category}</span>
+                                            <span className="bg-stone-100 px-2 py-1 rounded text-stone-600 text-xs">
+                                                {BOOK_CATEGORIES.find(c => c.value === book.category)?.label || book.category}
+                                            </span>
                                         </td>
                                         <td className="p-3 text-right">
                                             <div className="flex items-center justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
