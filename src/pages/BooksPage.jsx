@@ -9,13 +9,11 @@ import noDataSvg from '../assets/undraw_no-data_ig65.svg';
 import PageHeader from "../components/PageHeader";
 import i18n from "../i18n";
 import { API_BASE_URL } from "../config";
+import { BOOK_CATEGORIES } from "../constants/categories";
 
 const categories = [
-  "Barchasi",
-  "Adabiyotlar",
-  "Darslik",
-  "Ilmiy",
-  "Oquv"
+  { value: "Barchasi", label: "Barchasi" },
+  ...BOOK_CATEGORIES
 ];
 
 import { useTranslation } from "react-i18next";
@@ -37,17 +35,23 @@ export default function BooksPage() {
     const fetchBooks = async () => {
       setLoading(true);
       try {
-        const res = await axios.get(`${API_BASE_URL}/api/books/`, {
+        let url = `${API_BASE_URL}/api/books/`;
+        const params = {};
+
+        // Category Filter
+        if (currentCategory !== "Barchasi") {
+          params.category = currentCategory;
+        }
+
+        const res = await axios.get(url, {
+          params,
           headers: {
             "Accept-Language": i18n.language
           }
         });
         let works = res.data || [];
 
-        // Category Filter
-        if (currentCategory !== "Barchasi") {
-          works = works.filter((book) => book.category === currentCategory);
-        }
+
 
         // Search filter
         if (search.trim()) {
@@ -106,9 +110,9 @@ export default function BooksPage() {
             >
               {categories.map((cat) => (
                 <motion.button
-                  key={cat}
-                  onClick={() => setSearchParams({ category: cat, page: 1 })}
-                  className={`text-sm cursor-pointer px-4 py-2 rounded-md text-left transition-all duration-300 relative overflow-hidden ${currentCategory === cat
+                  key={cat.value}
+                  onClick={() => setSearchParams({ category: cat.value, page: 1 })}
+                  className={`text-sm cursor-pointer px-4 py-2 rounded-md text-left transition-all duration-300 relative overflow-hidden ${currentCategory === cat.value
                     ? "bg-gradient-to-r from-amber-600 to-orange-500 text-white font-semibold shadow-lg scale-[1.03]"
                     : "bg-stone-50 hover:bg-amber-50 text-stone-700"
                     }`
@@ -118,7 +122,7 @@ export default function BooksPage() {
                     boxShadow: "0 4px 20px rgba(245, 158, 11, 0.2)",
                   }}
                 >
-                  {cat === "Barchasi" ? t("categories.all") : t(`categories.${cat.toLowerCase()}`, cat)}
+                  {cat.value === "Barchasi" ? t("categories.all") : t(`categories.${cat.value.toLowerCase()}`, cat.label)}
                 </motion.button>
               ))}
             </motion.div>
@@ -128,7 +132,9 @@ export default function BooksPage() {
           <div className="md:col-span-3">
 
             <h2 className="text-2xl font-bold mb-6 text-stone-900">
-              {t("currentCategory")}: <span className="text-amber-600">{currentCategory === "Barchasi" ? t("categories.all") : t(`categories.${currentCategory.toLowerCase()}`, currentCategory)}</span>
+              <h2 className="text-2xl font-bold mb-6 text-stone-900">
+                {t("currentCategory")}: <span className="text-amber-600">{currentCategory === "Barchasi" ? t("categories.all") : t(`categories.${currentCategory.toLowerCase()}`, categories.find(c => c.value === currentCategory)?.label || currentCategory)}</span>
+              </h2>
             </h2>
 
             {/* Book Grid */}
