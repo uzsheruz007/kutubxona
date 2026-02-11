@@ -29,6 +29,38 @@ export function UserProvider({ children }) {
         }
     }, [token]);
 
+    // --- Auto Logout Logic ---
+    useEffect(() => {
+        if (!user) return; // Only track if logged in
+
+        const TIMEOUT_DURATION = 30 * 60 * 1000; // 30 minutes
+        let logoutTimer;
+
+        const resetTimer = () => {
+            if (logoutTimer) clearTimeout(logoutTimer);
+            logoutTimer = setTimeout(() => {
+                console.log("Auto-logging out due to inactivity...");
+                logout();
+                alert("Siz uzoq vaqt harakatsiz qoldingiz. Tizimdan chiqildi.");
+            }, TIMEOUT_DURATION);
+        };
+
+        // Events to track activity
+        const events = ['mousemove', 'keydown', 'click', 'scroll', 'touchstart'];
+
+        // Add listeners
+        events.forEach(event => document.addEventListener(event, resetTimer));
+
+        // Start timer
+        resetTimer();
+
+        // Cleanup
+        return () => {
+            if (logoutTimer) clearTimeout(logoutTimer);
+            events.forEach(event => document.removeEventListener(event, resetTimer));
+        };
+    }, [user]); // Re-run when user logs in/out
+
     const login = async (username, password) => {
         try {
             const response = await axios.post(`${API_BASE_URL}/api/accounts/login/`, {
