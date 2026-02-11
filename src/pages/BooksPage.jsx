@@ -162,6 +162,7 @@ export default function BooksPage() {
                               ? (book.cover_image.startsWith('http') ? book.cover_image : `${API_BASE_URL}${book.cover_image}`)
                               : ""
                           }
+                          category={book.category}
                         />
                       </motion.div>
                     ))
