@@ -70,7 +70,7 @@ export default function TopCategoriesSection() {
       perView: 6,
       spacing: 16,
     },
-    renderMode: "performance",
+    // renderMode: "performance",
     dragSpeed: 0.05,
     created(s) {
       setShowArrows(s.track.details.maxIdx > 0);
@@ -105,6 +105,12 @@ export default function TopCategoriesSection() {
   });
 
   const intervalRef = useRef(null);
+
+  useEffect(() => {
+    if (instanceRef.current) {
+      instanceRef.current.update();
+    }
+  }, [books, instanceRef]);
 
   useEffect(() => {
     clearInterval(intervalRef.current);
