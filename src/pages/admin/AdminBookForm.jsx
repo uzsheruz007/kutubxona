@@ -80,8 +80,15 @@ export default function AdminBookForm() {
         // Append all text fields
         Object.keys(formData).forEach(key => {
             if (['cover_image', 'file'].includes(key)) return; // Skip files loop
+            if (key === 'category') return; // Skip default category, we will handle it explicitly
             data.append(key, formData[key]);
         });
+
+        // Ensure category is set for all languages
+        data.append("category", formData.category);
+        data.append("category_uz", formData.category);
+        data.append("category_ru", formData.category);
+        data.append("category_en", formData.category);
 
         // Handle date
         data.append("published_date", `${formData.publication_year}-01-01`);
