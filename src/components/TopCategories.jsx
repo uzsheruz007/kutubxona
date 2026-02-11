@@ -45,6 +45,7 @@ export default function TopCategoriesSection() {
   const [activeCategory, setActiveCategory] = useState("Adabiyotlar");
   const [books, setBooks] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [showArrows, setShowArrows] = useState(false);
 
   // Load books when category changes
   useEffect(() => {
@@ -72,6 +73,7 @@ export default function TopCategoriesSection() {
     renderMode: "performance",
     dragSpeed: 0.05,
     created(s) {
+      setShowArrows(s.track.details.maxIdx > 0);
       s.container.addEventListener('dragstart', (e) => {
         e.preventDefault()
       })
@@ -80,7 +82,8 @@ export default function TopCategoriesSection() {
       s.container.style.transitionTimingFunction = 'cubic-bezier(0.25, 0.46, 0.45, 0.94)'
     },
     detailsChanged(s) {
-      s.container.style.transitionDuration = '1200ms'
+      s.container.style.transitionDuration = '1200ms';
+      setShowArrows(s.track.details.maxIdx > 0);
     },
     breakpoints: {
       "(max-width: 480px)": {
@@ -185,12 +188,14 @@ export default function TopCategoriesSection() {
 
           {/* Desktop: Inline navigation with categories */}
           <div className="hidden lg:flex items-center justify-center relative bg-transparent">
-            <button
-              onClick={handlePrev}
-              className="absolute left-0 z-10 p-3 rounded-full bg-white border border-stone-100 shadow-md hover:shadow-lg transition-all duration-300 hover:scale-110"
-            >
-              <ChevronLeft className="w-6 h-6 text-amber-600" />
-            </button>
+            {showArrows && (
+              <button
+                onClick={handlePrev}
+                className="absolute left-0 z-10 p-3 rounded-full bg-white border border-stone-100 shadow-md hover:shadow-lg transition-all duration-300 hover:scale-110"
+              >
+                <ChevronLeft className="w-6 h-6 text-amber-600" />
+              </button>
+            )}
 
             <div className="flex flex-wrap justify-center bg-white rounded-xl shadow-lg border border-stone-100/50 overflow-hidden p-1">
               {BOOK_CATEGORIES.map((cat) => (
@@ -210,12 +215,14 @@ export default function TopCategoriesSection() {
               ))}
             </div>
 
-            <button
-              onClick={handleNext}
-              className="absolute right-0 z-10 p-3 rounded-full bg-white border border-stone-100 shadow-md hover:shadow-lg transition-all duration-300 hover:scale-110"
-            >
-              <ChevronRight className="w-6 h-6 text-amber-600" />
-            </button>
+            {showArrows && (
+              <button
+                onClick={handleNext}
+                className="absolute right-0 z-10 p-3 rounded-full bg-white border border-stone-100 shadow-md hover:shadow-lg transition-all duration-300 hover:scale-110"
+              >
+                <ChevronRight className="w-6 h-6 text-amber-600" />
+              </button>
+            )}
           </div>
         </div>
 
