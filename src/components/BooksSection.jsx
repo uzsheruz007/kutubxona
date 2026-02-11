@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 import { Book } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import AnimatedSectionDivider from "./AnimatedSectionDivider";
@@ -6,12 +7,16 @@ import { useTranslation } from "react-i18next";
 import { API_BASE_URL } from "../config";
 
 export default function MostPopularBooks() {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const [activeIndex, setActiveIndex] = useState(0);
   const [books, setBooks] = useState([]);
 
   useEffect(() => {
-    fetch(`${API_BASE_URL}/api/books/popular/`)
+    fetch(`${API_BASE_URL}/api/books/popular/`, {
+      headers: {
+        "Accept-Language": i18n.language
+      }
+    })
       .then(res => res.json())
       .then(data => {
         if (data.length > 0) {
@@ -26,7 +31,7 @@ export default function MostPopularBooks() {
         }
       })
       .catch(err => console.error("Popular books loading error:", err));
-  }, [t]);
+  }, [t, i18n.language]);
 
   if (books.length === 0) return null; // Or show loading/empty state
 
@@ -83,9 +88,12 @@ export default function MostPopularBooks() {
                   </div>
 
                   <div className="mt-6 flex justify-end">
-                    <button className="bg-amber-600 cursor-pointer hover:bg-amber-700 text-white px-8 py-3 rounded-xl font-bold shadow-lg shadow-amber-200 hover:shadow-amber-300 transition transform hover:-translate-y-0.5">
+                    <Link
+                      to={`/book/${activeBook.id}`}
+                      className="bg-amber-600 cursor-pointer hover:bg-amber-700 text-white px-8 py-3 rounded-xl font-bold shadow-lg shadow-amber-200 hover:shadow-amber-300 transition transform hover:-translate-y-0.5 inline-block"
+                    >
                       {t("viewDetails")}
-                    </button>
+                    </Link>
                   </div>
                 </div>
               </div>
