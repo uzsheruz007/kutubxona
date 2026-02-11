@@ -73,7 +73,8 @@ export default function TopCategoriesSection() {
     // renderMode: "performance",
     dragSpeed: 0.05,
     created(s) {
-      setShowArrows(s.track.details.maxIdx > 0);
+      const hasOverflow = s.track?.details?.maxIdx > 0;
+      setShowArrows(hasOverflow);
       s.container.addEventListener('dragstart', (e) => {
         e.preventDefault()
       })
@@ -83,7 +84,8 @@ export default function TopCategoriesSection() {
     },
     detailsChanged(s) {
       s.container.style.transitionDuration = '1200ms';
-      setShowArrows(s.track.details.maxIdx > 0);
+      const hasOverflow = s.track?.details?.maxIdx > 0;
+      setShowArrows(hasOverflow);
     },
     breakpoints: {
       "(max-width: 480px)": {
@@ -107,8 +109,8 @@ export default function TopCategoriesSection() {
   const intervalRef = useRef(null);
 
   useEffect(() => {
-    if (instanceRef.current) {
-      instanceRef.current.update();
+    if (instanceRef.current && instanceRef.current.update) {
+      setTimeout(() => instanceRef.current?.update(), 100);
     }
   }, [books, instanceRef]);
 
