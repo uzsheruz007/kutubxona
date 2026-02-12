@@ -181,5 +181,7 @@
   "allBooksSubtitle": "View and read all books in our library!",
   "categoriesLabel": "Categories",
   "currentCategory": "Category",
-  "noBooksFound": "No books found."
+  "noBooksFound": "No books found.",
+  "searchPlaceholder": "Search by title or author...",
+  "booksFound": "books found"
 }

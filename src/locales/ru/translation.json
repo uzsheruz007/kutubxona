@@ -181,5 +181,7 @@
   "allBooksSubtitle": "Просматривайте и читайте все книги в нашей библиотеке!",
   "categoriesLabel": "Категории",
   "currentCategory": "Категория",
-  "noBooksFound": "Книги не найдены."
+  "noBooksFound": "Книги не найдены.",
+  "searchPlaceholder": "Поиск по названию или автору...",
+  "booksFound": "книг найдено"
 }

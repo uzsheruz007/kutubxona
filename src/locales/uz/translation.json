@@ -178,5 +178,7 @@
   "allBooksSubtitle": "Kutubxonamizdagi barcha kitoblarni ko'ring va o'qing!",
   "categoriesLabel": "Kategoriyalar",
   "currentCategory": "Kategoriya",
-  "noBooksFound": "Hech qanday kitob topilmadi."
+  "noBooksFound": "Hech qanday kitob topilmadi.",
+  "searchPlaceholder": "Kitob nomi yoki muallifini qidiring...",
+  "booksFound": "ta kitob topildi"
 }
