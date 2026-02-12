@@ -68,9 +68,9 @@ REST_FRAMEWORK = {
         'rest_framework.throttling.UserRateThrottle'
     ],
     'DEFAULT_THROTTLE_RATES': {
-        'anon': '1000/minute',
-        'user': '10000/day',
-        'hemis_auth': '60/minute', 
+        'anon': '10000/minute',
+        'user': '100000/day',
+        'hemis_auth': '100/minute', 
     }
 }
 
