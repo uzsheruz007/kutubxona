@@ -257,8 +257,8 @@ if not DEBUG:
     SECURE_CONTENT_TYPE_NOSNIFF = True
     X_FRAME_OPTIONS = 'DENY'  # Prevent clickjacking
     
-    # Secure Proxy SSL Header (for Nginx)
-    SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+# Secure Proxy SSL Header (for Nginx) - Always enable if behind proxy
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
 # File Upload Settings
 DATA_UPLOAD_MAX_MEMORY_SIZE = 209715200  # 200MB
