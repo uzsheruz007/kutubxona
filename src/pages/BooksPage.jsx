@@ -23,7 +23,7 @@ export default function BooksPage() {
   const [searchParams, setSearchParams] = useSearchParams();
   const currentCategory = searchParams.get("category") || "Barchasi";
   const page = parseInt(searchParams.get("page")) || 1;
-  const limit = 18;
+  const limit = 15;
 
   const [booksData, setBooksData] = useState([]);
   const [totalCount, setTotalCount] = useState(0);
@@ -85,6 +85,9 @@ export default function BooksPage() {
     fetchBooks();
   }, [currentCategory, search, sort, i18n.language]);
 
+  // Pagination Logic
+  const paginatedBooks = booksData.slice((page - 1) * limit, page * limit);
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-stone-50 to-amber-50 pb-16">
       {/* Header */}
@@ -132,9 +135,7 @@ export default function BooksPage() {
           <div className="md:col-span-3">
 
             <h2 className="text-2xl font-bold mb-6 text-stone-900">
-              <h2 className="text-2xl font-bold mb-6 text-stone-900">
-                {t("currentCategory")}: <span className="text-amber-600">{currentCategory === "Barchasi" ? t("categories.all") : t(`categories.${currentCategory.toLowerCase()}`, categories.find(c => c.value === currentCategory)?.label || currentCategory)}</span>
-              </h2>
+              {t("currentCategory")}: <span className="text-amber-600">{currentCategory === "Barchasi" ? t("categories.all") : t(`categories.${currentCategory.toLowerCase()}`, categories.find(c => c.value === currentCategory)?.label || currentCategory)}</span>
             </h2>
 
             {/* Book Grid */}
@@ -144,8 +145,8 @@ export default function BooksPage() {
                   ? Array.from({ length: 9 }).map((_, idx) => (
                     <BookCardSkeleton key={idx} />
                   ))
-                  : booksData.length > 0
-                    ? booksData.map((book, idx) => (
+                  : paginatedBooks.length > 0
+                    ? paginatedBooks.map((book, idx) => (
                       <motion.div
                         key={idx}
                         initial={{ opacity: 0, y: 30 }}
