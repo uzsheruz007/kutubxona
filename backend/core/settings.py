@@ -247,7 +247,7 @@ HEMIS_REDIRECT_URI = os.environ.get('HEMIS_REDIRECT_URI', 'https://e-library.sam
 # ==========================================
 if not DEBUG:
     # Force HTTPS
-    SECURE_SSL_REDIRECT = True
+    SECURE_SSL_REDIRECT = False
     # HSTS (HTTP Strict Transport Security)
     SECURE_HSTS_SECONDS = 31536000  # 1 year
     SECURE_HSTS_INCLUDE_SUBDOMAINS = True
