@@ -30,8 +30,8 @@ export default function BooksPage() {
   const [displayBooks, setDisplayBooks] = useState([]);
 
   const [loading, setLoading] = useState(false);
-  const [searchTerm, setSearchTerm] = useState(""); // Input value
-  const [debouncedSearch, setDebouncedSearch] = useState(""); // Debounced value for filtering
+  const [searchTerm, setSearchTerm] = useState(searchParams.get("search") || ""); // Input value
+  const [debouncedSearch, setDebouncedSearch] = useState(searchParams.get("search") || ""); // Debounced value for filtering
   const [sort, setSort] = useState("title");
 
   // 1. Fetch ALL books for the current category once

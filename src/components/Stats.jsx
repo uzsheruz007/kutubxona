@@ -24,7 +24,6 @@ export default function LibraryStats() {
         return res.json();
       })
       .then(data => {
-        console.log("Stats Loaded:", data);
         setCounts(data);
       })
       .catch(err => console.error("Stats loading error:", err));

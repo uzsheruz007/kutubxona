@@ -62,16 +62,44 @@ export default function HeroSection({ onScrollClick }) {
             {t("hero.description")}
           </p>
 
-          <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
+          <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start w-full max-w-lg lg:max-w-none">
             <Link
               to="/books"
-              className="group px-8 py-4 bg-amber-600 hover:bg-amber-700 text-white rounded-2xl font-semibold shadow-lg shadow-amber-200 transition-all flex items-center justify-center gap-2"
+              className="group px-8 py-4 bg-amber-600 hover:bg-amber-700 text-white rounded-2xl font-semibold shadow-lg shadow-amber-200 transition-all flex items-center justify-center gap-2 whitespace-nowrap"
             >
               {t("hero.enterLibrary")}
               <ArrowRight size={20} className="group-hover:translate-x-1 transition-transform" />
             </Link>
 
-            <button className="px-8 py-4 bg-white hover:bg-stone-50 text-stone-700 border border-stone-200 rounded-2xl font-semibold transition-all flex items-center justify-center gap-2 shadow-sm hover:shadow-md">
+            <div className="relative flex-grow max-w-md hidden sm:block">
+              <input
+                type="text"
+                placeholder={t("hero.search") + "..."}
+                className="w-full h-full px-6 py-4 bg-white border border-stone-200 rounded-2xl text-stone-700 focus:outline-none focus:ring-2 focus:ring-amber-500 shadow-sm"
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter' && e.target.value.trim()) {
+                    window.location.href = `/books?search=${encodeURIComponent(e.target.value.trim())}`;
+                  }
+                }}
+              />
+              <button
+                className="absolute right-2 top-2 p-2 bg-stone-100 hover:bg-amber-100 text-stone-500 hover:text-amber-600 rounded-xl transition-colors"
+                onClick={(e) => {
+                  const input = e.currentTarget.previousElementSibling;
+                  if (input.value.trim()) {
+                    window.location.href = `/books?search=${encodeURIComponent(input.value.trim())}`;
+                  }
+                }}
+              >
+                <Search size={20} />
+              </button>
+            </div>
+
+            {/* Mobile Search Button (visible only on small screens) */}
+            <button
+              className="sm:hidden px-8 py-4 bg-white hover:bg-stone-50 text-stone-700 border border-stone-200 rounded-2xl font-semibold transition-all flex items-center justify-center gap-2 shadow-sm hover:shadow-md"
+              onClick={() => window.location.href = '/books'}
+            >
               <Search size={20} className="text-stone-400" />
               {t("hero.search")}
             </button>
