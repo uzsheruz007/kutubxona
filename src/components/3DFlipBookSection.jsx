@@ -231,7 +231,7 @@ Otabek, Marg‘ilonning eng ko‘zga ko‘ringan boylaridan Yusufbek hojining o�
                 }
               }}
               className="relative z-20 transform hover:scale-105 transition-transform duration-300 ease-out"
-              style={{ touchAction: 'pan-y' }}
+              style={{ touchAction: 'none' }}
             >
               <HTMLFlipBook
                 width={isMobile ? 280 : 320}
