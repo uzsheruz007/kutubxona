@@ -77,6 +77,7 @@ REST_FRAMEWORK = {
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'core.middleware.ForceHttpsMiddleware', # Force HTTPS for Kerio
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.locale.LocaleMiddleware', # Language Support
     'corsheaders.middleware.CorsMiddleware',
