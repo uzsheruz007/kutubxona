@@ -21,10 +21,11 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/6.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-!ahw76oy!1hnq))h#yb)5y4)=y#0#_fcr79o@-mphejg1@4yqs'
+# SECURITY WARNING: keep the secret key used in production secret!
+SECRET_KEY = os.environ.get('SECRET_KEY', 'django-insecure-!ahw76oy!1hnq))h#yb)5y4)=y#0#_fcr79o@-mphejg1@4yqs')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.environ.get('DEBUG', 'True') == 'True'
 
 ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS', 'e-library.samduuf.uz,www.e-library.samduuf.uz,kutubxona.samduuf.uz,www.kutubxona.samduuf.uz,localhost,127.0.0.1').split(',')
 
@@ -162,9 +163,11 @@ MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
 
 # CORS Configuration
-CORS_ALLOW_ALL_ORIGINS = True
+# Only allow all origins in DEBUG mode. In production, restrict to allowed origins.
+CORS_ALLOW_ALL_ORIGINS = DEBUG
 CORS_ALLOWED_ORIGINS = [
     "https://e-library.samduuf.uz",
+    "https://kutubxona.samduuf.uz",
     "http://localhost:5173",
     "http://127.0.0.1:5173",
 ]
