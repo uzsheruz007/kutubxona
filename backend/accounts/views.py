@@ -124,7 +124,8 @@ class HemisCallbackView(APIView):
 
         if not token_data or 'access_token' not in token_data:
             logger.error(f"HemisCallbackView: Failed to get token. Data: {token_data}")
-            return Response({'error': 'Failed to get access token from Hemis'}, status=status.HTTP_400_BAD_REQUEST)
+            # DEBUGGING: Return the actual data/error from Hemis to see why it failed
+            return Response({'error': 'Failed to get access token from Hemis', 'details': token_data}, status=status.HTTP_400_BAD_REQUEST)
 
         access_token = token_data['access_token']
         found_domain = token_data.get('found_domain')
@@ -139,7 +140,7 @@ class HemisCallbackView(APIView):
 
         if not user_info:
             logger.error("HemisCallbackView: User info is empty")
-            return Response({'error': 'Failed to get user info from Hemis'}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({'error': 'Failed to get user info from Hemis', 'details': 'User info returned None'}, status=status.HTTP_400_BAD_REQUEST)
             
         logger.info(f"HemisCallbackView: User info received: {user_info.get('id', 'Unknown')}")
 
