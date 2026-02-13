@@ -237,7 +237,7 @@ Otabek, Marg‘ilonning eng ko‘zga ko‘ringan boylaridan Yusufbek hojining o�
                 maxShadowOpacity={0.8}
                 showCover={!isMobile}
                 startPage={isMobile ? 0 : 1}
-                mobileScrollSupport={true}
+                mobileScrollSupport={false}
                 className="book-shadow"
                 style={{
                   filter: 'drop-shadow(0 25px 50px rgba(0,0,0,0.3)) drop-shadow(0 10px 20px rgba(0,0,0,0.2))'
@@ -268,32 +268,7 @@ Otabek, Marg‘ilonning eng ko‘zga ko‘ringan boylaridan Yusufbek hojining o�
         </div>
       </div>
 
-      <style jsx>{`
-        .book-shadow {
-          transition: all 0.3s ease;
-        }
-        .book-shadow:hover {
-          filter: drop-shadow(0 30px 60px rgba(0,0,0,0.4)) drop-shadow(0 15px 25px rgba(0,0,0,0.3)) !important;
-        }
-        .text-shadow-lg {
-          text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
-        }
-        .perspective-1000 {
-          perspective: 1000px;
-        }
-        .rotate-x-60 {
-          transform: rotateX(60deg);
-        }
-        .rotate-x-45 {
-          transform: rotateX(45deg);
-        }
-        .rotate-x-30 {
-          transform: rotateX(30deg);
-        }
-        .bg-gradient-radial {
-          background: radial-gradient(ellipse at center, var(--tw-gradient-stops));
-        }
-      `}</style>
+
     </section>
   );
 }
