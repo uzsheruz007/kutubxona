@@ -77,7 +77,6 @@ REST_FRAMEWORK = {
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
-    'core.middleware.ForceHttpsMiddleware', # Force HTTPS for Kerio
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.locale.LocaleMiddleware', # Language Support
     'corsheaders.middleware.CorsMiddleware',
@@ -261,8 +260,12 @@ if not DEBUG:
     SECURE_CONTENT_TYPE_NOSNIFF = True
     X_FRAME_OPTIONS = 'DENY'  # Prevent clickjacking
     
-# Secure Proxy SSL Header (for Nginx) - Always enable if behind proxy
+# Secure Proxy SSL Header (for Nginx/Kerio)
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+# Trust the X-Forwarded-Host header as well (useful if Kerio changes the host)
+USE_X_FORWARDED_HOST = True
+# Ensure we don't force redirects
+SECURE_SSL_REDIRECT = False
 
 # File Upload Settings
 DATA_UPLOAD_MAX_MEMORY_SIZE = 209715200  # 200MB
