@@ -117,7 +117,7 @@ export default function TopCategoriesSection() {
   useEffect(() => {
     clearInterval(intervalRef.current);
     intervalRef.current = setInterval(() => {
-      if (instanceRef.current) {
+      if (instanceRef.current && instanceRef.current.track && instanceRef.current.track.details) {
         instanceRef.current.moveToIdx(instanceRef.current.track.details.abs + 1, true);
       }
     }, 6000);

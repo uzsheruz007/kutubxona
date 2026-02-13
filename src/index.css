@@ -1,1 +1,12 @@
 @import 'tailwindcss';
+
+@keyframes marquee-rl {
+  0% { transform: translateX(100vw); }
+  100% { transform: translateX(-100%); }
+}
+
+.animate-marquee-rl {
+  display: inline-block;
+  animation: marquee-rl 25s linear infinite;
+  will-change: transform;
+}

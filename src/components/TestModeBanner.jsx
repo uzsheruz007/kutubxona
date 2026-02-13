@@ -8,17 +8,7 @@ export default function TestModeBanner() {
             <div className="whitespace-nowrap animate-marquee-rl text-sm sm:text-base font-semibold tracking-wide w-full px-4 leading-normal flex items-center">
                 {t("testModeWarning")}
             </div>
-            <style jsx>{`
-                @keyframes marquee-rl {
-                    0% { transform: translateX(100vw); }
-                    100% { transform: translateX(-100%); }
-                }
-                .animate-marquee-rl {
-                    display: inline-block;
-                    animation: marquee-rl 25s linear infinite;
-                    will-change: transform;
-                }
-            `}</style>
+
         </div>
     );
 }
