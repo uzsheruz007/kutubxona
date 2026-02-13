@@ -163,8 +163,8 @@ MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
 
 # CORS Configuration
-# Reverting to Allow All to insure connectivity. TODO: Lock down later.
-CORS_ALLOW_ALL_ORIGINS = True
+# Only allow all origins in DEBUG mode. In production, restrict to allowed origins.
+CORS_ALLOW_ALL_ORIGINS = DEBUG
 CORS_ALLOWED_ORIGINS = [
     "https://e-library.samduuf.uz",
     "https://kutubxona.samduuf.uz",
@@ -243,19 +243,25 @@ HEMIS_API_URL = 'https://student.samduuf.uz/oauth/api'
 HEMIS_REDIRECT_URI = os.environ.get('HEMIS_REDIRECT_URI', 'https://e-library.samduuf.uz/login/callback')
 
 # ==========================================
-# PRODUCTION SECURITY HARDENING (DISABLED FOR STABILITY)
+# PRODUCTION SECURITY HARDENING
 # ==========================================
-# We explicitly disable these to stop the Infinite Redirect Loop
-SECURE_SSL_REDIRECT = False
-SECURE_HSTS_SECONDS = 0 
-SECURE_HSTS_INCLUDE_SUBDOMAINS = False
-SECURE_HSTS_PRELOAD = False
-SESSION_COOKIE_SECURE = False
-CSRF_COOKIE_SECURE = False
-
-# Secure Proxy SSL Header (for Nginx) 
-# Commenting this out too in case Nginx is inconsistent
-# SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+if not DEBUG:
+    # Force HTTPS
+    SECURE_SSL_REDIRECT = True
+    # HSTS (HTTP Strict Transport Security)
+    SECURE_HSTS_SECONDS = 31536000  # 1 year
+    SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+    SECURE_HSTS_PRELOAD = True
+    # Cookie Security
+    SESSION_COOKIE_SECURE = True
+    CSRF_COOKIE_SECURE = True
+    # Browser Security Headers
+    SECURE_BROWSER_XSS_FILTER = True
+    SECURE_CONTENT_TYPE_NOSNIFF = True
+    X_FRAME_OPTIONS = 'DENY'  # Prevent clickjacking
+    
+# Secure Proxy SSL Header (for Nginx) - Always enable if behind proxy
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
 # File Upload Settings
 DATA_UPLOAD_MAX_MEMORY_SIZE = 209715200  # 200MB
