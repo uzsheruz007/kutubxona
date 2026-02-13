@@ -235,7 +235,7 @@ export default function TopCategoriesSection() {
         </div>
 
         {/* Book Carousel */}
-        <div ref={sliderRef} className="keen-slider py-4">
+        <div ref={sliderRef} className="keen-slider py-4" style={{ touchAction: "pan-y" }}>
           {books.length > 0 ? (
             books.map((book, i) => (
               <BookCard key={book.id || i} {...book} />
