@@ -246,15 +246,15 @@ HEMIS_REDIRECT_URI = os.environ.get('HEMIS_REDIRECT_URI', 'https://e-library.sam
 # PRODUCTION SECURITY HARDENING
 # ==========================================
 if not DEBUG:
-    # Force HTTPS
-    SECURE_SSL_REDIRECT = True
-    # HSTS (HTTP Strict Transport Security)
-    SECURE_HSTS_SECONDS = 31536000  # 1 year
-    SECURE_HSTS_INCLUDE_SUBDOMAINS = True
-    SECURE_HSTS_PRELOAD = True
+    # Force HTTPS (DISABLED to prevent redirect loop)
+    SECURE_SSL_REDIRECT = False
+    # HSTS (DISABLED)
+    SECURE_HSTS_SECONDS = 0
+    SECURE_HSTS_INCLUDE_SUBDOMAINS = False
+    SECURE_HSTS_PRELOAD = False
     # Cookie Security
-    SESSION_COOKIE_SECURE = True
-    CSRF_COOKIE_SECURE = True
+    SESSION_COOKIE_SECURE = False
+    CSRF_COOKIE_SECURE = False
     # Browser Security Headers
     SECURE_BROWSER_XSS_FILTER = True
     SECURE_CONTENT_TYPE_NOSNIFF = True
