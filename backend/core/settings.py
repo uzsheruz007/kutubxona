@@ -163,8 +163,8 @@ MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
 
 # CORS Configuration
-# Only allow all origins in DEBUG mode. In production, restrict to allowed origins.
-CORS_ALLOW_ALL_ORIGINS = DEBUG
+# Reverting to Allow All to insure connectivity. TODO: Lock down later.
+CORS_ALLOW_ALL_ORIGINS = True
 CORS_ALLOWED_ORIGINS = [
     "https://e-library.samduuf.uz",
     "https://kutubxona.samduuf.uz",
