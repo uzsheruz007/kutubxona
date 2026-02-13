@@ -224,7 +224,15 @@ Otabek, Marg‘ilonning eng ko‘zga ko‘ringan boylaridan Yusufbek hojining o�
             <div className="absolute left-1/2 -translate-x-1/2 -translate-y-2 w-2 h-[440px] bg-gradient-to-b from-black/30 via-black/20 to-black/30 rounded-full blur-sm transform -rotate-2"></div>
 
             {/* Main book */}
-            <div className="relative z-20 transform hover:scale-105 transition-transform duration-300 ease-out">
+            <div
+              ref={(el) => {
+                if (el) {
+                  el.addEventListener("touchstart", () => { }, { passive: true });
+                }
+              }}
+              className="relative z-20 transform hover:scale-105 transition-transform duration-300 ease-out"
+              style={{ touchAction: 'pan-y' }}
+            >
               <HTMLFlipBook
                 width={isMobile ? 280 : 320}
                 height={isMobile ? 390 : 440}
