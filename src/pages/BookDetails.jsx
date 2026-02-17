@@ -2,7 +2,8 @@ import { useParams, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { motion } from "framer-motion";
-import { FiArrowLeft, FiHeart, FiShare2, FiBookOpen, FiFacebook, FiTwitter, FiInstagram, FiYoutube } from "react-icons/fi";
+import { FiArrowLeft, FiHeart, FiShare2, FiBookOpen } from "react-icons/fi";
+import { FaFacebook, FaTelegram, FaInstagram, FaYoutube } from "react-icons/fa";
 import QRCode from "react-qr-code";
 import PageHeader from "../components/PageHeader";
 import { useUser } from "../context/UserContext";
@@ -249,12 +250,19 @@ export default function BookDetails() {
                   )}
                 </div>
                 {/* Social Icons (Keeping static for now or can verify later) */}
-                <div className="flex gap-3 justify-center">
-                  {/* ... icons ... */}
-                  <a href="#" className="p-3 rounded-full bg-stone-50 text-stone-500 hover:bg-amber-600 hover:text-white shadow-sm hover:shadow-md transition-all duration-300"><FiFacebook className="w-5 h-5" /></a>
-                  <a href="#" className="p-3 rounded-full bg-stone-50 text-stone-500 hover:bg-amber-400 hover:text-white shadow-sm hover:shadow-md transition-all duration-300"><FiTwitter className="w-5 h-5" /></a>
-                  <a href="#" className="p-3 rounded-full bg-stone-50 text-stone-500 hover:bg-gradient-to-tr hover:from-orange-500 hover:to-amber-500 hover:text-white shadow-sm hover:shadow-md transition-all duration-300"><FiInstagram className="w-5 h-5" /></a>
-                  <a href="#" className="p-3 rounded-full bg-stone-50 text-stone-500 hover:bg-red-600 hover:text-white shadow-sm hover:shadow-md transition-all duration-300"><FiYoutube className="w-5 h-5" /></a>
+                <div className="flex gap-3 justify-center mt-4">
+                  <a href="https://t.me/samdu_urgut_filial" target="_blank" rel="noopener noreferrer" className="p-3 rounded-full bg-stone-50 text-stone-500 hover:bg-blue-500 hover:text-white shadow-sm hover:shadow-md transition-all duration-300">
+                    <FaTelegram className="w-5 h-5" />
+                  </a>
+                  <a href="https://www.instagram.com/samduuf_edu?igsh=MWF5bWhvZ3ZhbTI5ZA%3D%3D&utm_source=qr" target="_blank" rel="noopener noreferrer" className="p-3 rounded-full bg-stone-50 text-stone-500 hover:bg-pink-600 hover:text-white shadow-sm hover:shadow-md transition-all duration-300">
+                    <FaInstagram className="w-5 h-5" />
+                  </a>
+                  <a href="https://www.facebook.com/samduufeduuz" target="_blank" rel="noopener noreferrer" className="p-3 rounded-full bg-stone-50 text-stone-500 hover:bg-blue-600 hover:text-white shadow-sm hover:shadow-md transition-all duration-300">
+                    <FaFacebook className="w-5 h-5" />
+                  </a>
+                  <a href="https://www.youtube.com/@samduufeducation7037" target="_blank" rel="noopener noreferrer" className="p-3 rounded-full bg-stone-50 text-stone-500 hover:bg-red-600 hover:text-white shadow-sm hover:shadow-md transition-all duration-300">
+                    <FaYoutube className="w-5 h-5" />
+                  </a>
                 </div>
               </div>
 
