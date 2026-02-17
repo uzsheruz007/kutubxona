@@ -70,6 +70,16 @@ export default function HeroSection({ onScrollClick }) {
               {t("hero.enterLibrary")}
               <ArrowRight size={20} className="group-hover:translate-x-1 transition-transform" />
             </Link>
+
+            <a
+              href="https://kbt.samduuf.uz/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="group px-8 py-4 bg-white border-2 border-amber-600 text-amber-600 hover:bg-amber-50 rounded-2xl font-semibold transition-all flex items-center justify-center gap-2 whitespace-nowrap"
+            >
+              Kitob buyurtma berish
+              <ArrowRight size={20} className="group-hover:translate-x-1 transition-transform" />
+            </a>
           </div>
 
           {/* Stats / Trust Indicators */}

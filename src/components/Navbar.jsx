@@ -136,6 +136,8 @@ export default function Navbar() {
 
                         {/* 3. ACTIONS (Lang & User) */}
                         <div className="hidden md:flex items-center gap-3">
+
+
                             {/* Lang */}
                             <div className="relative" ref={langRef}>
                                 <button
@@ -230,6 +232,8 @@ export default function Navbar() {
 
                         {/* Mobile Actions */}
                         <div className="flex flex-col gap-6 items-center w-full px-8">
+
+
                             {/* Language Switcher */}
                             <div className="flex gap-4 p-1 bg-stone-100/50 rounded-xl">
                                 {languages.map(lang => (

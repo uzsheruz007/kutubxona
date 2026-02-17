@@ -156,9 +156,14 @@ export default function ThreeDHero({ onScrollClick }) {
                     >
                         Kutubxonaga Kirish
                     </button>
-                    <button className="px-8 py-4 bg-white/5 hover:bg-white/10 text-white font-bold rounded-lg border border-white/20 backdrop-blur-sm transition-all">
-                        Batafsil Ma'lumot
-                    </button>
+                    <a
+                        href="https://kbt.samduuf.uz/"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="px-8 py-4 bg-white/5 hover:bg-white/10 text-white font-bold rounded-lg border border-white/20 backdrop-blur-sm transition-all flex items-center justify-center"
+                    >
+                        Kitob buyurtma berish
+                    </a>
                 </div>
             </div>
 

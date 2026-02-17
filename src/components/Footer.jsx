@@ -1,9 +1,17 @@
-import { Facebook, Twitter, Instagram, Mail, MapPin, ChevronUp, BookOpen } from "lucide-react";
+import { Mail, MapPin, ChevronUp, BookOpen } from "lucide-react";
+import { FaFacebook, FaTelegram, FaInstagram, FaYoutube } from "react-icons/fa";
 import { useTranslation } from "react-i18next";
 
 export default function Footer() {
   const year = new Date().getFullYear();
   const { t } = useTranslation();
+
+  const socialLinks = [
+    { name: "Telegram", icon: FaTelegram, url: "https://t.me/samdu_urgut_filial", color: "hover:bg-blue-500" },
+    { name: "Instagram", icon: FaInstagram, url: "https://www.instagram.com/samduuf_edu?igsh=MWF5bWhvZ3ZhbTI5ZA%3D%3D&utm_source=qr", color: "hover:bg-pink-600" },
+    { name: "Facebook", icon: FaFacebook, url: "https://www.facebook.com/samduufeduuz", color: "hover:bg-blue-600" },
+    { name: "YouTube", icon: FaYoutube, url: "https://www.youtube.com/@samduufeducation7037", color: "hover:bg-red-600" },
+  ];
 
   return (
     <footer className="bg-stone-900 text-stone-300 pt-20 pb-10 font-sans">
@@ -21,9 +29,15 @@ export default function Footer() {
             {t("footer.p")}
           </p>
           <div className="flex gap-4">
-            {[Facebook, Twitter, Instagram].map((Icon, idx) => (
-              <a key={idx} href="#" className="w-10 h-10 rounded-full bg-stone-800 flex items-center justify-center text-stone-400 hover:bg-amber-600 hover:text-white transition-all duration-300 shadow-md">
-                <Icon size={18} />
+            {socialLinks.map((item, idx) => (
+              <a
+                key={idx}
+                href={item.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className={`w-10 h-10 rounded-full bg-stone-800 flex items-center justify-center text-stone-400 ${item.color} hover:text-white transition-all duration-300 shadow-md`}
+              >
+                <item.icon size={18} />
               </a>
             ))}
           </div>
@@ -33,11 +47,16 @@ export default function Footer() {
         <div>
           <h4 className="text-white font-bold text-lg mb-6">{t("footer.socialMedia", "Ijtimoiy Tarmoqlar")}</h4>
           <ul className="space-y-3">
-            {["Facebook", "Telegram", "Instagram", "LinkedIn"].map((link) => (
-              <li key={link}>
-                <a href="#" className="hover:text-amber-400 transition-colors flex items-center gap-2">
+            {socialLinks.map((link) => (
+              <li key={link.name}>
+                <a
+                  href={link.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="hover:text-amber-400 transition-colors flex items-center gap-2"
+                >
                   <span className="w-1.5 h-1.5 rounded-full bg-amber-500"></span>
-                  {link}
+                  {link.name}
                 </a>
               </li>
             ))}
@@ -58,7 +77,7 @@ export default function Footer() {
               <div className="text-amber-500">
                 <Mail size={18} />
               </div>
-              <a href="mailto:info@lib.uz" className="text-sm text-stone-400 hover:text-white transition-colors">info@lib.uz</a>
+              <a href="mailto:devonxona@samduuf.uz" className="text-sm text-stone-400 hover:text-white transition-colors">devonxona@samduuf.uz</a>
             </li>
           </ul>
         </div>
