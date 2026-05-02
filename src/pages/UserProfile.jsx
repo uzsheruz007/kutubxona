@@ -63,7 +63,7 @@ export default function Profile() {
                                 className={`w-full py-2.5 px-4 rounded-xl text-sm font-semibold transition-all flex items-center gap-3 ${activeTab === "books" ? "bg-amber-100/50 text-amber-700" : "text-stone-600 hover:bg-stone-50"}`}
                             >
                                 <FiHeart className={activeTab === "books" ? "text-amber-600" : "text-stone-400"} />
-                                Sevimli Kitoblar
+                                Sevimli kitoblar
                             </button>
 
                             <button
@@ -97,7 +97,7 @@ export default function Profile() {
                         {activeTab === "books" && (
                             <div>
                                 <h3 className="text-xl font-bold font-serif mb-6 text-stone-800 flex items-center gap-2">
-                                    <FiHeart className="text-red-500" /> Sevimli Kitoblar
+                                    <FiHeart className="text-red-500" /> Sevimli kitoblar
                                 </h3>
                                 {user.favourites && user.favourites.length > 0 ? (
                                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
@@ -128,7 +128,7 @@ export default function Profile() {
                                         </div>
                                         <p className="text-lg text-stone-600 font-medium">Sizda hali sevimli kitoblar yo'q</p>
                                         <p className="text-sm text-stone-400">Kitoblar sahifasiga o'tib, yoqqanlarini saqlab qo'ying.</p>
-                                        <Link to="/books" className="mt-4 px-6 py-2 bg-amber-600 text-white rounded-full text-sm font-semibold hover:bg-amber-700 transition-all">Kitoblar Sahifasi</Link>
+                                        <Link to="/books" className="mt-4 px-6 py-2 bg-amber-600 text-white rounded-full text-sm font-semibold hover:bg-amber-700 transition-all">Kitoblar sahifasi</Link>
                                     </div>
                                 )}
                             </div>
@@ -139,12 +139,12 @@ export default function Profile() {
                         {activeTab === "stats" && (
                             <div>
                                 <h3 className="text-xl font-bold font-serif mb-6 text-stone-800 flex items-center gap-2">
-                                    <FiAward className="text-purple-500" /> Shaxsiy Statistika
+                                    <FiAward className="text-purple-500" /> Shaxsiy statistika
                                 </h3>
                                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                                     <div className="bg-gradient-to-br from-amber-50 to-orange-50 p-6 rounded-2xl border border-amber-100">
                                         <div className="text-3xl font-bold text-amber-700 mb-1">{user.favourites?.length || 0}</div>
-                                        <div className="text-sm text-stone-600">Jami Saqlangan Kitoblar</div>
+                                        <div className="text-sm text-stone-600">Jami saqlangan kitoblar</div>
                                     </div>
                                     <div className="bg-gradient-to-br from-blue-50 to-indigo-50 p-6 rounded-2xl border border-blue-100">
                                         <div className="text-3xl font-bold text-blue-700 mb-1">{new Date().getFullYear() - 2020}</div>

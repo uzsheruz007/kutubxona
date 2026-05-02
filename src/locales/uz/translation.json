@@ -40,7 +40,7 @@
     "aboutUs": "Biz haqimizda",
     "contactUs": "Biz bilan bog'lanish",
     "socialMedia": "Ijtimoiy tarmoqlar",
-    "brand": "SamDU Urgut filiali Elektron Kutubxonasi",
+    "brand": "SamDU Urgut filiali elektron kutubxonasi",
     "p": "Zamonaviy kutubxona, eng yaxshi kitoblar va qulay xizmatlar",
     "address": "Urgut tumani, Samarqand viloyati, O'zbekiston",
     "ourAddress": "Bizning manzilimiz",
@@ -49,9 +49,9 @@
   "news": {
     "readMore": "Batafsil",
     "postedBy": "Muallif:",
-    "libraryLife": "Kutubxona Hayoti",
+    "libraryLife": "Kutubxona hayoti",
     "newsAnd": "Yangiliklar va",
-    "announcements": "E'lonlar",
+    "announcements": "e'lonlar",
     "pageSubtitle": "Kutubxonamizdagi so'nggi o'zgarishlar, yangi kelgan kitoblar va bo'lajak tadbirlar haqida xabardor bo'ling.",
     "noNewsFound": "Ushbu toifadagi yangiliklar mavjud emas.",
     "latestNews": "Yangiliklar",
@@ -79,35 +79,35 @@
   "features": {
     "badge": "Afzalliklarimiz",
     "whyUsPart1": "Nega aynan bizning",
-    "whyUsPart2": "Kutubxona?",
+    "whyUsPart2": "kutubxona?",
     "description": "Biz foydalanuvchilarimizga eng qulay va zamonaviy o'qish tajribasini taqdim etishga intilamiz.",
     "fastSearch": {
-      "title": "Tezkor Qidiruv",
+      "title": "Tezkor qidiruv",
       "desc": "Millionlab kitoblar orasidan keraklisini soniyalar ichida toping."
     },
     "easyDownload": {
-      "title": "Oson Yuklab Olish",
+      "title": "Oson yuklab olish",
       "desc": "Sevimli kitoblaringizni istalgan formatda (PDF, EPUB) yuklab oling."
     },
     "largeBase": {
-      "title": "Katta Baza",
+      "title": "Katta baza",
       "desc": "Barcha janrlardagi badiiy va ilmiy adabiyotlar to'plami."
     },
     "anywhere": {
-      "title": "Istalgan Joyda",
+      "title": "Istalgan joyda",
       "desc": "Kompyuter, planshet yoki telefonda qulay foydalanish imkoniyati."
     },
     "highSpeed": {
-      "title": "Yuqori Tezlik",
+      "title": "Yuqori tezlik",
       "desc": "Eng zamonaviy texnologiyalar asosida ishlaydigan tezkor platforma."
     },
     "secureSystem": {
-      "title": "Xavfsiz Tizim",
+      "title": "Xavfsiz tizim",
       "desc": "Shaxsiy ma'lumotlaringiz va o'qish tarixingiz himoyalangan."
     }
   },
   "topCategories": {
-    "title": "Top Kategoriyalar",
+    "title": "Top kategoriyalar",
     "subtitle": "Mashhur kitoblarni kategoriyalar orqali toping",
     "bookDesc": "Bu kitob haqida qisqacha ma'lumot mavjud emas.",
     "details": "Batafsil"
@@ -117,14 +117,14 @@
     "adabiyotlar": "Adabiyotlar",
     "darslik": "Darslik",
     "oquv": "O'quv adabiyotlar",
-    "ilmiy": "Ilmiy Adabiyot"
+    "ilmiy": "Ilmiy adabiyot"
   },
   "popularBooks": {
     "title": "Mashhur kitoblar",
     "subtitle": "Kutubxonadagi eng ko‘p o‘qilgan mashhur kitoblar"
   },
   "stats": {
-    "title": "Kutubxona Statistikasi",
+    "title": "Kutubxona statistikasi",
     "subtitle": "Elektron kutubxonamiz haqida qisqacha ma'lumot",
     "totalBooks": "Jami kitoblar",
     "categories": "Kategoriya",
@@ -132,9 +132,9 @@
     "newBooks": "Yangi kitoblar"
   },
   "flipBook": {
-    "readFree": "Mutolaa uchun bepul kitoblar",
-    "freeBooksDesc": "Eng sara asarlar va qo'llanmalar siz uchun mutlaqo bepul",
-    "aboutWork": "Asar Haqida",
+    "readFree": "O'zbek adabiyoti durdonasi",
+    "freeBooksDesc": "",
+    "aboutWork": "Asar haqida",
     "aboutWorkDesc": "Bilimlar dunyosini kashf eting. Ushbu raqamli kutubxona barcha kitobxonlarni ilhomlantirish va o'qitish uchun mo'ljallangan saralangan tarkibni o'z ichiga oladi.",
     "publisher": "Sharq Ziyosi Nashriyoti"
   },
@@ -174,7 +174,7 @@
   "textbooks": "O'quv adabiyotlar",
   "monographs": "Monografiyalar",
   "dissertations": "Dissertatsiyalar",
-  "allBooks": "Barcha Kitoblar",
+  "allBooks": "Barcha kitoblar",
   "allBooksSubtitle": "Kutubxonamizdagi barcha kitoblarni ko'ring va o'qing!",
   "categoriesLabel": "Kategoriyalar",
   "currentCategory": "Kategoriya",

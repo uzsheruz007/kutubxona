@@ -1,9 +1,20 @@
 import { Link, useLocation } from "react-router-dom";
 import { motion } from "framer-motion";
 import { FiHome } from "react-icons/fi";
+import { useTranslation } from "react-i18next";
 
 export default function PageHeader({ title, subtitle }) {
+  const { t } = useTranslation();
   const location = useLocation();
+
+  const segmentLabels = {
+    books: t("navbar.books"),
+    news: t("navbar.news"),
+    book: t("navbar.books"),
+    profile: t("navbar.profile"),
+    login: t("navbar.login"),
+    statistics: t("navbar.statistics"),
+  };
 
   // Extract path segments for breadcrumb
   const paths = location.pathname
@@ -30,15 +41,15 @@ export default function PageHeader({ title, subtitle }) {
             <span key={path} className="flex items-center gap-1">
               <span>/</span>
               {isLast ? (
-                <span className="font-semibold text-stone-900 capitalize">
-                  {decodeURIComponent(segment)}
+                <span className="font-semibold text-stone-900">
+                  {segmentLabels[segment.toLowerCase()] || decodeURIComponent(segment)}
                 </span>
               ) : (
                 <Link
                   to={path}
-                  className="hover:text-amber-600 capitalize transition-colors"
+                  className="hover:text-amber-600 transition-colors"
                 >
-                  {decodeURIComponent(segment)}
+                  {segmentLabels[segment.toLowerCase()] || decodeURIComponent(segment)}
                 </Link>
               )}
             </span>

@@ -127,7 +127,7 @@ export default function AdminBookForm() {
         <div className="space-y-4 animate-in fade-in slide-in-from-bottom-2 duration-300">
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                 <div className="space-y-2">
-                    <label className="text-sm font-semibold text-stone-700">Kitob Nomi ({lang.toUpperCase()})</label>
+                    <label className="text-sm font-semibold text-stone-700">Kitob nomi ({lang.toUpperCase()})</label>
                     <input required={lang === 'uz'} name={`title_${lang}`} value={formData[`title_${lang}`]} onChange={handleChange} type="text" className="w-full px-4 py-2.5 rounded-xl border border-stone-200 focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 outline-none" />
                 </div>
                 <div className="space-y-2">
@@ -152,21 +152,21 @@ export default function AdminBookForm() {
                 <button onClick={() => navigate("/admin-panel/books")} className="p-2 bg-white rounded-xl border border-stone-200 text-stone-500 hover:text-stone-800 transition-colors">
                     <FiArrowLeft />
                 </button>
-                <h1 className="text-2xl font-bold text-stone-800">{isEdit ? "Kitobni Tahrirlash" : "Yangi Kitob Qo'shish"}</h1>
+                <h1 className="text-2xl font-bold text-stone-800">{isEdit ? "Kitobni tahrirlash" : "Yangi kitob qo'shish"}</h1>
             </div>
 
             <form onSubmit={handleSubmit} className="bg-white rounded-2xl shadow-sm border border-stone-200 p-6 sm:p-8 space-y-8">
 
                 {/* Common Data */}
                 <div className="space-y-4">
-                    <h3 className="text-lg font-semibold text-stone-800 border-b border-stone-100 pb-2">Umumiy Ma'lumotlar</h3>
+                    <h3 className="text-lg font-semibold text-stone-800 border-b border-stone-100 pb-2">Umumiy ma'lumotlar</h3>
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                         <div className="space-y-2">
-                            <label className="text-sm font-semibold text-stone-700">Nashr Yili</label>
+                            <label className="text-sm font-semibold text-stone-700">Nashr yili</label>
                             <input required name="publication_year" value={formData.publication_year} onChange={handleChange} type="number" min="1900" max={new Date().getFullYear() + 1} className="w-full px-4 py-2.5 rounded-xl border border-stone-200 focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 outline-none" />
                         </div>
                         <div className="space-y-2">
-                            <label className="text-sm font-semibold text-stone-700">Betlar Soni</label>
+                            <label className="text-sm font-semibold text-stone-700">Betlar soni</label>
                             <input required name="page_count" value={formData.page_count} onChange={handleChange} type="number" min="0" className="w-full px-4 py-2.5 rounded-xl border border-stone-200 focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 outline-none" />
                         </div>
                         <div className="space-y-2">
@@ -216,7 +216,7 @@ export default function AdminBookForm() {
                             </div>
                         </div>
                         <div className="space-y-2">
-                            <label className="text-sm font-semibold text-stone-700">Kitob Fayli</label>
+                            <label className="text-sm font-semibold text-stone-700">Kitob fayli</label>
                             <div className="border border-dashed border-stone-300 rounded-xl p-4 text-center hover:bg-stone-50 transition-colors cursor-pointer relative h-32 flex flex-col items-center justify-center">
                                 <input name="file" onChange={handleChange} type="file" className="absolute inset-0 opacity-0 cursor-pointer z-10" />
                                 <FiUploadCloud size={24} className="text-stone-400 mb-2" />

@@ -138,7 +138,7 @@ export default function AdminNewsForm() {
                 <button onClick={() => navigate("/admin-panel/news")} className="p-2 bg-white rounded-xl border border-stone-200 text-stone-500 hover:text-stone-800 transition-colors">
                     <FiArrowLeft />
                 </button>
-                <h1 className="text-2xl font-bold text-stone-800">{isEdit ? "Yangilikni Tahrirlash" : "Yangi Yangilik Qo'shish"}</h1>
+                <h1 className="text-2xl font-bold text-stone-800">{isEdit ? "Yangilikni tahrirlash" : "Yangi yangilik qo'shish"}</h1>
             </div>
 
             <form onSubmit={handleSubmit} className="bg-white rounded-2xl shadow-sm border border-stone-200 p-6 sm:p-8 space-y-8">

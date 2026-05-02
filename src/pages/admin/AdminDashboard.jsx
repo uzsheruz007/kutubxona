@@ -29,14 +29,14 @@ export default function AdminDashboard() {
     if (!stats) return <div className="text-center p-10 text-stone-500">Ma'lumotlarni yuklashda xatolik.</div>;
 
     const cards = [
-        { title: "Jami Kitoblar", value: stats.totalBooks, icon: FiBook, color: "bg-blue-500" },
-        { title: "Jami Foydalanuvchilar", value: stats.totalUsers, icon: FiUsers, color: "bg-green-500" },
+        { title: "Jami kitoblar", value: stats.totalBooks, icon: FiBook, color: "bg-blue-500" },
+        { title: "Jami foydalanuvchilar", value: stats.totalUsers, icon: FiUsers, color: "bg-green-500" },
         { title: "Bugungi yangi a'zolar", value: stats.newUsersToday, icon: FiUserPlus, color: "bg-purple-500" },
     ];
 
     return (
         <div className="space-y-8">
-            <h1 className="text-2xl font-bold text-stone-800">Boshqaruv Paneli</h1>
+            <h1 className="text-2xl font-bold text-stone-800">Boshqaruv paneli</h1>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                 {cards.map((card, idx) => (

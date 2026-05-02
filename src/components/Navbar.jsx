@@ -185,10 +185,10 @@ export default function Navbar() {
                                                     <div className="w-6 h-6 rounded-full bg-amber-50 flex items-center justify-center">
                                                         <User size={14} className="text-amber-500" />
                                                     </div>
-                                                    Profile
+                                                    {t("navbar.profile")}
                                                 </RouterLink>
                                                 <button onClick={() => { logout(); setUserDropdown(false); }} className="w-full flex items-center gap-2 px-3 py-2 rounded-xl hover:bg-red-50 text-red-600 text-sm mt-1">
-                                                    <LogOut size={16} /> Chiqish
+                                                    <LogOut size={16} /> {t("navbar.logout")}
                                                 </button>
                                             </motion.div>
                                         )}

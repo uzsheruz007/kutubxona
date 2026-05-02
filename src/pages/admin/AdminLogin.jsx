@@ -33,7 +33,7 @@ export default function AdminLogin() {
             <div className="bg-white rounded-2xl shadow-xl border border-stone-200 p-8 w-full max-w-md">
                 <div className="flex flex-col items-center mb-8">
                     <img src={Logo} alt="Logo" className="h-12 w-12 mb-4" />
-                    <h1 className="text-xl font-bold text-stone-900 border-b-2 border-amber-500 pb-1">Admin Panelga Kirish</h1>
+                    <h1 className="text-xl font-bold text-stone-900 border-b-2 border-amber-500 pb-1">Admin panelga kirish</h1>
                     <p className="text-xs text-stone-500 mt-2">Faqat administratorlar uchun</p>
                 </div>
 

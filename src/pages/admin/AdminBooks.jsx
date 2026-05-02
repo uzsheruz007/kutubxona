@@ -59,9 +59,9 @@ export default function AdminBooks() {
     return (
         <div className="space-y-6">
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-                <h1 className="text-2xl font-bold text-stone-800">Kitoblar Boshqaruvi</h1>
+                <h1 className="text-2xl font-bold text-stone-800">Kitoblar boshqaruvi</h1>
                 <Link to="/admin-panel/books/new" className="bg-amber-600 hover:bg-amber-700 text-white px-4 py-2 rounded-xl flex items-center gap-2 font-medium transition-colors shadow-sm">
-                    <FiPlus /> Yangi Kitob
+                    <FiPlus /> Yangi kitob
                 </Link>
             </div>
 
