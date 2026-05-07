@@ -44,7 +44,7 @@ export default function Profile() {
     const favCount = user.favourites?.length || 0;
 
     return (
-        <div className="min-h-screen bg-stone-100 pt-28 pb-16 px-4">
+        <div className="min-h-screen bg-stone-100 pt-36 pb-16 px-4">
 
             <div className="max-w-3xl mx-auto space-y-5">
 
