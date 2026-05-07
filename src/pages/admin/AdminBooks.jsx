@@ -1,9 +1,10 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
-import { FiPlus, FiEdit2, FiTrash2, FiSearch, FiFilter } from "react-icons/fi";
+import { FiPlus, FiEdit2, FiTrash2, FiSearch, FiFilter, FiDownload } from "react-icons/fi";
 import { useNavigate } from "react-router-dom";
 import { Loader } from "lucide-react";
+import * as XLSX from "xlsx";
 import { API_BASE_URL } from "../../config";
 import { BOOK_CATEGORIES } from "../../constants/categories";
 
@@ -56,13 +57,67 @@ export default function AdminBooks() {
         book.author.toLowerCase().includes(search.toLowerCase())
     );
 
+    const [exporting, setExporting] = useState(false);
+
+    const handleExportExcel = async () => {
+        setExporting(true);
+        try {
+            const response = await axios.get(`${API_BASE_URL}/api/books/`);
+            const allBooks = response.data;
+
+            const rows = allBooks.map((book, idx) => ({
+                "#": idx + 1,
+                "Kitob nomi": book.title || "",
+                "Muallif": book.author || "",
+                "Kategoriya": BOOK_CATEGORIES.find(c => c.value === book.category)?.label || book.category || "",
+                "Betlar soni": book.page_count || 0,
+                "Chop etilgan sana": book.published_date || "",
+                "Mavzular": book.subjects || "",
+                "Qo'shilgan sana": book.created_at ? new Date(book.created_at).toLocaleDateString("uz-UZ") : "",
+            }));
+
+            const worksheet = XLSX.utils.json_to_sheet(rows);
+            worksheet["!cols"] = [
+                { wch: 4 },
+                { wch: 40 },
+                { wch: 30 },
+                { wch: 18 },
+                { wch: 12 },
+                { wch: 18 },
+                { wch: 35 },
+                { wch: 18 },
+            ];
+
+            const workbook = XLSX.utils.book_new();
+            XLSX.utils.book_append_sheet(workbook, worksheet, "Kitoblar");
+
+            const today = new Date().toISOString().slice(0, 10);
+            XLSX.writeFile(workbook, `kitoblar_${today}.xlsx`);
+        } catch (error) {
+            console.error("Excel eksport xatosi:", error);
+            alert("Eksport qilishda xatolik yuz berdi.");
+        } finally {
+            setExporting(false);
+        }
+    };
+
     return (
         <div className="space-y-6">
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                 <h1 className="text-2xl font-bold text-stone-800">Kitoblar boshqaruvi</h1>
-                <Link to="/admin-panel/books/new" className="bg-amber-600 hover:bg-amber-700 text-white px-4 py-2 rounded-xl flex items-center gap-2 font-medium transition-colors shadow-sm">
-                    <FiPlus /> Yangi kitob
-                </Link>
+                <div className="flex items-center gap-3">
+                    <button
+                        onClick={handleExportExcel}
+                        disabled={exporting}
+                        className="bg-green-600 hover:bg-green-700 disabled:opacity-60 text-white px-4 py-2 rounded-xl flex items-center gap-2 font-medium transition-colors shadow-sm"
+                    >
+                        {exporting ? <Loader className="animate-spin h-4 w-4" /> : <FiDownload />}
+                        Excel yuklab olish
+                    </button>
+                    <Link to="/admin-panel/books/new" className="bg-amber-600 hover:bg-amber-700 text-white px-4 py-2 rounded-xl flex items-center gap-2 font-medium transition-colors shadow-sm">
+                        <FiPlus /> Yangi kitob
+                    </Link>
+                </div>
             </div>
 
             <div className="bg-white rounded-2xl shadow-sm border border-stone-200 p-4">
