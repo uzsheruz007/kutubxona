@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { useUser } from "../context/UserContext";
-import { FiLogOut, FiHeart, FiBookOpen, FiCalendar, FiMail, FiTrash2, FiUser } from "react-icons/fi";
+import { FiLogOut, FiHeart, FiBookOpen, FiCalendar, FiMail, FiTrash2 } from "react-icons/fi";
 import { Link, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import axios from "axios";
@@ -44,84 +44,88 @@ export default function Profile() {
     const favCount = user.favourites?.length || 0;
 
     return (
-        <div className="min-h-screen bg-stone-100 pt-36 pb-16 px-4">
-
-            <div className="max-w-3xl mx-auto space-y-5">
+        <div className="min-h-screen bg-stone-100 pb-16 px-3 sm:px-4" style={{ paddingTop: "5rem" }}>
+            <div className="max-w-2xl mx-auto space-y-4">
 
                 {/* ── Profil kartasi ── */}
                 <motion.div
-                    initial={{ opacity: 0, y: 20 }}
+                    initial={{ opacity: 0, y: 16 }}
                     animate={{ opacity: 1, y: 0 }}
                     className="bg-white rounded-2xl shadow-sm border border-stone-200 overflow-hidden"
                 >
-                    {/* Yupqa rang chizig'i */}
-                    <div className="h-2 bg-gradient-to-r from-amber-500 to-orange-500" />
+                    <div className="h-1.5 bg-gradient-to-r from-amber-500 to-orange-500" />
 
-                    <div className="p-6 flex flex-col sm:flex-row sm:items-center gap-5">
-                        {/* Avatar */}
-                        <div className="w-20 h-20 rounded-2xl overflow-hidden flex-shrink-0 shadow-md">
-                            {user.avatar ? (
-                                <img src={user.avatar} alt="Avatar" className="w-full h-full object-cover" />
-                            ) : (
-                                <div className="w-full h-full bg-gradient-to-br from-amber-400 to-orange-500 flex items-center justify-center">
-                                    <span className="text-white text-3xl font-bold select-none">{initials}</span>
-                                </div>
-                            )}
-                        </div>
-
-                        {/* Ma'lumotlar */}
-                        <div className="flex-1 min-w-0">
-                            <h1 className="text-xl font-bold text-stone-800">{displayName}</h1>
-                            <p className="text-stone-400 text-sm mb-3">@{user.username}</p>
-                            <div className="flex flex-wrap gap-x-5 gap-y-1.5">
-                                <span className="flex items-center gap-1.5 text-sm text-stone-500">
-                                    <FiHeart size={13} className="text-red-400" />
-                                    <strong className="text-stone-700">{favCount}</strong> sevimli kitob
-                                </span>
-                                {user.email && (
-                                    <span className="flex items-center gap-1.5 text-sm text-stone-500">
-                                        <FiMail size={13} className="text-amber-500" />
-                                        {user.email}
-                                    </span>
-                                )}
-                                {joinDate && (
-                                    <span className="flex items-center gap-1.5 text-sm text-stone-500">
-                                        <FiCalendar size={13} className="text-amber-500" />
-                                        {joinDate} dan a'zo
-                                    </span>
+                    <div className="p-4 sm:p-6">
+                        {/* Yuqori qator: avatar + ism + chiqish */}
+                        <div className="flex items-start gap-4">
+                            {/* Avatar */}
+                            <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-2xl overflow-hidden flex-shrink-0 shadow-md">
+                                {user.avatar ? (
+                                    <img src={user.avatar} alt="Avatar" className="w-full h-full object-cover" />
+                                ) : (
+                                    <div className="w-full h-full bg-gradient-to-br from-amber-400 to-orange-500 flex items-center justify-center">
+                                        <span className="text-white text-2xl sm:text-3xl font-bold select-none">{initials}</span>
+                                    </div>
                                 )}
                             </div>
+
+                            {/* Ism va username */}
+                            <div className="flex-1 min-w-0">
+                                <h1 className="text-base sm:text-xl font-bold text-stone-800 leading-tight truncate">{displayName}</h1>
+                                <p className="text-stone-400 text-xs sm:text-sm mt-0.5 truncate">@{user.username}</p>
+                            </div>
+
+                            {/* Chiqish tugmasi */}
+                            <button
+                                onClick={handleLogout}
+                                className="flex-shrink-0 flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-red-100 bg-red-50 text-red-500 hover:bg-red-100 font-semibold text-xs sm:text-sm transition-all"
+                            >
+                                <FiLogOut size={13} />
+                                <span>Chiqish</span>
+                            </button>
                         </div>
 
-                        {/* Chiqish */}
-                        <button
-                            onClick={handleLogout}
-                            className="flex items-center gap-2 px-4 py-2 rounded-xl border border-red-100 bg-red-50 text-red-500 hover:bg-red-100 font-semibold text-sm transition-all self-start sm:self-center whitespace-nowrap"
-                        >
-                            <FiLogOut size={15} />
-                            Chiqish
-                        </button>
+                        {/* Ma'lumotlar qatori */}
+                        <div className="flex flex-wrap gap-3 mt-4 pt-4 border-t border-stone-100">
+                            <span className="flex items-center gap-1.5 text-xs sm:text-sm text-stone-500">
+                                <FiHeart size={12} className="text-red-400 flex-shrink-0" />
+                                <strong className="text-stone-700">{favCount}</strong>&nbsp;sevimli kitob
+                            </span>
+                            {user.email && (
+                                <span className="flex items-center gap-1.5 text-xs sm:text-sm text-stone-500 min-w-0">
+                                    <FiMail size={12} className="text-amber-500 flex-shrink-0" />
+                                    <span className="truncate">{user.email}</span>
+                                </span>
+                            )}
+                            {joinDate && (
+                                <span className="flex items-center gap-1.5 text-xs sm:text-sm text-stone-500">
+                                    <FiCalendar size={12} className="text-amber-500 flex-shrink-0" />
+                                    <span>{joinDate}</span>
+                                </span>
+                            )}
+                        </div>
                     </div>
                 </motion.div>
 
                 {/* ── Sevimli kitoblar ── */}
                 <motion.div
-                    initial={{ opacity: 0, y: 20 }}
+                    initial={{ opacity: 0, y: 16 }}
                     animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.1 }}
+                    transition={{ delay: 0.08 }}
                     className="bg-white rounded-2xl shadow-sm border border-stone-200"
                 >
-                    <div className="px-6 py-4 border-b border-stone-100 flex items-center gap-2">
-                        <FiHeart size={16} className="text-red-400" />
-                        <h2 className="font-bold text-stone-800 text-base">Sevimli kitoblar</h2>
+                    {/* Sarlavha */}
+                    <div className="px-4 sm:px-6 py-3 sm:py-4 border-b border-stone-100 flex items-center gap-2">
+                        <FiHeart size={15} className="text-red-400" />
+                        <h2 className="font-bold text-stone-800 text-sm sm:text-base">Sevimli kitoblar</h2>
                         <span className="ml-auto text-xs font-semibold bg-amber-100 text-amber-700 px-2 py-0.5 rounded-full">
                             {favCount}
                         </span>
                     </div>
 
-                    <div className="p-6">
+                    <div className="p-4 sm:p-6">
                         {favCount > 0 ? (
-                            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
+                            <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 sm:gap-4">
                                 {user.favourites.map((book, i) => {
                                     const cover = book.coverUrl
                                         ? (book.coverUrl.startsWith("http") ? book.coverUrl : `${API_BASE_URL}${book.coverUrl}`)
@@ -142,17 +146,18 @@ export default function Profile() {
                                                         className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                                                     />
                                                 </div>
-                                                <div className="p-2.5">
+                                                <div className="p-2 sm:p-3">
                                                     <p className="text-xs font-bold text-stone-800 line-clamp-2 leading-snug group-hover:text-amber-700 transition-colors">
                                                         {book.title}
                                                     </p>
                                                     <p className="text-xs text-stone-400 mt-0.5 line-clamp-1">{book.author}</p>
                                                 </div>
                                             </Link>
+                                            {/* O'chirish tugmasi */}
                                             <button
                                                 onClick={() => handleRemoveFavorite(book.id)}
                                                 title="Olib tashlash"
-                                                className="absolute top-1.5 right-1.5 w-6 h-6 bg-white rounded-full flex items-center justify-center shadow opacity-0 group-hover:opacity-100 transition-opacity hover:bg-red-50"
+                                                className="absolute top-1.5 right-1.5 w-6 h-6 bg-white rounded-full flex items-center justify-center shadow opacity-0 group-hover:opacity-100 transition-opacity hover:bg-red-50 active:opacity-100"
                                             >
                                                 <FiTrash2 size={11} className="text-red-500" />
                                             </button>
@@ -161,12 +166,12 @@ export default function Profile() {
                                 })}
                             </div>
                         ) : (
-                            <div className="py-16 flex flex-col items-center text-center">
-                                <div className="w-16 h-16 rounded-full bg-amber-50 flex items-center justify-center mb-4">
-                                    <FiBookOpen size={28} className="text-amber-400" />
+                            <div className="py-12 sm:py-16 flex flex-col items-center text-center">
+                                <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-full bg-amber-50 flex items-center justify-center mb-4">
+                                    <FiBookOpen size={24} className="text-amber-400" />
                                 </div>
-                                <p className="font-semibold text-stone-600">Hali sevimli kitob yo'q</p>
-                                <p className="text-sm text-stone-400 mt-1 mb-5">
+                                <p className="font-semibold text-stone-600 text-sm sm:text-base">Hali sevimli kitob yo'q</p>
+                                <p className="text-xs sm:text-sm text-stone-400 mt-1 mb-5 px-4">
                                     Kitob sahifasida ♥ tugmasini bosib saqlang
                                 </p>
                                 <Link

@@ -110,16 +110,16 @@ export function UserProvider({ children }) {
     };
 
     const refreshUser = async () => {
-        if (!token) return;
+        const storedToken = token || localStorage.getItem("token");
+        if (!storedToken) return;
         try {
-            // Simplified fetch - we don't have a dedicated /me/ endpoint in views shown, 
-            // but we can use UserProfileView GET /api/accounts/profile/
-            const response = await axios.get(`${API_BASE_URL}/api/accounts/profile/`);
+            const response = await axios.get(`${API_BASE_URL}/api/accounts/profile/`, {
+                headers: { Authorization: `Token ${storedToken}` }
+            });
             setUser(response.data);
             return response.data;
         } catch (error) {
             console.error("Error refreshing user:", error);
-            // If token is invalid (401), maybe logout? 
             if (error.response?.status === 401) logout();
         }
     };
