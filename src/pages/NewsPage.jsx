@@ -7,14 +7,9 @@ import axios from "axios";
 import i18n from "../i18n";
 import { API_BASE_URL } from "../config";
 
-// Match Backend Defaults
-const categoryKeys = ["Barchasi", "Yangilik", "E'lon", "Tadbir", "Yangi", "Texnik", "Xizmat"];
-
 export default function AllNewsPage() {
     const { t } = useTranslation();
     const [news, setNews] = useState([]);
-    const [filteredNews, setFilteredNews] = useState([]);
-    const [activeCategory, setActiveCategory] = useState("Barchasi");
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState("");
 
@@ -28,7 +23,6 @@ export default function AllNewsPage() {
                     }
                 });
                 setNews(response.data);
-                setFilteredNews(response.data);
                 setLoading(false);
             } catch (err) {
                 console.error("Error fetching news:", err);
@@ -40,16 +34,6 @@ export default function AllNewsPage() {
         fetchNews();
     }, [i18n.language]);
 
-    // Filter Logic
-    useEffect(() => {
-        if (loading) return;
-        if (activeCategory === "Barchasi") {
-            setFilteredNews(news);
-        } else {
-            const filtered = news.filter((n) => n.category === activeCategory);
-            setFilteredNews(filtered)
-        }
-    }, [activeCategory, news, loading]);
 
     return (
         <div className="min-h-screen bg-stone-50 relative overflow-hidden font-sans pt-24 pb-20">
@@ -97,31 +81,6 @@ export default function AllNewsPage() {
                     </motion.p>
                 </div>
 
-                {/* --- Filters --- */}
-                <div className="flex flex-wrap gap-3 justify-center mb-12">
-                    {categoryKeys.map((catKey, idx) => (
-                        <motion.button
-                            key={catKey}
-                            initial={{ opacity: 0, y: 10 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            transition={{ delay: 0.3 + idx * 0.05 }}
-                            onClick={() => setActiveCategory(catKey)}
-                            className={`px-6 py-2.5 rounded-full text-sm font-semibold transition-all duration-300 shadow-sm border ${activeCategory === catKey
-                                ? "bg-amber-600 text-white border-amber-600 shadow-amber-200 hover:bg-amber-700"
-                                : "bg-white text-stone-600 hover:bg-stone-100 border-stone-200"
-                                }`}
-                        >
-                            {/* Display translated matching category key */}
-                            {catKey === "Barchasi" ? t("news.categories.all") :
-                                catKey === "Yangilik" ? t("news.categories.news") :
-                                    catKey === "E'lon" ? t("news.categories.announcement") :
-                                        catKey === "Tadbir" ? t("news.categories.event") :
-                                            catKey === "Yangi" ? t("news.categories.new") :
-                                                catKey === "Texnik" ? t("news.categories.technical") :
-                                                    catKey === "Xizmat" ? t("news.categories.service") : catKey}
-                        </motion.button>
-                    ))}
-                </div>
 
                 {/* --- Content Grid --- */}
                 {loading ? (
@@ -133,7 +92,7 @@ export default function AllNewsPage() {
                     <div className="text-center text-red-500 font-medium py-20 bg-red-50/50 rounded-2xl border border-red-100">
                         {error}
                     </div>
-                ) : filteredNews.length === 0 ? (
+                ) : news.length === 0 ? (
                     <div className="text-center py-20 bg-white/40 rounded-3xl border border-slate-200/50 backdrop-blur-sm">
                         <Search size={48} className="mx-auto text-slate-300 mb-4" />
                         <p className="text-lg text-slate-500 font-medium">{t("news.noNewsFound")}</p>
@@ -143,7 +102,7 @@ export default function AllNewsPage() {
                         className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8"
                         layout
                     >
-                        {filteredNews.map((item, index) => (
+                        {news.map((item, index) => (
                             <motion.div
                                 key={item.id}
                                 layout
