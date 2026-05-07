@@ -38,7 +38,7 @@ export default function Login() {
                 <div className="absolute inset-0 pointer-events-none">
                     <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-amber-200/30 rounded-full blur-[120px] -translate-y-1/2 translate-x-1/2"></div>
                     <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-orange-100/40 rounded-full blur-[120px] translate-y-1/3 -translate-x-1/2"></div>
-                    <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20"></div>
+                    
                 </div>
 
                 <motion.div
