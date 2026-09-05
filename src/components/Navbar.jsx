@@ -1,32 +1,26 @@
 import { useState, useEffect, useRef } from "react";
-import { Menu, X, Globe, LogIn, LogOut, ChevronDown, User } from "lucide-react";
+import { Menu, X, LogOut, User } from "lucide-react";
 import { Link as RouterLink, useLocation, useNavigate } from "react-router-dom";
 import { animateScroll as scroll } from "react-scroll";
 import { motion, AnimatePresence } from "framer-motion";
-import PremiumNavLink from "./NavLink";
 import Logo from "../assets/Logo.png";
 import { useUser } from "../context/UserContext";
 import { useTranslation } from "react-i18next";
 
 const languages = [
-    { code: "uz", label: "O'zbekcha", flag: "🇺🇿" },
-    { code: "en", label: "English", flag: "🇬🇧" },
-    { code: "ru", label: "Русский", flag: "🇷🇺" },
+    { code: "uz", label: "UZ" },
+    { code: "ru", label: "RU" },
+    { code: "en", label: "EN" },
 ];
 
 export default function Navbar() {
     const { t, i18n } = useTranslation();
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-    const [langDropdown, setLangDropdown] = useState(false);
     const [userDropdown, setUserDropdown] = useState(false);
     const { user, logout } = useUser();
     const location = useLocation();
     const navigate = useNavigate();
 
-    // Scrolled state for visual changes
-    const [isScrolled, setIsScrolled] = useState(false);
-
-    const langRef = useRef(null);
     const userRef = useRef(null);
     const mobileMenuRef = useRef(null);
 
@@ -39,14 +33,6 @@ export default function Navbar() {
         // removed contact
         { key: "books", to: "/books", label: t("navbar.books") },
     ];
-
-    useEffect(() => {
-        const handleScroll = () => {
-            setIsScrolled(window.scrollY > 20);
-        };
-        window.addEventListener("scroll", handleScroll);
-        return () => window.removeEventListener("scroll", handleScroll);
-    }, []);
 
     const handleSectionClick = (sectionId) => {
         if (location.pathname !== "/") {
@@ -77,10 +63,11 @@ export default function Navbar() {
         }
     };
 
+    const isActive = (item) => Boolean(item.to) && location.pathname === item.to;
+
     // Close CLICK OUTSIDE
     useEffect(() => {
         const handleClickOutside = (event) => {
-            if (langRef.current && !langRef.current.contains(event.target)) setLangDropdown(false);
             if (userRef.current && !userRef.current.contains(event.target)) setUserDropdown(false);
             if (mobileMenuRef.current && !mobileMenuRef.current.contains(event.target) && !event.target.closest('.mobile-menu-button')) {
                 setMobileMenuOpen(false);
@@ -92,178 +79,169 @@ export default function Navbar() {
 
     const changeLanguage = (lang) => {
         i18n.changeLanguage(lang);
-        setLangDropdown(false);
     };
 
     return (
         <>
-            <motion.nav
-                initial={{ y: -100 }}
-                animate={{ y: 0 }}
-                transition={{ type: "spring", stiffness: 100, damping: 20 }}
-                className={`fixed left-0 right-0 z-50 mx-auto px-4 max-w-7xl transition-all duration-300 ${isScrolled ? "top-10" : "top-12"}`}
+            <header
+                style={{
+                    position: "sticky",
+                    top: 36,
+                    zIndex: 40,
+                    background: "color-mix(in srgb, var(--color-bg) 92%, transparent)",
+                    backdropFilter: "blur(8px)",
+                    borderBottom: "1px solid var(--color-divider)",
+                }}
             >
-                <div className={`
-                    rounded-full border border-stone-200 backdrop-blur-xl
-                    ${isScrolled ? "bg-white/90 py-2 shadow-sm" : "bg-white/70 py-3"}
-                    transition-all duration-300 px-6 sm:px-8
-                `}>
-                    <div className="flex justify-between items-center">
+                <div
+                    className="max-w-[1180px] mx-auto flex items-center gap-6 px-4 sm:px-6"
+                    style={{ paddingTop: "var(--space-3)", paddingBottom: "var(--space-3)" }}
+                >
+                    {/* 1. LOGO */}
+                    <RouterLink to="/" className="flex items-center gap-2 mr-auto">
+                        <img src={Logo} alt="Logo" className="h-7 w-7 object-contain" />
+                        <span
+                            className="hidden sm:inline"
+                            style={{ fontFamily: "var(--font-heading)", fontWeight: "var(--font-heading-weight)", fontSize: 19, letterSpacing: "-0.01em" }}
+                        >
+                            {t("navbar.brand")}
+                        </span>
+                    </RouterLink>
 
-                        {/* 1. LOGO */}
-                        <RouterLink to="/" className="flex items-center gap-2 group">
-                            <div className="relative">
-                                <div className="absolute inset-0 bg-amber-600 blur-lg opacity-20 group-hover:opacity-40 transition-opacity rounded-full"></div>
-                                <img src={Logo} alt="Logo" className="h-10 w-10 sm:h-12 sm:w-12 object-contain relative z-10" />
-                            </div>
-                            <span className="font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-amber-700 to-orange-600 text-lg sm:text-xl tracking-tight hidden sm:block">
-                                {t("navbar.brand")}
-                            </span>
-                        </RouterLink>
+                    {/* 2. DESKTOP MENU */}
+                    <nav className="hidden lg:flex items-center gap-6">
+                        {navItems.map((item) => (
+                            <button
+                                key={item.key}
+                                onClick={() => handleNavClick(item)}
+                                className={`pb-0.5 text-sm border-b transition-colors ${isActive(item)
+                                        ? "border-[var(--color-accent)] text-[var(--color-accent)]"
+                                        : "border-transparent hover:border-[var(--color-accent)] hover:text-[var(--color-accent)]"
+                                    }`}
+                            >
+                                {item.label}
+                            </button>
+                        ))}
+                    </nav>
 
-                        {/* 2. DESKTOP MENU */}
-                        <div className="hidden lg:flex items-center gap-8 bg-stone-100/50 p-1 px-2 rounded-full border border-white/50 ring-1 ring-stone-200/50">
-                            {navItems.map((item) => (
-                                <button
-                                    key={item.key}
-                                    onClick={() => handleNavClick(item)}
-                                    className="px-5 py-2 rounded-full text-sm font-medium text-stone-600 hover:text-amber-700 hover:bg-amber-50 transition-all shadow-sm hover:shadow-orange-100/50"
-                                >
-                                    {item.label}
-                                </button>
+                    {/* 3. ACTIONS (Lang & User) */}
+                    <div className="hidden md:flex items-center gap-4">
+                        {/* Lang */}
+                        <div className="seg">
+                            {languages.map((lang) => (
+                                <label key={lang.code} className="seg-opt">
+                                    <input
+                                        type="radio"
+                                        name="lang"
+                                        checked={currentLang === lang.code}
+                                        onChange={() => changeLanguage(lang.code)}
+                                    />
+                                    {lang.label}
+                                </label>
                             ))}
                         </div>
 
-                        {/* 3. ACTIONS (Lang & User) */}
-                        <div className="hidden md:flex items-center gap-3">
-
-
-                            {/* Lang */}
-                            <div className="relative" ref={langRef}>
-                                <button
-                                    onClick={() => setLangDropdown(!langDropdown)}
-                                    className="w-10 h-10 flex items-center justify-center rounded-full bg-stone-50 hover:bg-amber-50 text-stone-700 transition hover:scale-105 border border-stone-200"
-                                >
-                                    <Globe size={18} className="text-amber-600" />
+                        {/* User */}
+                        {user ? (
+                            <div className="relative" ref={userRef}>
+                                <button onClick={() => setUserDropdown(!userDropdown)} className="btn btn-secondary btn-icon" aria-label={t("navbar.profile")}>
+                                    {user.avatar ? (
+                                        <img src={user.avatar} alt="User" className="w-full h-full object-cover" style={{ borderRadius: "var(--radius-sm)" }} />
+                                    ) : (
+                                        <User size={18} style={{ color: "var(--color-accent)" }} />
+                                    )}
                                 </button>
                                 <AnimatePresence>
-                                    {langDropdown && (
+                                    {userDropdown && (
                                         <motion.div
-                                            initial={{ opacity: 0, scale: 0.9, y: 10 }}
-                                            animate={{ opacity: 1, scale: 1, y: 0 }}
-                                            exit={{ opacity: 0, scale: 0.9, y: 10 }}
-                                            className="absolute right-0 mt-3 w-40 bg-white rounded-2xl shadow-xl border border-stone-100 overflow-hidden p-1 ring-1 ring-stone-900/5"
+                                            initial={{ opacity: 0, y: 6 }}
+                                            animate={{ opacity: 1, y: 0 }}
+                                            exit={{ opacity: 0, y: 6 }}
+                                            transition={{ duration: 0.15 }}
+                                            className="absolute right-0 mt-2 w-48"
+                                            style={{ background: "var(--color-surface)", border: "1px solid var(--color-divider)", borderRadius: "var(--radius-md)", padding: "var(--space-1)" }}
                                         >
-                                            {languages.map(lang => (
-                                                <button key={lang.code} onClick={() => changeLanguage(lang.code)} className={`w-full text-left px-3 py-2 rounded-xl text-sm ${currentLang === lang.code ? "bg-amber-100 text-amber-700" : "hover:bg-stone-50 text-stone-700"}`}>
-                                                    <span className="mr-2">{lang.flag}</span> {lang.label}
-                                                </button>
-                                            ))}
+                                            <RouterLink to="/profile" onClick={() => setUserDropdown(false)} className="flex items-center gap-2 px-3 py-2 text-sm hover:text-[var(--color-accent)]">
+                                                <User size={14} /> {t("navbar.profile")}
+                                            </RouterLink>
+                                            <button onClick={() => { logout(); setUserDropdown(false); }} className="w-full flex items-center gap-2 px-3 py-2 text-sm text-left hover:text-[var(--color-accent)]">
+                                                <LogOut size={14} /> {t("navbar.logout")}
+                                            </button>
                                         </motion.div>
                                     )}
                                 </AnimatePresence>
                             </div>
-
-                            {/* User */}
-                            {user ? (
-                                <div className="relative" ref={userRef}>
-                                    <button onClick={() => setUserDropdown(!userDropdown)} className="flex items-center gap-2 pl-1 pr-3 py-1 rounded-full bg-gradient-to-r from-stone-50 to-amber-50 border border-stone-200 hover:shadow-lg transition">
-                                        <div className="w-8 h-8 rounded-full bg-white border-2 border-amber-100 flex items-center justify-center shadow-sm overflow-hidden">
-                                            {user.avatar ? (
-                                                <img src={user.avatar} alt="User" className="w-full h-full object-cover" />
-                                            ) : (
-                                                <User size={18} className="text-amber-500" />
-                                            )}
-                                        </div>
-                                        <span className="text-sm font-semibold text-stone-800 max-w-[80px] truncate">{user.first_name || user.username}</span>
-                                    </button>
-                                    {/* User Dropdown (Simplified) */}
-                                    <AnimatePresence>
-                                        {userDropdown && (
-                                            <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: 10 }} className="absolute right-0 mt-3 w-48 bg-white rounded-2xl shadow-xl border border-stone-100 p-2 ring-1 ring-stone-900/5">
-                                                <RouterLink to="/profile" className="flex items-center gap-2 px-3 py-2 rounded-xl hover:bg-amber-50 text-stone-700 text-sm">
-                                                    <div className="w-6 h-6 rounded-full bg-amber-50 flex items-center justify-center">
-                                                        <User size={14} className="text-amber-500" />
-                                                    </div>
-                                                    {t("navbar.profile")}
-                                                </RouterLink>
-                                                <button onClick={() => { logout(); setUserDropdown(false); }} className="w-full flex items-center gap-2 px-3 py-2 rounded-xl hover:bg-red-50 text-red-600 text-sm mt-1">
-                                                    <LogOut size={16} /> {t("navbar.logout")}
-                                                </button>
-                                            </motion.div>
-                                        )}
-                                    </AnimatePresence>
-                                </div>
-                            ) : (
-                                <RouterLink to="/login" className="px-6 py-2.5 rounded-full bg-gradient-to-r from-amber-600 to-orange-600 text-white font-semibold text-sm shadow-lg shadow-amber-500/30 hover:shadow-amber-600/40 hover:scale-105 transition-all active:scale-95">
-                                    {t("navbar.login")}
-                                </RouterLink>
-                            )}
-                        </div>
-
-                        {/* Mobile Toggle */}
-                        <button className="md:hidden p-2 text-gray-600 hover:text-amber-600 mobile-menu-button" onClick={() => setMobileMenuOpen(true)}>
-                            <Menu size={28} />
-                        </button>
+                        ) : (
+                            <RouterLink to="/login" className="btn btn-primary">
+                                {t("navbar.login")}
+                            </RouterLink>
+                        )}
                     </div>
+
+                    {/* Mobile Toggle */}
+                    <button className="lg:hidden mobile-menu-button btn btn-icon" onClick={() => setMobileMenuOpen(true)} aria-label="Menu">
+                        <Menu size={24} />
+                    </button>
                 </div>
-            </motion.nav>
+            </header>
 
             {/* Mobile Menu Overlay */}
             <AnimatePresence>
                 {mobileMenuOpen && (
                     <motion.div
+                        ref={mobileMenuRef}
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
                         exit={{ opacity: 0 }}
-                        className="fixed inset-0 z-[60] bg-white/95 backdrop-blur-xl flex flex-col items-center justify-center space-y-8"
+                        transition={{ duration: 0.2 }}
+                        className="fixed inset-0 z-[60] flex flex-col items-center justify-center gap-8"
+                        style={{ background: "var(--color-bg)" }}
                     >
-                        <button onClick={() => setMobileMenuOpen(false)} className="absolute top-8 right-8 p-2 bg-gray-100 rounded-full text-gray-500 hover:text-red-500">
-                            <X size={32} />
+                        <button onClick={() => setMobileMenuOpen(false)} className="absolute top-6 right-6 btn btn-icon" aria-label="Close">
+                            <X size={24} />
                         </button>
 
                         <div className="flex flex-col items-center gap-6">
                             {navItems.map((item) => (
-                                <button key={item.key} onClick={() => handleNavClick(item)} className="text-2xl font-bold text-gray-800 hover:text-amber-600">
+                                <button
+                                    key={item.key}
+                                    onClick={() => handleNavClick(item)}
+                                    style={{ fontFamily: "var(--font-heading)", fontWeight: "var(--font-heading-weight)", fontSize: 28 }}
+                                >
                                     {item.label}
                                 </button>
                             ))}
                         </div>
 
                         {/* Mobile Actions */}
-                        <div className="flex flex-col gap-6 items-center w-full px-8">
-
-
+                        <div className="flex flex-col gap-6 items-center w-full px-8 max-w-xs">
                             {/* Language Switcher */}
-                            <div className="flex gap-4 p-1 bg-stone-100/50 rounded-xl">
-                                {languages.map(lang => (
-                                    <button
-                                        key={lang.code}
-                                        onClick={() => { changeLanguage(lang.code); setMobileMenuOpen(false); }}
-                                        className={`px-3 py-1.5 rounded-lg text-sm transition-all ${currentLang === lang.code ? "bg-white shadow-sm text-amber-600 font-bold" : "text-stone-500"}`}
-                                    >
-                                        <span className="mr-1">{lang.flag}</span> {lang.code.toUpperCase()}
-                                    </button>
+                            <div className="seg">
+                                {languages.map((lang) => (
+                                    <label key={lang.code} className="seg-opt">
+                                        <input
+                                            type="radio"
+                                            name="lang-mobile"
+                                            checked={currentLang === lang.code}
+                                            onChange={() => { changeLanguage(lang.code); }}
+                                        />
+                                        {lang.label}
+                                    </label>
                                 ))}
                             </div>
 
                             {/* User Actions */}
                             {user ? (
-                                <div className="flex flex-col gap-4 w-full items-center">
-                                    <RouterLink to="/profile" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-3 px-6 py-3 bg-stone-50 rounded-2xl w-full justify-center hover:bg-amber-50 transition border border-stone-100">
-                                        {user.avatar ? (
-                                            <img src={user.avatar} alt="User" className="w-8 h-8 rounded-full object-cover border border-amber-200" />
-                                        ) : (
-                                            <User size={20} className="text-amber-500" />
-                                        )}
-                                        <span className="font-semibold text-stone-700">{t("navbar.profile")}</span>
+                                <div className="flex flex-col gap-3 w-full items-center">
+                                    <RouterLink to="/profile" onClick={() => setMobileMenuOpen(false)} className="btn btn-secondary btn-block">
+                                        <User size={18} /> {t("navbar.profile")}
                                     </RouterLink>
-                                    <button onClick={() => { logout(); setMobileMenuOpen(false); }} className="text-red-500 font-semibold flex items-center gap-2 hover:bg-red-50 px-4 py-2 rounded-xl transition">
+                                    <button onClick={() => { logout(); setMobileMenuOpen(false); }} className="btn btn-block">
                                         <LogOut size={18} /> {t("navbar.logout")}
                                     </button>
                                 </div>
                             ) : (
-                                <RouterLink to="/login" onClick={() => setMobileMenuOpen(false)} className="w-full text-center px-8 py-3.5 rounded-xl bg-gradient-to-r from-amber-600 to-orange-600 text-white font-bold text-lg shadow-xl shadow-amber-200">
+                                <RouterLink to="/login" onClick={() => setMobileMenuOpen(false)} className="btn btn-primary btn-block">
                                     {t("navbar.login")}
                                 </RouterLink>
                             )}

@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
 import { FiPlus, FiEdit2, FiTrash2, FiSearch, FiFilter, FiDownload } from "react-icons/fi";
-import { useNavigate } from "react-router-dom";
 import { Loader } from "lucide-react";
 import * as XLSX from "xlsx";
 import { API_BASE_URL } from "../../config";
@@ -14,7 +13,6 @@ export default function AdminBooks() {
     const [search, setSearch] = useState("");
     const [category, setCategory] = useState("all");
 
-    // Static categories for filter (same as translations)
     // Categories for filter
     const categoryOptions = [
         { value: "all", label: "Barchasi" },
@@ -104,38 +102,36 @@ export default function AdminBooks() {
     return (
         <div className="space-y-6">
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-                <h1 className="text-2xl font-bold text-stone-800">Kitoblar boshqaruvi</h1>
+                <h1 className="text-2xl">Kitoblar boshqaruvi</h1>
                 <div className="flex items-center gap-3">
-                    <button
-                        onClick={handleExportExcel}
-                        disabled={exporting}
-                        className="bg-green-600 hover:bg-green-700 disabled:opacity-60 text-white px-4 py-2 rounded-xl flex items-center gap-2 font-medium transition-colors shadow-sm"
-                    >
-                        {exporting ? <Loader className="animate-spin h-4 w-4" /> : <FiDownload />}
+                    <button onClick={handleExportExcel} disabled={exporting} className="btn btn-secondary">
+                        {exporting ? <Loader className="animate-spin h-4 w-4" /> : <FiDownload size={16} />}
                         Excel yuklab olish
                     </button>
-                    <Link to="/admin-panel/books/new" className="bg-amber-600 hover:bg-amber-700 text-white px-4 py-2 rounded-xl flex items-center gap-2 font-medium transition-colors shadow-sm">
-                        <FiPlus /> Yangi kitob
+                    <Link to="/admin-panel/books/new" className="btn btn-primary">
+                        <FiPlus size={16} /> Yangi kitob
                     </Link>
                 </div>
             </div>
 
-            <div className="bg-white rounded-2xl shadow-sm border border-stone-200 p-4">
-                <div className="flex flex-wrap gap-4 mb-4">
+            <div className="card">
+                <div className="flex flex-wrap gap-4">
                     <div className="flex-1 min-w-[200px] relative">
-                        <FiSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-stone-400" />
+                        <FiSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-muted" size={16} />
                         <input
                             type="text"
                             placeholder="Qidirish..."
-                            className="w-full pl-10 pr-4 py-2 rounded-xl border border-stone-200 focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500"
+                            className="input"
+                            style={{ paddingLeft: "34px" }}
                             value={search}
                             onChange={(e) => setSearch(e.target.value)}
                         />
                     </div>
                     <div className="relative">
-                        <FiFilter className="absolute left-3 top-1/2 -translate-y-1/2 text-stone-400" />
+                        <FiFilter className="absolute left-3 top-1/2 -translate-y-1/2 text-muted pointer-events-none" size={16} />
                         <select
-                            className="pl-10 pr-8 py-2 rounded-xl border border-stone-200 focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 bg-white appearance-none cursor-pointer"
+                            className="input"
+                            style={{ paddingLeft: "34px", cursor: "pointer" }}
                             value={category}
                             onChange={(e) => setCategory(e.target.value)}
                         >
@@ -147,44 +143,44 @@ export default function AdminBooks() {
                 </div>
 
                 <div className="overflow-x-auto">
-                    <table className="w-full text-left border-collapse">
+                    <table className="table">
                         <thead>
-                            <tr className="border-b border-stone-100 text-stone-500 text-sm font-medium">
-                                <th className="p-3">#</th>
-                                <th className="p-3">Muqova</th>
-                                <th className="p-3">Nomi</th>
-                                <th className="p-3">Muallif</th>
-                                <th className="p-3">Kategoriya</th>
-                                <th className="p-3 text-right">Amallar</th>
+                            <tr>
+                                <th>#</th>
+                                <th>Muqova</th>
+                                <th>Nomi</th>
+                                <th>Muallif</th>
+                                <th>Kategoriya</th>
+                                <th className="text-right">Amallar</th>
                             </tr>
                         </thead>
-                        <tbody className="text-stone-700">
+                        <tbody>
                             {loading ? (
                                 <tr>
-                                    <td colSpan="6" className="text-center p-8"><Loader className="animate-spin h-6 w-6 text-amber-600 mx-auto" /></td>
+                                    <td colSpan="6" className="text-center p-8"><Loader className="animate-spin h-6 w-6 mx-auto" style={{ color: "var(--color-accent)" }} /></td>
                                 </tr>
                             ) : filteredBooks.length > 0 ? (
                                 filteredBooks.map((book, idx) => (
-                                    <tr key={book.id} className="border-b border-stone-50 hover:bg-stone-50/50 transition-colors group">
-                                        <td className="p-3 text-stone-400 text-sm">{idx + 1}</td>
-                                        <td className="p-3">
-                                            <div className="h-12 w-8 bg-stone-200 rounded overflow-hidden">
+                                    <tr key={book.id} className="group">
+                                        <td className="text-sm text-muted">{idx + 1}</td>
+                                        <td>
+                                            <div className="plate h-12 w-8" style={{ background: "var(--color-neutral-200)" }}>
                                                 {book.cover_image && <img src={book.cover_image} alt="" className="w-full h-full object-cover" />}
                                             </div>
                                         </td>
-                                        <td className="p-3 font-medium">{book.title}</td>
-                                        <td className="p-3 text-sm">{book.author}</td>
-                                        <td className="p-3 text-sm capitalize">
-                                            <span className="bg-stone-100 px-2 py-1 rounded text-stone-600 text-xs">
+                                        <td>{book.title}</td>
+                                        <td className="text-sm">{book.author}</td>
+                                        <td className="text-sm">
+                                            <span className="tag tag-neutral">
                                                 {BOOK_CATEGORIES.find(c => c.value === book.category)?.label || book.category}
                                             </span>
                                         </td>
-                                        <td className="p-3 text-right">
-                                            <div className="flex items-center justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                                                <Link to={`/admin-panel/books/edit/${book.id}`} className="p-2 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors">
+                                        <td className="text-right">
+                                            <div className="flex items-center justify-end gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                                                <Link to={`/admin-panel/books/edit/${book.id}`} className="btn btn-icon btn-ghost">
                                                     <FiEdit2 size={16} />
                                                 </Link>
-                                                <button onClick={() => handleDelete(book.id)} className="p-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors">
+                                                <button onClick={() => handleDelete(book.id)} className="btn btn-icon btn-ghost" style={{ color: "#a13a2b" }}>
                                                     <FiTrash2 size={16} />
                                                 </button>
                                             </div>
@@ -193,7 +189,7 @@ export default function AdminBooks() {
                                 ))
                             ) : (
                                 <tr>
-                                    <td colSpan="6" className="text-center p-8 text-stone-400">Kitoblar topilmadi.</td>
+                                    <td colSpan="6" className="text-center p-8 text-muted">Kitoblar topilmadi.</td>
                                 </tr>
                             )}
                         </tbody>

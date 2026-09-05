@@ -15,8 +15,6 @@ export default function AdminDashboard() {
                 setStats(response.data);
             } catch (error) {
                 console.error("Failed to load admin stats", error);
-                // Fallback / mock data for dev if permissions fail temporarily
-                // setStats({ totalBooks: 0, totalUsers: 0, newUsersToday: 0 });
             } finally {
                 setLoading(false);
             }
@@ -24,29 +22,32 @@ export default function AdminDashboard() {
         fetchStats();
     }, []);
 
-    if (loading) return <div className="flex justify-center p-20"><Loader className="animate-spin text-amber-600" /></div>;
+    if (loading) return <div className="flex justify-center p-20"><Loader className="animate-spin" style={{ color: "var(--color-accent)" }} /></div>;
 
-    if (!stats) return <div className="text-center p-10 text-stone-500">Ma'lumotlarni yuklashda xatolik.</div>;
+    if (!stats) return <div className="text-center p-10 text-muted">Ma'lumotlarni yuklashda xatolik.</div>;
 
     const cards = [
-        { title: "Jami kitoblar", value: stats.totalBooks, icon: FiBook, color: "bg-blue-500" },
-        { title: "Jami foydalanuvchilar", value: stats.totalUsers, icon: FiUsers, color: "bg-green-500" },
-        { title: "Bugungi yangi a'zolar", value: stats.newUsersToday, icon: FiUserPlus, color: "bg-purple-500" },
+        { title: "Jami kitoblar", value: stats.totalBooks, icon: FiBook },
+        { title: "Jami foydalanuvchilar", value: stats.totalUsers, icon: FiUsers },
+        { title: "Bugungi yangi a'zolar", value: stats.newUsersToday, icon: FiUserPlus },
     ];
 
     return (
         <div className="space-y-8">
-            <h1 className="text-2xl font-bold text-stone-800">Boshqaruv paneli</h1>
+            <h1 className="text-2xl">Boshqaruv paneli</h1>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                 {cards.map((card, idx) => (
-                    <div key={idx} className="bg-white rounded-2xl p-6 shadow-sm border border-stone-100 flex items-center gap-4">
-                        <div className={`w-14 h-14 rounded-xl ${card.color} text-white flex items-center justify-center shadow-lg shadow-gray-200`}>
-                            <card.icon size={28} />
+                    <div key={idx} className="card flex-row items-center gap-4">
+                        <div
+                            className="w-12 h-12 flex items-center justify-center shrink-0"
+                            style={{ borderRadius: "var(--radius-md)", border: "1px solid var(--color-divider)", color: "var(--color-accent)" }}
+                        >
+                            <card.icon size={22} />
                         </div>
                         <div>
-                            <p className="text-stone-500 text-sm font-medium">{card.title}</p>
-                            <p className="text-3xl font-bold text-stone-800">{card.value}</p>
+                            <p className="text-sm text-muted">{card.title}</p>
+                            <p className="num text-3xl" style={{ fontFamily: "var(--font-heading)", fontWeight: "var(--font-heading-weight)" }}>{card.value}</p>
                         </div>
                     </div>
                 ))}
@@ -54,36 +55,40 @@ export default function AdminDashboard() {
 
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
                 {/* Category Stats */}
-                <div className="bg-white rounded-2xl p-6 shadow-sm border border-stone-100">
-                    <h3 className="text-lg font-bold text-stone-800 mb-6 flex items-center gap-2">
-                        <FiPieChart className="text-amber-500" /> Kitoblar turlari bo'yicha
+                <div className="card">
+                    <h3 className="text-lg flex items-center gap-2 mb-2" style={{ fontFamily: "var(--font-heading)", fontWeight: "var(--font-heading-weight)" }}>
+                        <FiPieChart style={{ color: "var(--color-accent)" }} /> Kitoblar turlari bo'yicha
                     </h3>
 
                     <div className="space-y-4">
                         {stats.categoryStats?.map((cat, idx) => (
                             <div key={idx}>
                                 <div className="flex justify-between text-sm mb-1">
-                                    <span className="font-medium text-stone-700">{cat.category || "Noma'lum"}</span>
-                                    <span className="text-stone-500">{cat.count} ta</span>
+                                    <span>{cat.category || "Noma'lum"}</span>
+                                    <span className="text-muted">{cat.count} ta</span>
                                 </div>
-                                <div className="w-full bg-stone-100 rounded-full h-2">
+                                <div style={{ width: "100%", background: "var(--color-neutral-200)", height: "6px", borderRadius: "var(--radius-sm)" }}>
                                     <div
-                                        className="bg-amber-500 h-2 rounded-full"
-                                        style={{ width: `${(cat.count / stats.totalBooks) * 100}%` }}
+                                        style={{
+                                            width: `${(cat.count / stats.totalBooks) * 100}%`,
+                                            background: "var(--color-accent)",
+                                            height: "6px",
+                                            borderRadius: "var(--radius-sm)",
+                                        }}
                                     ></div>
                                 </div>
                             </div>
                         ))}
                         {(!stats.categoryStats || stats.categoryStats.length === 0) && (
-                            <p className="text-stone-400 text-sm text-center py-4">Ma'lumot yo'q</p>
+                            <p className="text-sm text-center py-4 text-muted">Ma'lumot yo'q</p>
                         )}
                     </div>
                 </div>
 
                 {/* Recent Activity Placeholder */}
-                <div className="bg-white rounded-2xl p-6 shadow-sm border border-stone-100 opacity-60">
-                    <h3 className="text-lg font-bold text-stone-800 mb-4">So'nggi faoliyatlar</h3>
-                    <p className="text-stone-500 text-sm">Tez orada...</p>
+                <div className="card opacity-60">
+                    <h3 className="text-lg mb-2" style={{ fontFamily: "var(--font-heading)", fontWeight: "var(--font-heading-weight)" }}>So'nggi faoliyatlar</h3>
+                    <p className="text-sm text-muted">Tez orada...</p>
                 </div>
             </div>
         </div>

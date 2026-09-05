@@ -45,18 +45,19 @@ export default function AdminNews() {
     return (
         <div className="space-y-6">
             <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-                <h1 className="text-2xl font-bold text-stone-800">Yangiliklar va E'lonlar</h1>
-                <button onClick={() => navigate("/admin-panel/news/new")} className="bg-stone-900 text-white px-6 py-2 rounded-xl font-bold hover:bg-black transition-all flex items-center gap-2 shadow-lg shadow-stone-200">
-                    <FiPlus /> Yangilik Qo'shish
+                <h1 className="text-2xl">Yangiliklar va E'lonlar</h1>
+                <button onClick={() => navigate("/admin-panel/news/new")} className="btn btn-primary">
+                    <FiPlus size={16} /> Yangilik Qo'shish
                 </button>
             </div>
 
-            <div className="bg-white rounded-2xl p-4 shadow-sm border border-stone-100 flex items-center gap-2 w-full sm:w-96">
-                <FiSearch className="text-stone-400" />
+            <div className="relative w-full sm:w-96">
+                <FiSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-muted" size={16} />
                 <input
                     type="text"
                     placeholder="Qidirish..."
-                    className="flex-1 outline-none text-stone-700 bg-transparent"
+                    className="input"
+                    style={{ paddingLeft: "34px" }}
                     value={search}
                     onChange={(e) => setSearch(e.target.value)}
                 />
@@ -64,35 +65,36 @@ export default function AdminNews() {
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {loading ? (
-                    <div className="col-span-full flex justify-center p-20"><Loader className="animate-spin text-amber-600" /></div>
+                    <div className="col-span-full flex justify-center p-20"><Loader className="animate-spin" style={{ color: "var(--color-accent)" }} /></div>
                 ) : news.length === 0 ? (
-                    <div className="col-span-full text-center text-stone-400 py-20">Yangiliklar topilmadi</div>
+                    <div className="col-span-full text-center text-muted py-20">Yangiliklar topilmadi</div>
                 ) : (
                     news.map(item => (
-                        <div key={item.id} className="bg-white rounded-2xl shadow-sm border border-stone-100 overflow-hidden hover:shadow-md transition-shadow group flex flex-col">
-                            <div className="h-40 bg-stone-100 relative overflow-hidden">
+                        <div key={item.id} className="card p-0 overflow-hidden group">
+                            <div className="h-40 relative overflow-hidden" style={{ background: "var(--color-neutral-200)" }}>
                                 {item.image ? (
-                                    <img src={item.image} alt={item.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+                                    <img src={item.image} alt={item.title} className="w-full h-full object-cover" />
                                 ) : (
-                                    <div className="w-full h-full flex items-center justify-center text-stone-300 bg-stone-50">Rasm yo'q</div>
+                                    <div className="w-full h-full flex items-center justify-center text-muted text-sm">Rasm yo'q</div>
                                 )}
-                                <div className="absolute top-2 right-2 bg-white/90 backdrop-blur px-3 py-1 rounded-full text-xs font-bold shadow-sm text-stone-800">
-                                    {item.category}
+                                <div className="absolute top-2 right-2">
+                                    <span className="tag tag-accent">{item.category}</span>
                                 </div>
                             </div>
-                            <div className="p-5 flex-1 flex flex-col">
-                                <h3 className="text-lg font-bold text-stone-800 mb-2 line-clamp-2">{item.title}</h3>
-                                <div className="flex items-center gap-2 text-stone-400 text-sm mb-4">
+                            <div className="p-4 flex-1 flex flex-col gap-3">
+                                <h3 className="text-lg line-clamp-2" style={{ fontFamily: "var(--font-heading)", fontWeight: "var(--font-heading-weight)" }}>{item.title}</h3>
+                                <div className="flex items-center gap-2 text-sm text-muted">
                                     <FiCalendar size={14} />
                                     <span>{item.date ? format(new Date(item.date), "dd MMM yyyy") : "-"}</span>
                                 </div>
 
-                                <div className="mt-auto flex justify-end gap-2 pt-4 border-t border-stone-50">
-                                    <button onClick={() => navigate(`/admin-panel/news/edit/${item.id}`)} className="p-2 text-blue-500 hover:bg-blue-50 rounded-lg transition-colors">
-                                        <FiEdit2 />
+                                <div className="hr" style={{ margin: "0" }}></div>
+                                <div className="flex justify-end gap-1">
+                                    <button onClick={() => navigate(`/admin-panel/news/edit/${item.id}`)} className="btn btn-icon btn-ghost">
+                                        <FiEdit2 size={16} />
                                     </button>
-                                    <button onClick={() => handleDelete(item.id)} className="p-2 text-red-500 hover:bg-red-50 rounded-lg transition-colors">
-                                        <FiTrash2 />
+                                    <button onClick={() => handleDelete(item.id)} className="btn btn-icon btn-ghost" style={{ color: "#a13a2b" }}>
+                                        <FiTrash2 size={16} />
                                     </button>
                                 </div>
                             </div>

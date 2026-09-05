@@ -9,7 +9,7 @@
     "logout": "Chiqish",
     "profile": "Profil",
     "language": "Til",
-    "brand": "SamDUUF Elektron Kutubxona"
+    "brand": "SamDPI Urgut fakulteti Elektron Kutubxonasi"
   },
   "testModeWarning": "Diqqat! Ushbu elektron kutubxona platformasi hozirda test rejimida ishlamoqda. Taklif va mulohazalaringizni mamnuniyat bilan qabul qilamiz. 🛠️",
   "loginPage": {
@@ -35,12 +35,12 @@
     "online": "Onlayn"
   },
   "footer": {
-    "rights": "SamDUUF Elektron Kutubxona. Barcha huquqlar himoyalangan.",
+    "rights": "SamDPI Urgut fakulteti Elektron Kutubxonasi. Barcha huquqlar himoyalangan.",
     "privacyPolicy": "Maxfiylik siyosati",
     "aboutUs": "Biz haqimizda",
     "contactUs": "Biz bilan bog'lanish",
     "socialMedia": "Ijtimoiy tarmoqlar",
-    "brand": "SamDU Urgut filiali elektron kutubxonasi",
+    "brand": "SamDPI Urgut fakulteti elektron kutubxonasi",
     "p": "Zamonaviy kutubxona, eng yaxshi kitoblar va qulay xizmatlar",
     "address": "Urgut tumani, Samarqand viloyati, O'zbekiston",
     "ourAddress": "Bizning manzilimiz",
@@ -112,6 +112,26 @@
     "bookDesc": "Bu kitob haqida qisqacha ma'lumot mavjud emas.",
     "details": "Batafsil"
   },
+  "featuredBooks": {
+    "title": "Tanlangan nashrlar",
+    "viewAll": "Butun katalog"
+  },
+  "services": {
+    "title": "Xizmatlar",
+    "onlineRead": "Onlayn o'qish — brauzerda, varaqlab",
+    "pdfDownload": "PDF yuklab olish — HEMIS hisobi bilan",
+    "studyRoom": "O'quv zali — dushanba–shanba, 09:00–18:00"
+  },
+  "todayReading": {
+    "title": "Bugun o'qing",
+    "cta": "Varaqlab o'qish"
+  },
+  "ctaSection": {
+    "title": "Fondga to'liq kirish",
+    "subtitle": "HEMIS hisobingiz bilan kiring — yuklab olish va sevimlilar ochiladi.",
+    "profile": "Profil",
+    "openCatalog": "Katalogni ochish"
+  },
   "categories": {
     "all": "Barchasi",
     "adabiyotlar": "Adabiyotlar",
@@ -122,6 +142,10 @@
   "popularBooks": {
     "title": "Mashhur kitoblar",
     "subtitle": "Kutubxonadagi eng ko‘p o‘qilgan mashhur kitoblar"
+  },
+  "newArrivals": {
+    "title": "Yangi kelganlar",
+    "subtitle": "Kutubxonaga so'nggi qo'shilgan nashrlar"
   },
   "stats": {
     "title": "Kutubxona statistikasi",

@@ -1,129 +1,134 @@
-import { Book } from "lucide-react";
+import { Book, ChevronLeft, ChevronRight } from "lucide-react";
 import React from "react";
 import HTMLFlipBook from "react-pageflip";
 import AnimatedSectionDivider from "./AnimatedSectionDivider";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useTranslation } from "react-i18next";
 
-const Page = React.forwardRef(({ title, text, pageNumber }, ref) => {
+const Page = React.forwardRef(({ title, text, pageNumber, side }, ref) => {
+  // react-pageflip clones this root element and overwrites its `style` prop
+  // internally, so all real styling must live on a nested wrapper div instead.
   return (
-    <div
-      ref={ref}
-      className="w-full h-full bg-gradient-to-br from-amber-50 to-orange-50 shadow-inner rounded-sm border-r border-amber-200 p-6 flex flex-col justify-between relative overflow-hidden"
-      style={{
-        backgroundImage: `
-          linear-gradient(45deg, transparent 24%, rgba(255,255,255,0.1) 25%, rgba(255,255,255,0.1) 26%, transparent 27%, transparent 74%, rgba(255,255,255,0.1) 75%, rgba(255,255,255,0.1) 76%, transparent 77%, transparent),
-          linear-gradient(-45deg, transparent 24%, rgba(255,255,255,0.05) 25%, rgba(255,255,255,0.05) 26%, transparent 27%, transparent 74%, rgba(255,255,255,0.05) 75%, rgba(255,255,255,0.05) 76%, transparent 77%, transparent)
-        `,
-        backgroundSize: '12px 12px'
-      }}
-    >
-      <div className="absolute inset-0 opacity-20 bg-gradient-to-br from-transparent via-amber-100 to-orange-100"></div>
+    <div ref={ref} style={{ width: "100%", height: "100%" }}>
+      <div
+        style={{
+          width: "100%", height: "100%",
+          background: "var(--color-neutral-100)",
+          boxShadow:
+            side === "left"
+              ? "inset -16px 0 20px -16px color-mix(in srgb, var(--color-neutral-900) 55%, transparent)"
+              : "inset 16px 0 20px -16px color-mix(in srgb, var(--color-neutral-900) 55%, transparent)",
+          borderRight: side === "left" ? "1px solid color-mix(in srgb, var(--color-text) 30%, transparent)" : "none",
+          borderLeft: side === "right" ? "1px solid color-mix(in srgb, var(--color-text) 30%, transparent)" : "none",
+          padding: "var(--space-6)",
+          paddingRight: side === "left" ? "calc(var(--space-6) + var(--space-4))" : "var(--space-6)",
+          paddingLeft: side === "right" ? "calc(var(--space-6) + var(--space-4))" : "var(--space-6)",
+          display: "flex", flexDirection: "column",
+          boxSizing: "border-box",
+          overflow: "hidden",
+        }}
+      >
+        {title && (
+          <h5
+            style={{
+              flex: "none",
+              borderBottom: "1px solid var(--color-divider)",
+              paddingBottom: "var(--space-2)",
+              marginBottom: "var(--space-2)",
+            }}
+          >
+            {title}
+          </h5>
+        )}
 
-      <div className="absolute left-0 top-0 bottom-0 w-8 border-r border-red-300 bg-gradient-to-r from-red-50 to-transparent">
-        <div className="absolute left-3 top-8 w-1 h-1 bg-red-400 rounded-full"></div>
-        <div className="absolute left-3 top-16 w-1 h-1 bg-red-400 rounded-full"></div>
-        <div className="absolute left-3 bottom-16 w-1 h-1 bg-red-400 rounded-full"></div>
+        <div style={{ flex: "1 1 auto", minHeight: 0, overflowY: "auto" }}>
+          {text.split("\n\n").map((para, i) => (
+            <p
+              key={i}
+              style={{
+                fontSize: 12.5, lineHeight: 1.65, textAlign: "justify",
+                textIndent: "1.5em", margin: "0 0 0.4em",
+              }}
+            >
+              {para}
+            </p>
+          ))}
+        </div>
+
+        <div className="num text-muted" style={{ flex: "none", fontSize: 11, alignSelf: "flex-end", paddingTop: "var(--space-1)" }}>
+          {pageNumber}
+        </div>
       </div>
-
-      <div className="relative z-10 ml-6">
-        {title && <h3 className="text-base font-bold text-gray-800 mb-3 font-serif border-b border-amber-200 pb-2">{title}</h3>}
-        <p className="text-gray-700 text-xs leading-relaxed font-serif">{text}</p>
-      </div>
-
-      <div className="absolute bottom-4 right-6 text-xs text-gray-500 font-serif">{pageNumber}</div>
     </div>
   );
 });
 
 const CoverPage = React.forwardRef((props, ref) => (
-  <div
-    ref={ref}
-    className="w-full h-full relative rounded-sm overflow-hidden"
-  >
-    <div className="absolute inset-0 bg-slate-800"></div>
-
+  <div ref={ref} style={{ width: "100%", height: "100%" }}>
     <div
-      className="absolute inset-0 opacity-80"
       style={{
-        background: `linear-gradient(145deg, #0f172a 0%, #1e293b 20%, #334155 40%, #475569 60%, #64748b 100%)`,
-        backgroundImage: `
-          radial-gradient(circle at 25% 25%, rgba(0,0,0,0.4) 1px, transparent 1px),
-          radial-gradient(circle at 75% 75%, rgba(255,255,255,0.15) 1px, transparent 1px),
-          linear-gradient(45deg, transparent 48%, rgba(255,255,255,0.08) 49%, rgba(255,255,255,0.08) 51%, transparent 52%),
-          linear-gradient(-45deg, transparent 48%, rgba(0,0,0,0.1) 49%, rgba(0,0,0,0.1) 51%, transparent 52%)
-        `,
-        backgroundSize: '6px 6px, 8px 8px, 4px 4px, 4px 4px'
+        width: "100%", height: "100%", position: "relative", boxSizing: "border-box",
+        background: "var(--color-neutral-900)",
+        border: "1px solid var(--color-accent)",
       }}
-    ></div>
-
-    <div className="absolute inset-0 bg-gradient-to-br from-white/20 via-transparent to-black/40"></div>
-
-    <div className="relative z-20 p-8 h-full flex flex-col items-center justify-center text-white">
-      <div className="relative mb-6">
-        <h1 className="text-3xl font-bold font-serif tracking-wide relative z-10 drop-shadow-2xl">
+    >
+      <div
+        style={{
+          position: "absolute", inset: 0, padding: "var(--space-6)",
+          display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center",
+          color: "var(--color-neutral-100)", textAlign: "center",
+        }}
+      >
+        <h1 style={{ fontWeight: 600, letterSpacing: "0.02em", color: "var(--color-neutral-100)" }}>
           O'tkan Kunlar
         </h1>
-        <div className="absolute inset-0 text-3xl font-bold font-serif tracking-wide text-black/60 transform translate-x-1 translate-y-1">
-          O'tkan Kunlar
+
+        <div className="flex items-center" style={{ gap: "var(--space-2)", margin: "var(--space-3) 0" }}>
+          <span style={{ width: 40, height: 1, background: "var(--color-accent)" }} />
+          <Book size={20} color="var(--color-accent)" />
+          <span style={{ width: 40, height: 1, background: "var(--color-accent)" }} />
+        </div>
+
+        <p style={{ fontSize: 14, letterSpacing: "0.08em", color: "var(--color-accent)" }}>
+          Abdulla Qodiriy
+        </p>
+
+        <div style={{ position: "absolute", bottom: "var(--space-4)", fontSize: 11, color: "var(--color-neutral-400)" }}>
+          Toshkent — 1926
         </div>
       </div>
 
-      <div className="flex items-center gap-4 mb-4">
-        <div className="w-16 h-px bg-gradient-to-r from-transparent via-amber-400 to-amber-300"></div>
-        <Book className="w-7 h-7 text-amber-300 drop-shadow-lg" />
-        <div className="w-16 h-px bg-gradient-to-l from-transparent via-amber-400 to-amber-300"></div>
-      </div>
-
-      <p className="text-xl font-serif tracking-widest text-amber-100 drop-shadow-md">
-        Abdulla Qodiriy
-      </p>
-
-      <div className="absolute bottom-6 right-6 text-xs text-amber-200/80 font-serif drop-shadow-sm">
-        Toshkent — 1926
-      </div>
+      <div style={{ position: "absolute", top: 8, left: 8, width: 18, height: 18, borderLeft: "1px solid var(--color-accent)", borderTop: "1px solid var(--color-accent)" }} />
+      <div style={{ position: "absolute", top: 8, right: 8, width: 18, height: 18, borderRight: "1px solid var(--color-accent)", borderTop: "1px solid var(--color-accent)" }} />
+      <div style={{ position: "absolute", bottom: 8, left: 8, width: 18, height: 18, borderLeft: "1px solid var(--color-accent)", borderBottom: "1px solid var(--color-accent)" }} />
+      <div style={{ position: "absolute", bottom: 8, right: 8, width: 18, height: 18, borderRight: "1px solid var(--color-accent)", borderBottom: "1px solid var(--color-accent)" }} />
     </div>
-
-    <div className="absolute top-3 left-3 w-6 h-6 border-l-2 border-t-2 border-amber-400/70 rounded-tl-sm"></div>
-    <div className="absolute top-3 right-3 w-6 h-6 border-r-2 border-t-2 border-amber-400/70 rounded-tr-sm"></div>
-    <div className="absolute bottom-3 left-3 w-6 h-6 border-l-2 border-b-2 border-amber-400/70 rounded-bl-sm"></div>
-    <div className="absolute bottom-3 right-3 w-6 h-6 border-r-2 border-b-2 border-amber-400/70 rounded-br-sm"></div>
   </div>
 ));
 
 const BackCover = React.forwardRef((props, ref) => {
   const { t } = useTranslation();
   return (
-    <div
-      ref={ref}
-      className="w-full h-full relative rounded-sm overflow-hidden"
-    >
-      <div className="absolute inset-0 bg-slate-800"></div>
+    <div ref={ref} style={{ width: "100%", height: "100%" }}>
       <div
-        className="absolute inset-0 opacity-80"
         style={{
-          background: `linear-gradient(145deg, #0f172a 0%, #1e293b 20%, #334155 40%, #475569 60%, #64748b 100%)`,
-          backgroundImage: `
-            radial-gradient(circle at 25% 25%, rgba(0,0,0,0.4) 1px, transparent 1px),
-            radial-gradient(circle at 75% 75%, rgba(255,255,255,0.15) 1px, transparent 1px)
-          `,
-          backgroundSize: '6px 6px, 8px 8px'
+          width: "100%", height: "100%", boxSizing: "border-box",
+          background: "var(--color-neutral-900)",
+          border: "1px solid var(--color-accent)",
+          color: "var(--color-neutral-100)",
+          padding: "var(--space-6)",
+          display: "flex", flexDirection: "column", justifyContent: "center",
         }}
-      ></div>
-      <div className="absolute inset-0 bg-gradient-to-tl from-white/20 via-transparent to-black/40"></div>
-
-      <div className="relative z-20 p-8 h-full flex flex-col justify-center text-white">
-        <div className="text-center mb-8">
-          <h2 className="text-lg font-bold font-serif mb-4 drop-shadow-lg">{t("flipBook.aboutWork")}</h2>
-          <p className="text-sm leading-relaxed text-gray-200 font-serif drop-shadow-sm">
+      >
+        <div className="text-center" style={{ marginBottom: "var(--space-6)" }}>
+          <h5 style={{ color: "var(--color-neutral-100)", marginBottom: "var(--space-2)" }}>{t("flipBook.aboutWork")}</h5>
+          <p style={{ fontSize: 12, lineHeight: 1.75, color: "var(--color-neutral-300)" }}>
             {t("flipBook.aboutWorkDesc")}
           </p>
         </div>
-        <div className="mt-auto text-center">
-          <div className="w-16 h-16 mx-auto mb-4 bg-white/30 rounded-full flex items-center justify-center backdrop-blur-sm">
-            <Book className="w-8 h-8 text-amber-300 drop-shadow-lg" />
-          </div>
-          <p className="text-xs font-serif text-amber-200/90 drop-shadow-sm">
+        <div className="text-center" style={{ marginTop: "auto" }}>
+          <Book size={24} color="var(--color-accent)" style={{ margin: "0 auto var(--space-2)" }} />
+          <p style={{ fontSize: 11, color: "var(--color-accent)" }}>
             {t("flipBook.publisher")}
           </p>
         </div>
@@ -228,6 +233,7 @@ Kumush barcha og'irliklarni jim ko'tardi. U er oldida doim xotirjam ko'rinishga 
 export default function FlipBookSection() {
   const { t } = useTranslation();
   const [isMobile, setIsMobile] = useState(false);
+  const flipBookRef = useRef(null);
 
   useEffect(() => {
     const checkMobile = () => setIsMobile(window.innerWidth < 768);
@@ -236,75 +242,70 @@ export default function FlipBookSection() {
     return () => window.removeEventListener("resize", checkMobile);
   }, []);
 
+  const goPrev = () => flipBookRef.current?.pageFlip()?.flipPrev();
+  const goNext = () => flipBookRef.current?.pageFlip()?.flipNext();
+
   return (
-    <section className="py-20 bg-stone-50 relative overflow-hidden">
-      <div className="absolute inset-0 pointer-events-none">
-        <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-amber-200/30 rounded-full blur-[120px] -translate-y-1/2 translate-x-1/2"></div>
-        <div className="absolute top-1/3 left-0 w-[500px] h-[500px] bg-orange-100/40 rounded-full blur-[120px] -translate-x-1/2"></div>
-        
+    <section id="reader" style={{ padding: "var(--space-8) 0" }}>
+      <div className="text-center" style={{ marginBottom: "var(--space-6)" }}>
+        <h2 style={{ fontWeight: 400 }}>{t("flipBook.readFree")}</h2>
+        {t("flipBook.freeBooksDesc") && <p className="text-muted">{t("flipBook.freeBooksDesc")}</p>}
+        <AnimatedSectionDivider />
       </div>
 
-      <div className="relative z-10">
-        <div className="text-center mb-16">
-          <h2 className="text-4xl font-extrabold text-stone-900 font-serif mb-4 tracking-tight">{t("flipBook.readFree")}</h2>
-          {t("flipBook.freeBooksDesc") && <p className="text-stone-600 text-lg font-medium mb-3">{t("flipBook.freeBooksDesc")}</p>}
-          <AnimatedSectionDivider />
+      <div className="flex justify-center items-center" style={{ gap: "var(--space-4)" }}>
+        <button onClick={goPrev} className="btn btn-secondary btn-icon" aria-label="previous page">
+          <ChevronLeft size={18} />
+        </button>
+
+        <div
+          style={{
+            border: "1px solid var(--color-divider)",
+            background: "var(--color-neutral-100)",
+            padding: "var(--space-2)",
+            boxShadow: "var(--shadow-md)",
+          }}
+        >
+          <HTMLFlipBook
+            ref={flipBookRef}
+            width={isMobile ? 300 : 360}
+            height={isMobile ? 420 : 480}
+            size="stretch"
+            minWidth={isMobile ? 290 : 340}
+            maxWidth={isMobile ? 340 : 440}
+            minHeight={isMobile ? 400 : 460}
+            maxHeight={isMobile ? 460 : 540}
+            usePortrait={isMobile}
+            maxShadowOpacity={0.3}
+            showCover={!isMobile}
+            startPage={isMobile ? 0 : 1}
+            mobileScrollSupport={false}
+            flippingTime={800}
+            startZIndex={100}
+            autoSize={false}
+            clickEventForward={true}
+            useMouseEvents={true}
+            swipeDistance={50}
+            showPageCorners={true}
+            disableFlipByClick={false}
+          >
+            <CoverPage />
+            {pages.map((page, idx) => (
+              <Page
+                key={idx}
+                title={page.title}
+                text={page.text}
+                pageNumber={page.pageNumber}
+                side={idx % 2 === 0 ? "left" : "right"}
+              />
+            ))}
+            <BackCover />
+          </HTMLFlipBook>
         </div>
 
-        <div className="relative flex justify-center items-center">
-          <div className="absolute inset-0 bg-gradient-radial from-black/10 via-black/5 to-transparent rounded-full transform scale-150"></div>
-
-          <div className="relative transform-gpu perspective-1000">
-            <div className="absolute left-1/2 top-4 -translate-x-1/2 w-[340px] h-[460px] bg-black/20 blur-xl rounded-lg transform rotate-x-60 scale-y-50"></div>
-            <div className="absolute left-1/2 top-2 -translate-x-1/2 w-[335px] h-[455px] bg-black/15 blur-lg rounded-lg transform rotate-x-45 scale-y-60"></div>
-
-            <div
-              ref={(el) => {
-                if (el) el.addEventListener("touchstart", () => {}, { passive: true });
-              }}
-              className="relative z-20 transform hover:scale-105 transition-transform duration-300 ease-out"
-              style={{ touchAction: "none" }}
-            >
-              <HTMLFlipBook
-                width={isMobile ? 280 : 320}
-                height={isMobile ? 390 : 440}
-                size="stretch"
-                minWidth={isMobile ? 280 : 300}
-                maxWidth={isMobile ? 320 : 360}
-                minHeight={isMobile ? 380 : 420}
-                maxHeight={isMobile ? 420 : 480}
-                usePortrait={isMobile}
-                maxShadowOpacity={0.8}
-                showCover={!isMobile}
-                startPage={isMobile ? 0 : 1}
-                mobileScrollSupport={false}
-                className="book-shadow"
-                style={{
-                  filter: "drop-shadow(0 25px 50px rgba(0,0,0,0.3)) drop-shadow(0 10px 20px rgba(0,0,0,0.2))",
-                }}
-                flippingTime={800}
-                startZIndex={100}
-                autoSize={false}
-                clickEventForward={true}
-                useMouseEvents={true}
-                swipeDistance={50}
-                showPageCorners={true}
-                disableFlipByClick={false}
-              >
-                <CoverPage />
-                {pages.map((page, idx) => (
-                  <Page
-                    key={idx}
-                    title={page.title}
-                    text={page.text}
-                    pageNumber={page.pageNumber}
-                  />
-                ))}
-                <BackCover />
-              </HTMLFlipBook>
-            </div>
-          </div>
-        </div>
+        <button onClick={goNext} className="btn btn-secondary btn-icon" aria-label="next page">
+          <ChevronRight size={18} />
+        </button>
       </div>
     </section>
   );

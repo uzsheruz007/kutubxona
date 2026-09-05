@@ -8,11 +8,11 @@ export default function App() {
   return (
     <UserProvider>
       <Router>
-        <title>SamDUUF Elektron Kutubxona - Bilimlar Xazinasi</title>
-        <meta name="description" content="Samarqand Davlat Universiteti Urgut filiali elektron kutubxonasi. Minglab kitoblar, maqolalar va ilmiy ishlarni bepul yuklab oling va onlayn o'qing." />
+        <title>SamDPI Urgut fakulteti Elektron Kutubxonasi - Bilimlar Xazinasi</title>
+        <meta name="description" content="SamDPI Urgut fakulteti elektron kutubxonasi. Minglab kitoblar, maqolalar va ilmiy ishlarni bepul yuklab oling va onlayn o'qing." />
         <link rel="canonical" href="https://e-library.samduuf.uz" />
         <meta name="robots" content="index, follow" />
-        <meta property="og:title" content="SamDUUF Elektron Kutubxona" />
+        <meta property="og:title" content="SamDPI Urgut fakulteti Elektron Kutubxonasi" />
         <meta property="og:description" content="Elektron kutubxona - Kitoblar, Darsliklar va Ilmiy ishlar bazasi." />
         <meta property="og:type" content="website" />
         <meta property="og:url" content="https://e-library.samduuf.uz" />

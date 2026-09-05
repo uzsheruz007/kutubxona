@@ -3,7 +3,6 @@ import Logo from '../../assets/Logo.png';
 import { useUser } from "../../context/UserContext";
 import { Loader } from "lucide-react";
 import { useNavigate } from "react-router-dom";
-import { useTranslation } from "react-i18next";
 
 export default function AdminLogin() {
     const { login } = useUser();
@@ -29,53 +28,52 @@ export default function AdminLogin() {
     };
 
     return (
-        <div className="min-h-screen flex flex-col items-center justify-center bg-stone-50 px-4">
-            <div className="bg-white rounded-2xl shadow-xl border border-stone-200 p-8 w-full max-w-md">
-                <div className="flex flex-col items-center mb-8">
+        <div className="min-h-screen flex flex-col items-center justify-center px-4" style={{ background: "var(--color-bg)" }}>
+            <div className="card w-full max-w-md p-8" style={{ background: "var(--color-surface)" }}>
+                <div className="flex flex-col items-center mb-6 text-center">
                     <img src={Logo} alt="Logo" className="h-12 w-12 mb-4" />
-                    <h1 className="text-xl font-bold text-stone-900 border-b-2 border-amber-500 pb-1">Admin panelga kirish</h1>
-                    <p className="text-xs text-stone-500 mt-2">Faqat administratorlar uchun</p>
+                    <h1 className="text-xl">Admin panelga kirish</h1>
+                    <p className="text-xs text-muted mt-2">Faqat administratorlar uchun</p>
                 </div>
 
                 {error && (
-                    <div className="bg-red-50 text-red-600 text-sm p-3 rounded-lg mb-4 border border-red-100">
+                    <div
+                        className="text-sm p-3 mb-4"
+                        style={{ borderRadius: "var(--radius-md)", border: "1px solid #a13a2b", color: "#a13a2b" }}
+                    >
                         {error}
                     </div>
                 )}
 
                 <form onSubmit={handleLogin} className="space-y-4">
-                    <div>
-                        <label className="text-sm font-medium text-stone-700 block mb-1">Login</label>
+                    <div className="field">
+                        <label>Login</label>
                         <input
                             type="text"
-                            className="w-full px-4 py-2 rounded-lg border border-stone-300 focus:ring-2 focus:ring-amber-500/50 focus:border-amber-500 outline-none"
+                            className="input"
                             value={username}
                             onChange={(e) => setUsername(e.target.value)}
                             required
                         />
                     </div>
-                    <div>
-                        <label className="text-sm font-medium text-stone-700 block mb-1">Parol</label>
+                    <div className="field">
+                        <label>Parol</label>
                         <input
                             type="password"
-                            className="w-full px-4 py-2 rounded-lg border border-stone-300 focus:ring-2 focus:ring-amber-500/50 focus:border-amber-500 outline-none"
+                            className="input"
                             value={password}
                             onChange={(e) => setPassword(e.target.value)}
                             required
                         />
                     </div>
-                    <button
-                        type="submit"
-                        disabled={loading}
-                        className="w-full py-3 bg-stone-900 text-white font-bold rounded-lg hover:bg-black transition-colors flex justify-center items-center gap-2"
-                    >
+                    <button type="submit" disabled={loading} className="btn btn-primary btn-block">
                         {loading && <Loader className="w-4 h-4 animate-spin" />}
                         Kirish
                     </button>
                 </form>
 
                 <div className="mt-6 text-center">
-                    <button onClick={() => navigate("/")} className="text-sm text-stone-400 hover:text-stone-600">
+                    <button onClick={() => navigate("/")} className="btn btn-ghost" style={{ color: "var(--color-text)" }}>
                         Bosh sahifaga qaytish
                     </button>
                 </div>

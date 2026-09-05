@@ -1,10 +1,12 @@
 import { useEffect, useState, useMemo } from "react";
 import axios from "axios";
 import { useNavigate, useParams } from "react-router-dom";
-import { FiSave, FiArrowLeft, FiUploadCloud, FiGlobe } from "react-icons/fi";
+import { FiSave, FiArrowLeft, FiUploadCloud } from "react-icons/fi";
 import { Loader } from "lucide-react";
 import JoditEditor from 'jodit-react';
 import { API_BASE_URL } from "../../config";
+
+const LANG_LABELS = { uz: "O'zbekcha", ru: "Русский", en: "English" };
 
 export default function AdminNewsForm() {
     const { id } = useParams();
@@ -110,24 +112,22 @@ export default function AdminNewsForm() {
         height: 400
     }), []);
 
-    if (loading) return <div className="flex justify-center p-20"><Loader className="animate-spin text-amber-600" /></div>;
+    if (loading) return <div className="flex justify-center p-20"><Loader className="animate-spin" style={{ color: "var(--color-accent)" }} /></div>;
 
     const renderLanguageFields = (lang) => (
-        <div className="space-y-4 animate-in fade-in slide-in-from-bottom-2 duration-300">
-            <div className="space-y-2">
-                <label className="text-sm font-semibold text-stone-700">Sarlavha ({lang.toUpperCase()})</label>
-                <input required={lang === 'uz'} name={`title_${lang}`} value={formData[`title_${lang}`]} onChange={handleChange} type="text" className="w-full px-4 py-2.5 rounded-xl border border-stone-200 focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 outline-none" />
+        <div className="space-y-4">
+            <div className="field">
+                <label>Sarlavha ({lang.toUpperCase()})</label>
+                <input required={lang === 'uz'} name={`title_${lang}`} value={formData[`title_${lang}`]} onChange={handleChange} type="text" className="input" />
             </div>
 
-            <div className="space-y-2">
-                <label className="text-sm font-semibold text-stone-700">Matn ({lang.toUpperCase()})</label>
-                <div className="prose max-w-none">
-                    <JoditEditor
-                        value={formData[`description_${lang}`]}
-                        config={{ ...config, placeholder: `${lang.toUpperCase()} tilidagi matn...` }}
-                        onBlur={newContent => setFormData(prev => ({ ...prev, [`description_${lang}`]: newContent }))}
-                    />
-                </div>
+            <div className="field">
+                <label>Matn ({lang.toUpperCase()})</label>
+                <JoditEditor
+                    value={formData[`description_${lang}`]}
+                    config={{ ...config, placeholder: `${lang.toUpperCase()} tilidagi matn...` }}
+                    onBlur={newContent => setFormData(prev => ({ ...prev, [`description_${lang}`]: newContent }))}
+                />
             </div>
         </div>
     );
@@ -135,48 +135,48 @@ export default function AdminNewsForm() {
     return (
         <div className="max-w-4xl mx-auto pb-10">
             <div className="flex items-center gap-4 mb-6">
-                <button onClick={() => navigate("/admin-panel/news")} className="p-2 bg-white rounded-xl border border-stone-200 text-stone-500 hover:text-stone-800 transition-colors">
-                    <FiArrowLeft />
+                <button onClick={() => navigate("/admin-panel/news")} className="btn btn-icon btn-secondary">
+                    <FiArrowLeft size={16} />
                 </button>
-                <h1 className="text-2xl font-bold text-stone-800">{isEdit ? "Yangilikni tahrirlash" : "Yangi yangilik qo'shish"}</h1>
+                <h1 className="text-2xl">{isEdit ? "Yangilikni tahrirlash" : "Yangi yangilik qo'shish"}</h1>
             </div>
 
-            <form onSubmit={handleSubmit} className="bg-white rounded-2xl shadow-sm border border-stone-200 p-6 sm:p-8 space-y-8">
+            <form onSubmit={handleSubmit} className="card p-6 sm:p-8 space-y-8">
 
                 {/* Common Fields */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                    <div className="space-y-2">
-                        <label className="text-sm font-semibold text-stone-700">Kategoriya</label>
-                        <select name="category" value={formData.category} onChange={handleChange} className="w-full px-4 py-2.5 rounded-xl border border-stone-200 focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 outline-none bg-white">
+                    <div className="field">
+                        <label>Kategoriya</label>
+                        <select name="category" value={formData.category} onChange={handleChange} className="input">
                             {categories.map(c => <option key={c} value={c}>{c}</option>)}
                         </select>
                     </div>
 
-                    <div className="space-y-2">
-                        <label className="text-sm font-semibold text-stone-700">Sana</label>
-                        <input required name="date" value={formData.date} onChange={handleChange} type="date" className="w-full px-4 py-2.5 rounded-xl border border-stone-200 focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 outline-none" />
+                    <div className="field">
+                        <label>Sana</label>
+                        <input required name="date" value={formData.date} onChange={handleChange} type="date" className="input" />
                     </div>
                 </div>
 
                 {/* Language Tabs */}
                 <div className="space-y-2">
-                    <div className="flex bg-stone-100 p-1 rounded-xl mb-4 w-fit">
+                    <div className="seg w-fit mb-4">
                         {['uz', 'ru', 'en'].map((lang) => (
                             <button
                                 key={lang}
                                 type="button"
                                 onClick={() => setActiveTab(lang)}
-                                className={`px-4 py-2 rounded-lg text-sm font-semibold transition-all ${activeTab === lang
-                                    ? "bg-white text-amber-600 shadow-sm"
-                                    : "text-stone-500 hover:text-stone-700"
-                                    }`}
+                                className="seg-opt"
+                                style={{
+                                    border: "none", background: "transparent", font: "inherit",
+                                    ...(activeTab === lang ? { color: "var(--color-accent)", boxShadow: "inset 0 0 0 1px var(--color-accent)" } : {}),
+                                }}
                             >
-                                <FiGlobe className="inline mr-2 mb-0.5" />
-                                {lang === 'uz' ? "O'zbekcha" : lang === 'ru' ? "Русский" : "English"}
+                                {LANG_LABELS[lang]}
                             </button>
                         ))}
                     </div>
-                    <div className="border border-stone-100 rounded-xl p-4 bg-stone-50/50">
+                    <div style={{ border: "1px solid var(--color-divider)", borderRadius: "var(--radius-md)", padding: "var(--space-4)" }}>
                         {activeTab === 'uz' && renderLanguageFields('uz')}
                         {activeTab === 'ru' && renderLanguageFields('ru')}
                         {activeTab === 'en' && renderLanguageFields('en')}
@@ -184,18 +184,19 @@ export default function AdminNewsForm() {
                 </div>
 
                 {/* File Upload */}
-                <div className="space-y-2">
-                    <label className="text-sm font-semibold text-stone-700">Rasm (Muqova)</label>
-                    <div className="border border-dashed border-stone-300 rounded-xl p-4 text-center hover:bg-stone-50 transition-colors cursor-pointer relative h-32 flex flex-col items-center justify-center">
+                <div className="field">
+                    <label>Rasm (Muqova)</label>
+                    <div style={{ border: "1px dashed var(--color-divider)", borderRadius: "var(--radius-md)" }} className="p-4 text-center cursor-pointer relative h-32 flex flex-col items-center justify-center">
                         <input name="image" onChange={handleChange} type="file" accept="image/*" className="absolute inset-0 opacity-0 cursor-pointer z-10" />
-                        <FiUploadCloud size={24} className="text-stone-400 mb-2" />
-                        <span className="text-xs text-stone-500 break-all px-2">{formData.image?.name || "Rasm yuklash (Ixtiyoriy)"}</span>
+                        <FiUploadCloud size={22} className="text-muted mb-2" />
+                        <span className="text-xs text-muted break-all px-2">{formData.image?.name || "Rasm yuklash (Ixtiyoriy)"}</span>
                     </div>
                 </div>
 
-                <div className="pt-6 border-t border-stone-100 flex justify-end">
-                    <button disabled={submitting} type="submit" className="bg-stone-900 hover:bg-black text-white px-8 py-3 rounded-xl font-bold shadow-lg shadow-stone-200 transition-all flex items-center gap-2 transform active:scale-95">
-                        {submitting ? <Loader className="animate-spin" /> : <FiSave />}
+                <div className="pt-6 flex justify-end gap-3" style={{ borderTop: "1px solid var(--color-divider)" }}>
+                    <button type="button" onClick={() => navigate("/admin-panel/news")} className="btn btn-secondary">Bekor qilish</button>
+                    <button disabled={submitting} type="submit" className="btn btn-primary">
+                        {submitting ? <Loader className="animate-spin" size={16} /> : <FiSave size={16} />}
                         {isEdit ? "Saqlash" : "Qo'shish"}
                     </button>
                 </div>

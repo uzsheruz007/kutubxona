@@ -22,17 +22,12 @@ export default function PageHeader({ title, subtitle }) {
     .filter((p) => p !== "");
 
   return (
-    <div className="relative pt-32 pb-12 px-6 md:px-12 text-center">
-      {/* Background Atmosphere (Optional, same as NewsPage for consistency) */}
-      <div className="absolute inset-0 pointer-events-none -z-10">
-        <div className="absolute top-0 right-1/2 w-[500px] h-[300px] bg-amber-100/50 rounded-full blur-[100px] translate-x-1/2 -translate-y-1/2"></div>
-      </div>
-
+    <div className="pt-16 pb-8 px-6 md:px-12 text-center">
       {/* Breadcrumb - Centered */}
-      <div className="flex items-center justify-center gap-1 text-sm text-stone-500 mb-8">
-        <Link to="/" className="flex items-center gap-1 hover:text-amber-600 transition-colors">
+      <div className="flex items-center justify-center gap-1 text-sm text-muted mb-4">
+        <Link to="/" className="flex items-center gap-1 hover:text-[var(--color-accent)] transition-colors" style={{ color: "inherit" }}>
           <FiHome className="w-4 h-4" />
-          <span>Bosh sahifa</span>
+          <span>{t("navbar.home")}</span>
         </Link>
         {paths.map((segment, idx) => {
           const path = "/" + paths.slice(0, idx + 1).join("/");
@@ -41,13 +36,14 @@ export default function PageHeader({ title, subtitle }) {
             <span key={path} className="flex items-center gap-1">
               <span>/</span>
               {isLast ? (
-                <span className="font-semibold text-stone-900">
+                <span style={{ color: "var(--color-text)" }}>
                   {segmentLabels[segment.toLowerCase()] || decodeURIComponent(segment)}
                 </span>
               ) : (
                 <Link
                   to={path}
-                  className="hover:text-amber-600 transition-colors"
+                  className="hover:text-[var(--color-accent)] transition-colors"
+                  style={{ color: "inherit" }}
                 >
                   {segmentLabels[segment.toLowerCase()] || decodeURIComponent(segment)}
                 </Link>
@@ -57,22 +53,13 @@ export default function PageHeader({ title, subtitle }) {
         })}
       </div>
 
-      <motion.div
-        initial={{ opacity: 0, y: -20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.8 }}
-        className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white border border-amber-100 text-amber-700 font-medium text-sm mb-6 shadow-sm"
-      >
-        <span>Kutubxona Hayoti</span>
-      </motion.div>
-
       {/* Title */}
       {title && (
         <motion.h1
-          initial={{ opacity: 0, scale: 0.95 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.8, delay: 0.1 }}
-          className="text-4xl md:text-6xl font-extrabold text-stone-900 mb-6 tracking-tight max-w-4xl mx-auto leading-tight"
+          initial={{ opacity: 0, y: 12 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+          className="max-w-3xl mx-auto"
         >
           {title}
         </motion.h1>
@@ -81,14 +68,16 @@ export default function PageHeader({ title, subtitle }) {
       {/* Subtitle */}
       {subtitle && (
         <motion.p
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.8, delay: 0.2 }}
-          className="text-lg md:text-xl text-stone-600 max-w-2xl mx-auto leading-relaxed"
+          initial={{ opacity: 0, y: 12 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.1 }}
+          className="max-w-2xl mx-auto text-muted"
         >
           {subtitle}
         </motion.p>
       )}
+
+      <hr className="hr max-w-3xl mx-auto mt-6" />
     </div>
   );
 }

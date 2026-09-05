@@ -1,137 +1,256 @@
-import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
-import { ArrowRight, Sparkles, BookOpen, Search } from "lucide-react";
+import { useState, useEffect } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { ArrowRight, ChevronDown, Search } from "lucide-react";
 import { motion } from "framer-motion";
 import { useTranslation } from "react-i18next";
-import BookShowcase from "./BookShowcase"; // Original Component
 import { API_BASE_URL } from "../config";
+
+// A quiet, static fan of book covers — three plates set at gentle offsetting
+// angles over a soft accent-tinted backdrop. No animation library, no flip
+// mechanics: the only motion is a small hover lift.
+const STACK_LAYOUT = [
+  { rotate: -7, x: -78, y: 14, z: 1, w: 148 },
+  { rotate: 4, x: 68, y: 26, z: 2, w: 148 },
+  { rotate: -1, x: -4, y: -10, z: 3, w: 172 },
+];
+
+// Shown whenever the catalog has no cover image for a slot (empty library,
+// or a book missing artwork) — a typographic plate instead of a broken image.
+const FALLBACK_BOOKS = [
+  { title: "O'tkan kunlar", author: "Abdulla Qodiriy" },
+  { title: "Kecha va kunduz", author: "Cho'lpon" },
+  { title: "Ulug'bek xazinasi", author: "Odil Yoqubov" },
+];
+
+function PlaceholderCover({ title, author }) {
+  return (
+    <div
+      style={{
+        width: "100%", height: "100%", boxSizing: "border-box",
+        display: "flex", flexDirection: "column", justifyContent: "flex-end",
+        padding: 12, textAlign: "center", alignItems: "center",
+      }}
+    >
+      <div style={{ fontFamily: "var(--font-heading)", fontWeight: 600, fontSize: 13, lineHeight: 1.2 }}>
+        {title}
+      </div>
+      {author && (
+        <div className="text-muted" style={{ fontSize: 10, fontStyle: "italic", marginTop: 2 }}>
+          {author}
+        </div>
+      )}
+    </div>
+  );
+}
+
+function CoverImage({ book }) {
+  const [failed, setFailed] = useState(false);
+  if (!book.coverUrl || failed) {
+    return <PlaceholderCover title={book.title} author={book.author} />;
+  }
+  return (
+    <img
+      src={book.coverUrl}
+      alt={book.title}
+      style={{ width: "100%", height: "100%", objectFit: "cover" }}
+      onError={() => setFailed(true)}
+    />
+  );
+}
+
+function FeaturedStack() {
+  const [books, setBooks] = useState([]);
+
+  useEffect(() => {
+    fetch(`${API_BASE_URL}/api/books/`)
+      .then((res) => res.json())
+      .then((data) => {
+        const list = Array.isArray(data) ? data : data.results || [];
+        setBooks(
+          list.slice(0, 3).map((book) => ({
+            id: book.id,
+            title: book.title,
+            author: book.author,
+            coverUrl: book.cover_image || null,
+          }))
+        );
+      })
+      .catch((err) => console.error("Hero books loading error:", err));
+  }, []);
+
+  const displayBooks = books.length ? books : FALLBACK_BOOKS;
+
+  return (
+    <div style={{ position: "relative", width: 380, maxWidth: "100%", height: 320 }}>
+      <style>{`.hero-stack-card:hover { transform: translate(-50%, -50%) rotate(0deg) scale(1.04) !important; z-index: 5 !important; }`}</style>
+      <span
+        aria-hidden="true"
+        style={{
+          position: "absolute", inset: "8% 12%", borderRadius: "50%",
+          background: "var(--color-accent-100)", opacity: 0.6, filter: "blur(2px)",
+        }}
+      />
+      {displayBooks.map((book, i) => {
+        const layout = STACK_LAYOUT[i];
+        return (
+          <div
+            key={book.id ?? book.title}
+            className="hero-stack-card"
+            style={{
+              position: "absolute",
+              left: `calc(50% + ${layout.x}px)`,
+              top: `calc(50% + ${layout.y}px)`,
+              transform: `translate(-50%, -50%) rotate(${layout.rotate}deg)`,
+              zIndex: layout.z,
+              width: layout.w,
+              transition: "transform 0.3s ease",
+            }}
+          >
+            <div
+              className="plate"
+              style={{
+                width: "100%", aspectRatio: "2 / 3",
+                background: "var(--color-neutral-200)",
+                boxShadow: "0 14px 28px color-mix(in srgb, var(--color-neutral-900) 22%, transparent)",
+                overflow: "hidden",
+              }}
+            >
+              <CoverImage book={book} />
+            </div>
+          </div>
+        );
+      })}
+    </div>
+  );
+}
 
 export default function HeroSection({ onScrollClick }) {
   const { t } = useTranslation();
+  const navigate = useNavigate();
+  const [query, setQuery] = useState("");
   const [stats, setStats] = useState({ totalBooks: 0, users: 0, online: "24/7" });
 
   useEffect(() => {
     fetch(`${API_BASE_URL}/api/books/stats/`)
-      .then(res => res.json())
-      .then(data => {
+      .then((res) => res.json())
+      .then((data) => {
         setStats({
           totalBooks: data.totalBooks,
           users: data.users,
-          online: "24/7"
+          online: "24/7",
         });
       })
-      .catch(err => console.error("Hero stats loading error:", err));
+      .catch((err) => console.error("Hero stats loading error:", err));
   }, []);
 
+  const handleSearch = (e) => {
+    e.preventDefault();
+    navigate(query.trim() ? `/books?search=${encodeURIComponent(query.trim())}` : "/books");
+  };
+
   return (
-    <div className="relative min-h-screen flex items-center bg-stone-50 overflow-hidden pt-20 lg:pt-0">
-
-      {/* 1. Background Blurs (Sand Theme Style) */}
-      <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-amber-200/50 rounded-full blur-[120px] -translate-y-1/2 translate-x-1/2"></div>
-      <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-orange-200/50 rounded-full blur-[120px] translate-y-1/2 -translate-x-1/2"></div>
-
-      {/* Grid Pattern */}
-      
-      <div className="absolute inset-0" style={{ backgroundImage: 'radial-gradient(#d6d3d1 1px, transparent 1px)', backgroundSize: '40px 40px', opacity: 0.3 }}></div>
-
-      <div className="container mx-auto px-6 relative z-10 grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-
-        {/* Left: Text Content */}
+    <section className="pt-28 pb-16 lg:pt-36 lg:pb-24">
+      <div className="max-w-7xl mx-auto px-6 grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center">
         <motion.div
-          initial={{ opacity: 0, x: -50 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ duration: 0.8, ease: "easeOut" }}
-          className="text-center lg:text-left"
+          initial={{ opacity: 0, y: 16 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, ease: "easeOut" }}
         >
-          {/* Badge */}
-          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white border border-amber-100 shadow-sm mt-8 lg:mt-16 mb-4">
-            <span className="flex h-2 w-2 rounded-full bg-amber-500 animate-pulse"></span>
-            <span className="text-sm font-medium text-stone-600 tracking-wide uppercase">
-              {t("brand.slogan", "Bilimlar xazinasi")}
+          <div className="flex items-center gap-3" style={{ marginBottom: "var(--space-4)" }}>
+            <span style={{ width: 32, height: 1, background: "var(--color-accent)" }} />
+            <span
+              style={{
+                fontSize: 12,
+                letterSpacing: "0.14em",
+                textTransform: "uppercase",
+                color: "var(--color-accent)",
+              }}
+            >
+              {t("hero.slogan")}
             </span>
           </div>
 
-          <h1 className="text-4xl sm:text-6xl lg:text-7xl font-extrabold text-stone-900 leading-[1.1] tracking-tight mb-6">
-            <span className="block">{t("hero.welcome_part1", "Kitob —")}</span>
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-600 via-orange-600 to-yellow-600">
-              {t("hero.welcome_part2", "vaqt mashinasi.")}
-            </span>
+          <h1 style={{ maxWidth: "16ch" }}>
+            {t("hero.welcome_part1")} {t("hero.welcome_part2")}
           </h1>
 
-          <p className="text-base sm:text-xl text-stone-600 mb-8 sm:mb-10 max-w-lg mx-auto lg:mx-0 leading-relaxed">
+          <p style={{ maxWidth: "52ch", textAlign: "justify", fontSize: 16, marginTop: "var(--space-3)" }}>
             {t("hero.description")}
           </p>
 
-          <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start w-full max-w-lg lg:max-w-none">
-            <Link
-              to="/books"
-              className="group px-8 py-4 bg-amber-600 hover:bg-amber-700 text-white rounded-2xl font-semibold shadow-lg shadow-amber-200 transition-all flex items-center justify-center gap-2 whitespace-nowrap"
-            >
-              {t("hero.enterLibrary")}
-              <ArrowRight size={20} className="group-hover:translate-x-1 transition-transform" />
-            </Link>
+          <form onSubmit={handleSearch} className="flex gap-2" style={{ maxWidth: 440, marginTop: "var(--space-4)" }}>
+            <input
+              type="text"
+              className="input"
+              placeholder={t("searchPlaceholder")}
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+            />
+            <button type="submit" className="btn btn-primary" style={{ flexShrink: 0 }}>
+              <Search size={16} />
+              {t("hero.search")}
+            </button>
+          </form>
 
+          <div className="flex flex-wrap items-center gap-3" style={{ marginTop: "var(--space-3)" }}>
+            <Link to="/books" className="btn btn-primary">
+              {t("hero.enterLibrary")}
+              <ArrowRight size={16} />
+            </Link>
             <a
               href="https://kbt.samduuf.uz/"
               target="_blank"
               rel="noopener noreferrer"
-              className="group px-8 py-4 bg-white border-2 border-amber-600 text-amber-600 hover:bg-amber-50 rounded-2xl font-semibold transition-all flex items-center justify-center gap-2 whitespace-nowrap"
+              className="btn btn-secondary"
             >
               Kitob buyurtma berish
-              <ArrowRight size={20} className="group-hover:translate-x-1 transition-transform" />
+              <ArrowRight size={16} />
             </a>
           </div>
 
-          {/* Stats / Trust Indicators */}
-          <div className="mt-12 flex items-center justify-center lg:justify-start gap-8 border-t border-stone-200 pt-8">
-            <div>
-              <p className="text-3xl font-bold text-stone-900">{stats.totalBooks}+</p>
-              <p className="text-sm text-stone-500">{t("hero.books")}</p>
+          <button
+            type="button"
+            onClick={onScrollClick}
+            className="btn btn-ghost"
+            style={{ marginTop: "var(--space-3)" }}
+          >
+            {t("hero.viewBooks")}
+            <ChevronDown size={14} />
+          </button>
+
+          <hr className="hr" style={{ marginTop: "var(--space-6)", marginBottom: "var(--space-4)" }} />
+
+          <div className="flex items-center" style={{ gap: "var(--space-6)" }}>
+            <div style={{ paddingRight: "var(--space-6)", borderRight: "1px solid var(--color-divider)" }}>
+              <div className="num" style={{ fontFamily: "var(--font-heading)", fontWeight: 600, fontSize: 28 }}>
+                {stats.totalBooks}+
+              </div>
+              <div className="text-muted" style={{ fontSize: 12 }}>{t("hero.books")}</div>
+            </div>
+            <div style={{ paddingRight: "var(--space-6)", borderRight: "1px solid var(--color-divider)" }}>
+              <div className="num" style={{ fontFamily: "var(--font-heading)", fontWeight: 600, fontSize: 28 }}>
+                {stats.users}+
+              </div>
+              <div className="text-muted" style={{ fontSize: 12 }}>{t("hero.users")}</div>
             </div>
             <div>
-              <p className="text-3xl font-bold text-stone-900">{stats.users}+</p>
-              <p className="text-sm text-stone-500">{t("hero.users")}</p>
-            </div>
-            <div>
-              <p className="text-3xl font-bold text-stone-900">{stats.online}</p>
-              <p className="text-sm text-stone-500">{t("hero.online")}</p>
+              <div className="num" style={{ fontFamily: "var(--font-heading)", fontWeight: 600, fontSize: 28 }}>
+                {stats.online}
+              </div>
+              <div className="text-muted" style={{ fontSize: 12 }}>{t("hero.online")}</div>
             </div>
           </div>
         </motion.div>
 
-        {/* Right: Book Showcase */}
         <motion.div
-          id="books"
-          initial={{ opacity: 0, scale: 0.9, y: 50 }}
-          animate={{ opacity: 1, scale: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.2 }}
-          className="relative"
+          initial={{ opacity: 0, y: 16 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.15, ease: "easeOut" }}
+          className="hidden lg:flex justify-center"
         >
-          {/* Background Glow */}
-          <div className="absolute inset-0 bg-gradient-to-tr from-amber-500/20 to-orange-500/20 rounded-full blur-[80px] scale-90"></div>
-
-          {/* The Book Showcase Component */}
-          <BookShowcase />
-
-          {/* Floating Elements Decor */}
-          <motion.div
-            animate={{ y: [0, -20, 0] }}
-            transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-            className="absolute -top-10 -right-5 bg-white p-4 rounded-2xl shadow-xl border border-stone-100 hidden sm:block"
-          >
-            <BookOpen className="text-amber-600 w-8 h-8" />
-          </motion.div>
-
-          <motion.div
-            animate={{ y: [0, 20, 0] }}
-            transition={{ duration: 5, repeat: Infinity, ease: "easeInOut", delay: 1 }}
-            className="absolute bottom-10 -left-10 bg-white p-3 rounded-2xl shadow-xl border border-stone-100 hidden sm:block"
-          >
-            <Sparkles className="text-amber-500 w-6 h-6" />
-          </motion.div>
+          <FeaturedStack />
         </motion.div>
-
       </div>
-    </div>
+    </section>
   );
 }

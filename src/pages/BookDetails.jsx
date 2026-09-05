@@ -1,13 +1,11 @@
-import { useParams, useNavigate } from "react-router-dom";
+import { Link, useParams, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { motion } from "framer-motion";
-import { FiArrowLeft, FiHeart, FiShare2, FiBookOpen } from "react-icons/fi";
-import { FaFacebook, FaTelegram, FaInstagram, FaYoutube } from "react-icons/fa";
+import { Heart, BookOpen } from "lucide-react";
+import { FaTelegram, FaInstagram, FaFacebook, FaYoutube } from "react-icons/fa";
 import QRCode from "react-qr-code";
-import PageHeader from "../components/PageHeader";
 import { useUser } from "../context/UserContext";
-import i18n from "../i18n";
 import { API_BASE_URL } from "../config";
 
 import { useTranslation } from "react-i18next";
@@ -71,7 +69,7 @@ export default function BookDetails() {
         }
         );
         setBook(res.data);
-      } catch (err) {
+      } catch {
         setBook(null);
       } finally {
         setLoading(false);
@@ -86,7 +84,7 @@ export default function BookDetails() {
   if (loading) {
     return (
       <div className="flex justify-center items-center min-h-[60vh]">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-amber-600"></div>
+        <div className="animate-spin rounded-full h-10 w-10 border-b-2" style={{ borderColor: "var(--color-accent)" }}></div>
       </div>
     );
   }
@@ -94,12 +92,9 @@ export default function BookDetails() {
   if (!book) {
     return (
       <div className="flex flex-col items-center justify-center min-h-[60vh]">
-        <p className="text-xl text-stone-500 mb-4">Kitob topilmadi.</p>
-        <button
-          onClick={() => navigate(-1)}
-          className="flex items-center gap-2 px-4 py-2 bg-amber-600 text-white rounded shadow hover:bg-amber-700 transition"
-        >
-          <FiArrowLeft /> Orqaga
+        <p style={{ color: "color-mix(in srgb, var(--color-text) 55%, transparent)" }} className="mb-4">Kitob topilmadi.</p>
+        <button onClick={() => navigate(-1)} className="btn btn-secondary">
+          {t("back")}
         </button>
       </div>
     );
@@ -110,181 +105,144 @@ export default function BookDetails() {
     : "/images/image.png";
 
   return (
-    <div className="min-h-screen bg-stone-50 relative overflow-hidden font-sans">
-      {/* Background Atmosphere */}
-      <div className="absolute inset-0 pointer-events-none">
-        <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-amber-200/30 rounded-full blur-[120px] -translate-y-1/2 translate-x-1/2"></div>
-        <div className="absolute top-1/3 left-0 w-[500px] h-[500px] bg-orange-100/40 rounded-full blur-[120px] -translate-x-1/2"></div>
-        
+    <div className="max-w-7xl mx-auto px-6 pt-16 pb-24">
+      {/* Breadcrumb */}
+      <div className="flex items-center gap-2 text-sm" style={{ color: "color-mix(in srgb, var(--color-text) 55%, transparent)" }}>
+        <Link to="/" style={{ color: "inherit" }}>{t("navbar.home")}</Link>
+        <span>/</span>
+        <Link to="/books" style={{ color: "inherit" }}>{t("navbar.books")}</Link>
+        <span>/</span>
+        <span style={{ color: "var(--color-text)" }}>{book.title}</span>
       </div>
+      <hr className="hr" />
 
-      <div className="relative z-10">
-        <PageHeader title="" />
-
-        <motion.div
-          initial={{ opacity: 0, y: 40 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="relative max-w-7xl mx-auto px-4 py-12 space-y-6"
-        >
-
-          {/* Back button */}
-          <button
-            onClick={() => navigate(-1)}
-            className="flex items-center cursor-pointer gap-2 mb-4 px-4 py-2 bg-amber-50 text-amber-700 rounded hover:bg-amber-100 transition border border-amber-100 shadow-sm font-medium"
+      <motion.div
+        initial={{ opacity: 0, y: 12 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.35 }}
+        className="grid grid-cols-1 md:grid-cols-[300px_1fr] gap-8"
+      >
+        {/* Left: cover + actions */}
+        <div>
+          <div
+            className="plate"
+            style={{
+              width: "100%",
+              aspectRatio: "2 / 3",
+              backgroundColor: "var(--color-neutral-100)",
+              overflow: "hidden",
+            }}
           >
-            <FiArrowLeft /> {t("back")}
-          </button>
-
-          {/* Main layout: Content + Sidebar */}
-          <div className="flex flex-col lg:flex-row gap-8">
-            {/* Main Content */}
-            <div className="flex-1 space-y-6">
-              {/* Cover + Info */}
-              <div className="flex flex-col md:flex-row gap-8 bg-white rounded-2xl shadow-xl p-8 border border-stone-100">
-                {/* Left: Book Cover */}
-                <div className="flex flex-col items-center md:items-start shrink-0">
-                  <motion.div
-                    className="relative rounded-lg shadow-2xl border border-stone-200 overflow-hidden"
-                    whileHover={{ scale: 1.02 }}
-                    transition={{ type: "spring", stiffness: 200 }}
-                  >
-                    <img
-                      src={coverUrl}
-                      alt={book.title}
-                      className="w-64 h-auto object-cover"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-tr from-black/10 to-transparent pointer-events-none"></div>
-                  </motion.div>
-
-                  <button
-                    onClick={() => {
-                      if (user) {
-                        if (book.file) {
-                          const fileUrl = book.file.startsWith('http') ? book.file : `${API_BASE_URL}${book.file}`;
-                          window.open(fileUrl, '_blank');
-                        }
-                        else alert("Fayl yuklanmagan");
-                      } else {
-                        handleDownload();
-                      }
-                    }}
-                    className="w-full mt-6 cursor-pointer flex items-center justify-center gap-2 px-6 py-3 bg-amber-600 text-white rounded-xl hover:bg-amber-700 shadow-lg hover:shadow-amber-200 transition font-bold tracking-wide">
-                    <FiBookOpen /> {user ? t("download") : t("loginAndDownload")}
-                  </button>
-                </div>
-
-                {/* Right: Book Info */}
-                <div className="flex-1 flex flex-col justify-between">
-                  <div>
-                    <h1 className="text-3xl md:text-4xl font-extrabold text-stone-900 mb-6 leading-tight">
-                      {book.title}
-                    </h1>
-                    <div className="space-y-3 text-lg">
-                      <p className="text-stone-700 flex flex-wrap gap-2">
-                        <span className="font-semibold text-stone-900 min-w-[140px]">{t("author")}:</span>
-                        <span className="text-stone-800">{book.author || t("unknown")}</span>
-                      </p>
-                      <p className="text-stone-700 flex flex-wrap gap-2">
-                        <span className="font-semibold text-stone-900 min-w-[140px]">{t("resourceType")}:</span>
-                        <span className="bg-stone-100 text-stone-600 px-2 py-0.5 rounded text-sm font-medium">{book.resource_type || "Kitob"}</span>
-                      </p>
-                      <p className="text-stone-700 flex flex-wrap gap-2">
-                        <span className="font-semibold text-stone-900 min-w-[140px]">{t("pageCount")}:</span>
-                        <span>{book.page_count} {t("pages")}</span>
-                      </p>
-                      <p className="text-stone-700 flex flex-wrap gap-2">
-                        <span className="font-semibold text-stone-900 min-w-[140px]">{t("publishedDate")}:</span>
-                        <span>{book.published_date || t("unknown")}</span>
-                      </p>
-                      <p className="text-stone-700 flex flex-wrap gap-2">
-                        <span className="font-semibold text-stone-900 min-w-[140px]">{t("subjects")}:</span>
-                        <span className="text-stone-600 italic">
-                          {book.subjects || t("noSubjects")}
-                        </span>
-                      </p>
-                    </div>
-                  </div>
-                  {/* Action Buttons */}
-                  <div className="flex flex-wrap gap-4 mt-8 pt-6 border-t border-stone-100">
-                    <button
-                      onClick={toggleFavorite}
-                      className={`flex items-center gap-2 px-5 py-2.5 rounded-lg transition font-medium border ${isFavorited
-                        ? "bg-red-50 text-red-600 border-red-200"
-                        : "bg-stone-50 text-stone-600 border-stone-200 hover:bg-stone-100"
-                        }`}
-                    >
-                      <FiHeart className={isFavorited ? "fill-current" : ""} />
-                      {isFavorited ? "Sevimlilardan o'chirish" : t("addToFavorites")}
-                    </button>
-                    <button className="flex items-center gap-2 px-5 py-2.5 bg-stone-100 text-stone-700 rounded-lg hover:bg-stone-200 transition font-medium">
-                      <FiShare2 /> {t("share")}
-                    </button>
-                  </div>
-                </div>
-              </div>
-
-              {/* Description */}
-              <div className="bg-white rounded-2xl shadow-xl p-8 border border-stone-100">
-                <h2 className="text-xl font-bold text-stone-900 mb-4 flex items-center gap-2">
-                  <FiBookOpen className="text-amber-600" /> {t("aboutBook")}
-                </h2>
-                <div className="prose prose-stone max-w-none">
-                  <div dangerouslySetInnerHTML={{ __html: book.description || t("noDescription") }} />
-                </div>
-              </div>
-            </div>
-
-            {/* Right Sidebar */}
-            <div className="flex flex-col gap-6 lg:w-[300px] shrink-0">
-              {/* QR Code Card */}
-              <div className="bg-white rounded-2xl shadow-xl p-6 flex flex-col items-center text-center border border-stone-100">
-                <div className="bg-stone-50 p-4 rounded-xl mb-6 flex justify-center">
-                  {book.qr_code ? (
-                    <img
-                      src={book.qr_code.startsWith('http') ? book.qr_code : `${API_BASE_URL}${book.qr_code}`}
-                      alt="QR Code"
-                      className="w-[140px] h-[140px] object-contain mix-blend-multiply"
-                    />
-                  ) : (
-                    <QRCode value={currentUrl} size={140} fgColor="#44403c" />
-                  )}
-                </div>
-                {/* Social Icons (Keeping static for now or can verify later) */}
-                <div className="flex gap-3 justify-center mt-4">
-                  <a href="https://t.me/samdu_urgut_filial" target="_blank" rel="noopener noreferrer" className="p-3 rounded-full bg-stone-50 text-stone-500 hover:bg-blue-500 hover:text-white shadow-sm hover:shadow-md transition-all duration-300">
-                    <FaTelegram className="w-5 h-5" />
-                  </a>
-                  <a href="https://www.instagram.com/samduuf_edu?igsh=MWF5bWhvZ3ZhbTI5ZA%3D%3D&utm_source=qr" target="_blank" rel="noopener noreferrer" className="p-3 rounded-full bg-stone-50 text-stone-500 hover:bg-pink-600 hover:text-white shadow-sm hover:shadow-md transition-all duration-300">
-                    <FaInstagram className="w-5 h-5" />
-                  </a>
-                  <a href="https://www.facebook.com/samduufeduuz" target="_blank" rel="noopener noreferrer" className="p-3 rounded-full bg-stone-50 text-stone-500 hover:bg-blue-600 hover:text-white shadow-sm hover:shadow-md transition-all duration-300">
-                    <FaFacebook className="w-5 h-5" />
-                  </a>
-                  <a href="https://www.youtube.com/@samduufeducation7037" target="_blank" rel="noopener noreferrer" className="p-3 rounded-full bg-stone-50 text-stone-500 hover:bg-red-600 hover:text-white shadow-sm hover:shadow-md transition-all duration-300">
-                    <FaYoutube className="w-5 h-5" />
-                  </a>
-                </div>
-              </div>
-
-              {/* Elektron Kutubxona Card */}
-              <div className="bg-white rounded-2xl shadow-xl p-6 border border-stone-100">
-                <h3 className="text-lg font-bold text-stone-900 mb-4 border-b border-stone-100 pb-2">
-                  {t("eLibrary")}
-                </h3>
-                <ul className="space-y-2">
-                  {[t("textbooks"), t("monographs"), t("dissertations")].map((text, idx) => (
-                    <li
-                      key={idx}
-                      className="flex items-center gap-3 px-4 py-3 bg-stone-50 rounded-lg hover:bg-amber-50 hover:text-amber-700 cursor-pointer transition font-medium text-stone-700 group"
-                    >
-                      <span className="text-amber-500 group-hover:scale-110 transition-transform">📘</span> {text}
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            </div>
+            <img src={coverUrl} alt={book.title} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
           </div>
-        </motion.div>
+
+          <div className="flex flex-col gap-2" style={{ marginTop: "var(--space-4)" }}>
+            <button
+              onClick={() => {
+                if (user) {
+                  if (book.file) {
+                    const fileUrl = book.file.startsWith('http') ? book.file : `${API_BASE_URL}${book.file}`;
+                    window.open(fileUrl, '_blank');
+                  } else {
+                    alert("Fayl yuklanmagan");
+                  }
+                } else {
+                  handleDownload();
+                }
+              }}
+              className="btn btn-primary btn-block"
+            >
+              <BookOpen size={16} /> {user ? t("download") : t("loginAndDownload")}
+            </button>
+            <button onClick={toggleFavorite} className="btn btn-ghost btn-block">
+              <Heart size={16} fill={isFavorited ? "currentColor" : "none"} />
+              {isFavorited ? "Sevimlilardan o'chirish" : t("addToFavorites")}
+            </button>
+          </div>
+        </div>
+
+        {/* Right: info */}
+        <div>
+          <span className="tag tag-outline">{book.category || t("resourceType")}</span>
+          <h1 style={{ fontWeight: 400, margin: "var(--space-3) 0 var(--space-1)" }}>{book.title}</h1>
+          <p style={{ fontStyle: "italic", fontSize: 17, color: "color-mix(in srgb, var(--color-text) 60%, transparent)" }}>
+            {book.author || t("unknown")}
+          </p>
+
+          <table className="table" style={{ marginTop: "var(--space-4)" }}>
+            <tbody>
+              <tr>
+                <th style={{ width: 190 }}>{t("author")}</th>
+                <td>{book.author || t("unknown")}</td>
+              </tr>
+              <tr>
+                <th>{t("resourceType")}</th>
+                <td>{book.resource_type || "Kitob"}</td>
+              </tr>
+              <tr>
+                <th>{t("pageCount")}</th>
+                <td className="num">{book.page_count} {t("pages")}</td>
+              </tr>
+              <tr>
+                <th>{t("publishedDate")}</th>
+                <td className="num">{book.published_date || t("unknown")}</td>
+              </tr>
+              <tr>
+                <th>{t("subjects")}</th>
+                <td>{book.subjects || t("noSubjects")}</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <h4 style={{ margin: "var(--space-6) 0 var(--space-2)" }}>{t("aboutBook")}</h4>
+          <div
+            style={{ columns: "2", columnGap: "var(--space-8)", textAlign: "justify", hyphens: "auto" }}
+            dangerouslySetInnerHTML={{ __html: book.description || t("noDescription") }}
+          />
+        </div>
+      </motion.div>
+
+      {/* Sidebar-style extras below on mobile / beside description area */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-6" style={{ marginTop: "var(--space-8)" }}>
+        <div style={{ border: "1px solid var(--color-divider)", borderRadius: "var(--radius-md)", padding: "var(--space-4)" }} className="flex flex-col items-center text-center">
+          <div style={{ border: "1px solid var(--color-divider)", padding: "var(--space-2)" }}>
+            {book.qr_code ? (
+              <img
+                src={book.qr_code.startsWith('http') ? book.qr_code : `${API_BASE_URL}${book.qr_code}`}
+                alt="QR Code"
+                style={{ width: 140, height: 140, objectFit: "contain" }}
+              />
+            ) : (
+              <QRCode value={currentUrl} size={140} fgColor="#201f1d" />
+            )}
+          </div>
+          <div className="flex gap-4 justify-center" style={{ marginTop: "var(--space-4)" }}>
+            <a href="https://t.me/samdu_urgut_filial" target="_blank" rel="noopener noreferrer" style={{ color: "var(--color-accent)" }}>
+              <FaTelegram size={18} />
+            </a>
+            <a href="https://www.instagram.com/samduuf_edu?igsh=MWF5bWhvZ3ZhbTI5ZA%3D%3D&utm_source=qr" target="_blank" rel="noopener noreferrer" style={{ color: "var(--color-accent)" }}>
+              <FaInstagram size={18} />
+            </a>
+            <a href="https://www.facebook.com/samduufeduuz" target="_blank" rel="noopener noreferrer" style={{ color: "var(--color-accent)" }}>
+              <FaFacebook size={18} />
+            </a>
+            <a href="https://www.youtube.com/@samduufeducation7037" target="_blank" rel="noopener noreferrer" style={{ color: "var(--color-accent)" }}>
+              <FaYoutube size={18} />
+            </a>
+          </div>
+        </div>
+
+        <div style={{ border: "1px solid var(--color-divider)", borderRadius: "var(--radius-md)", padding: "var(--space-4)" }}>
+          <h5 style={{ marginBottom: "var(--space-2)" }}>{t("eLibrary")}</h5>
+          <hr className="hr" style={{ margin: "0 0 var(--space-2)" }} />
+          <ul style={{ listStyle: "none", margin: 0, padding: 0, display: "flex", flexDirection: "column", gap: "var(--space-1)" }}>
+            {[t("textbooks"), t("monographs"), t("dissertations")].map((text, idx) => (
+              <li key={idx} style={{ padding: "var(--space-1) 0", fontSize: 14 }}>
+                {text}
+              </li>
+            ))}
+          </ul>
+        </div>
       </div>
     </div>
   );

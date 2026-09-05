@@ -34,64 +34,47 @@ export default function NewsSection() {
   }, [i18n.language]);
 
   return (
-    <section id="news" className="relative bg-stone-50 py-20 overflow-hidden">
-      {/* (Keep existing decorative background) */}
-      <div className="absolute inset-0 overflow-hidden -z-10 pointer-events-none">
-        <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-amber-200/30 rounded-full blur-[120px] -translate-y-1/2 translate-x-1/2"></div>
-        <div className="absolute top-1/3 left-0 w-[500px] h-[500px] bg-orange-100/40 rounded-full blur-[120px] -translate-x-1/2"></div>
-      </div>
-
+    <section id="news" className="py-16 md:py-20 px-6">
       <style>
         {`
           .swiper-pagination-bullet {
-            background-color: #d6d3d1 !important; /* stone-300 */
+            background-color: var(--color-neutral-400) !important;
             opacity: 1 !important;
+            border-radius: var(--radius-sm) !important;
           }
           .swiper-pagination-bullet-active {
-            background-color: #d97706 !important; /* amber-600 */
+            background-color: var(--color-accent) !important;
             width: 20px !important;
-            border-radius: 6px !important;
             transition: all 0.3s ease !important;
           }
         `}
       </style>
 
-      <div className="max-w-7xl mx-auto px-4 md:px-8 lg:px-12 relative z-10">
-        {/* Section Title */}
+      <div className="max-w-7xl mx-auto">
         <motion.div
-          initial={{ opacity: 0, y: 30 }}
+          initial={{ opacity: 0, y: 12 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
-          className="flex flex-col md:flex-row md:items-center md:justify-between mb-10"
+          transition={{ duration: 0.5 }}
+          className="flex flex-col md:flex-row md:items-end md:justify-between"
+          style={{ marginBottom: "var(--space-6)", borderBottom: "1px solid var(--color-divider)", paddingBottom: "var(--space-4)" }}
         >
           <div>
-            <h2 className="text-3xl font-bold text-stone-900 mb-2">
-              {t("news.latestNews")}
-            </h2>
-            <p className="text-stone-600">
-              {t("news.homeSubtitle")}
-            </p>
+            <h2>{t("news.latestNews")}</h2>
+            <p className="text-muted">{t("news.homeSubtitle")}</p>
           </div>
-          <Link
-            to="/news"
-            className="mt-4 md:mt-0 inline-block px-5 py-2 bg-amber-600 text-white rounded-full shadow hover:bg-amber-700 transition"
-          >
+          <Link to="/news" className="btn btn-primary" style={{ marginTop: "var(--space-2)" }}>
             {t("news.viewAll")}
           </Link>
         </motion.div>
 
-        {/* News Carousel */}
         {loading ? (
-          <div className="text-center py-20">
-            <div className="w-12 h-12 border-4 border-amber-600 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
-            <p className="text-stone-500">Yangiliklar yuklanmoqda...</p>
-          </div>
+          <div className="text-center py-20 text-muted">{t("loading")}...</div>
         ) : (
           <Swiper
             modules={[Autoplay, Pagination]}
-            spaceBetween={20}
-            slidesPerView={1.2}
+            spaceBetween={28}
+            slidesPerView={1.1}
             breakpoints={{
               640: { slidesPerView: 1.5 },
               768: { slidesPerView: 2.2 },
@@ -100,13 +83,13 @@ export default function NewsSection() {
             autoplay={{ delay: 3500, disableOnInteraction: false }}
             pagination={{ clickable: true }}
             loop={news.length > 3}
-            className="pb-8"
+            className="pb-10"
           >
             {news.map((item) => (
               <SwiperSlide key={item.id}>
                 <NewsCard
                   {...item}
-                  // Ensure image is full URL if relative
+                  variant="row"
                   image={item.image ? (item.image.startsWith('http') ? item.image : `${API_BASE_URL}${item.image}`) : null}
                 />
               </SwiperSlide>
@@ -115,7 +98,7 @@ export default function NewsSection() {
         )}
 
         {!loading && news.length === 0 && (
-          <div className="text-center py-10 text-stone-500">
+          <div className="text-center py-10 text-muted">
             {t("news.noNewsHome")}
           </div>
         )}

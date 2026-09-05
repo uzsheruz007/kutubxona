@@ -1,7 +1,6 @@
 import { useEffect, useState, useRef } from "react";
 import { useSearchParams, useNavigate } from "react-router-dom";
 import { useUser } from "../context/UserContext";
-import axios from "axios";
 import { Loader } from "lucide-react";
 
 export default function LoginCallback() {
@@ -35,17 +34,17 @@ export default function LoginCallback() {
                 setStatus("Error: " + result.error);
                 // setTimeout(() => navigate('/login'), 3000);
             }
-        } catch (error) {
+        } catch {
             setStatus("Authentication failed.");
             // setTimeout(() => navigate('/login'), 3000);
         }
     };
 
     return (
-        <div className="min-h-screen flex items-center justify-center bg-stone-50">
-            <div className="flex flex-col items-center gap-4">
-                <Loader className="w-8 h-8 animate-spin text-amber-600" />
-                <p className="text-stone-600">{status}</p>
+        <div className="min-h-screen flex items-center justify-center">
+            <div className="flex flex-col items-center" style={{ gap: "var(--space-3)" }}>
+                <Loader size={28} color="var(--color-accent)" className="animate-spin" />
+                <p className="text-muted" style={{ fontSize: 14 }}>{status}</p>
             </div>
         </div>
     );
